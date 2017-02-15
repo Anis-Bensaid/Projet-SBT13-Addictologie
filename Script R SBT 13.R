@@ -9,6 +9,9 @@ bd <- read_excel("~/Desktop/Projet_SBT13/Github/SBT13/bdmieRpp2.xls")
 
 # Arthur Base de données
 # bd <- read_excel("~/Documents/Projet Enjeux/Projet-SBT13-Addictologie/bdmieRpp2.xls")
+
+# Emilio Base de données
+# bd <- read_excel("C:\Users\Emilio\Desktop\intercambio\clases\enjeux\sbt\Projet-SBT13-Addictologie\bdmieRpp2.xls")
 =======
 bd <- read_excel("~/Documents/Projet Enjeux/Projet-SBT13-Addictologie/bdmieRpp2.xls")
 >>>>>>> Stashed changes
