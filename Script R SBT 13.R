@@ -1,11 +1,17 @@
 rm(list=ls())
 install.packages("readxl")
 library(readxl)
+<<<<<<< Updated upstream
 bd <- read_excel("~/Desktop/Projet_SBT13/Github/SBT13/bdmieRpp2.xls")
 
-#Haïm base de données
+#Haim base de données
 # bd <- read_excel("~/Desktop/Projet_SBT13/Projet-SBT13-Addictologie-Github/bdmieRpp2.xls")
 
+# Arthur Base de données
+# bd <- read_excel("~/Documents/Projet Enjeux/Projet-SBT13-Addictologie/bdmieRpp2.xls")
+=======
+bd <- read_excel("~/Documents/Projet Enjeux/Projet-SBT13-Addictologie/bdmieRpp2.xls")
+>>>>>>> Stashed changes
 bd1 <-bd[bd$age<31,]
 # on cherche la corrélation entre chaque item de AQOLS contre tout le reste 
 
