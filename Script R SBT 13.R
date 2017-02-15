@@ -8,14 +8,14 @@ library(readxl)
 # Arthur Base de données
 # bd <- read_excel("~/Documents/Projet Enjeux/Projet-SBT13-Addictologie/bdmieRpp2.xls")
 
-#Benjamin base de donn�es
-#bd<- read_excel("~/GitHub/Projet-SBT13-Addictologie/bdmieRpp2.xls")
+# Benjamin base de donn?es
+# bd<- read_excel("~/GitHub/Projet-SBT13-Addictologie/bdmieRpp2.xls")
 
 # Emilio Base de données
 # bd <- read_excel("C:\Users\Emilio\Desktop\intercambio\clases\enjeux\sbt\Projet-SBT13-Addictologie\bdmieRpp2.xls")
 
-# Anis Base de donn�es
-# bd <- read_excel("D:\Users\enysb\Google Drive\Etudes\Git\Projet-SBT13-Addictologie\bdmieRpp2.xls")
+# Anis Base de donnés
+#bd <- read_excel("D:/Users/enysb/Google Drive/Etudes/Git/Projet-SBT13-Addictologie/bdmieRpp2.xls")
 
 
 bd1 <-bd[bd$age<31,]
@@ -101,24 +101,23 @@ data$FeteQuotidien <- bd1$idt4
 # Les autres considérent que faire la féte fait partie de ma personnalité
 data$FeteImageAutre <- bd1$idt5
 
-Correlation=matrix(data=NA,nrow=35,ncol=18)
-nomlignes=c()
-nomcolonnes=c()
 
-for (i in (1:35)){nomlignes=c(nomlignes,names(data[i]))}
-
-for (i in (36:52)){nomcolonnes=c(nomcolonnes,names(data[i]))}
-
-for (i in (1:35))  
-  
-{for (j in (36:52)) 
-{Correlation[i,j-35]=as.numeric(cor.test(as.numeric(unlist(data[i])), as.numeric(unlist(data[j])), method="spearman")[3])}}
-
-
-rownames(Correlation)=nomlignes
-colnames(Correlation)=nomcolonnes
-
-persp(z = Correlation, ,theta=30,phi=15,xlab='AQoLS',ylab='Consommations',zlab='p-value',col="lightgreen",expand=0.5,shade=0.8,ticktype="detailed")
-
-
-
+## Test de Spearman en suspend
+# Correlation=matrix(data=NA,nrow=35,ncol=18)
+# nomlignes=c()
+# nomcolonnes=c()
+# 
+# for (i in (1:35)){nomlignes=c(nomlignes,names(data[i]))}
+# for (i in (36:53)){nomcolonnes=c(nomcolonnes,names(data[i]))}
+# 
+# for (i in (1:35))
+# {for (j in (36:53))
+# {Correlation[i,j-35]=as.numeric(cor.test(as.numeric(unlist(data[i])), as.numeric(unlist(data[j])), method="spearman")[2])}}
+# 
+# rownames(Correlation)=nomlignes
+# colnames(Correlation)=nomcolonnes
+# 
+# persp(z = Correlation, ,theta=30,phi=15,xlab='AQoLS',ylab='Consommations',zlab='p-value',col="lightgreen",expand=0.5,shade=0.8,ticktype="detailed")
+# 
+# library(plot3D)
+# persp3D(z=Correlation)
