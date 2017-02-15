@@ -8,13 +8,13 @@ library(readxl)
 # Arthur Base de données
 # bd <- read_excel("~/Documents/Projet Enjeux/Projet-SBT13-Addictologie/bdmieRpp2.xls")
 
-#Benjamin base de donn�es
+#Benjamin base de donn?es
 #bd<- read_excel("~/GitHub/Projet-SBT13-Addictologie/bdmieRpp2.xls")
 
 # Emilio Base de données
 # bd <- read_excel("C:\Users\Emilio\Desktop\intercambio\clases\enjeux\sbt\Projet-SBT13-Addictologie\bdmieRpp2.xls")
 
-# Anis Base de donn�es
+# Anis Base de donn?es
 # bd <- read_excel("D:\Users\enysb\Google Drive\Etudes\Git\Projet-SBT13-Addictologie\bdmieRpp2.xls")
 
 
@@ -26,8 +26,11 @@ Nl=dim(bd1)[1] #nombre de lignes
 Nc=dim(bd1)[2] # nombre de colonnes dans la base de données
 data=data.frame(matrix(data=NA,nrow=Nl,ncol=1))
 
-# on transforme les réponses é l'AQOLS en score et on les insére dans la data.frame
+# ID de l'individu interrogé et du collecteur
+data$ID_indiv <-bd[1]
+data$collecteur <- bd[2]
 
+# on transforme les réponses de l'AQOLS en score et on les insére dans la data.frame
 data$a1 <- ifelse(bd1$A1=="Pas du tout", 0, ifelse(bd1$A1=="Un peu", 1,ifelse(bd1$A1== "Beaucoup", 2,ifelse(bd1$A1 == "Enormément", 3,NA))))
 data$a2 <- ifelse(bd1$A2=="Pas du tout", 0, ifelse(bd1$A2=="Un peu", 1,ifelse(bd1$A2== "Beaucoup", 2,ifelse(bd1$A2 == "Enormément", 3,NA))))
 data$a3 <- ifelse(bd1$A3=="Pas du tout", 0, ifelse(bd1$A3=="Un peu", 1,ifelse(bd1$A3== "Beaucoup", 2,ifelse(bd1$A3 == "Enormément", 3,NA))))
@@ -66,8 +69,25 @@ data$atot <- data$a1+data$a2+data$a3+ data$a4+data$a5+data$a6+ data$a7+data$a8+d
 
 # suppression d'une colonne inutile :
 data<-data[,-1]
+# Age 
+data$Age<-bd$age
 # Genre
 data$Genre <- ifelse(bd1$sex=="Un homme", 1, ifelse(bd1$sex=="Une femme", 2,ifelse(bd1$sex== "Indéterminé", NA ,ifelse(bd1$sex == "Ne sait pas", NA,NA))))
+# Niveau d'étude après le Bac
+data$Niveau <- ifelse(bd1$niv=="Bac +1", 1, ifelse(bd1$niv=="Bac +2", 2, ifelse(bd1$niv=="Bac +3",3, ifelse(bd1$niv=="Bac +4", 4, ifelse(bd1$niv=="Bac +5", 5, ifelse(bd1$niv=="Bac>+5", 6, NA))))))
+# Nivautre : c'est une colonne vide, elle n'a pas été remplie. Test : 
+# A <- bd1$nivautre
+# N = 16930
+# B=matrix(data = NA, nrow=N, ncol = 1)
+# for (i in (1:N)){
+#  if (is.na(A[i])){B[i]=0}
+#  else {B[i]=1}
+# }
+# S=0
+# for (i in (1:N)){
+#   if (is.null(B[i])){S=S+1}
+# }
+
 # Fréquence binge-drinking
 data$FreqBinge <- ifelse(bd1$frqoh== "Jamais", 0, ifelse(bd1$binge== "non", 0, ifelse(bd1$frqb1=="1 fois", 1, ifelse(bd1$frqb2=="2 fois", 2, ifelse(bd1$frqb3=="3 é 5 fois", 3, ifelse(bd1$frqb6=="6 é 9 fois", 4, ifelse(bd1$frqb10=="10 fois ou plus", 5, NA)))))))
 # Autres substances 
@@ -100,6 +120,19 @@ data$FetePerso <-bd1$idt3
 data$FeteQuotidien <- bd1$idt4
 # Les autres considérent que faire la féte fait partie de ma personnalité
 data$FeteImageAutre <- bd1$idt5
+
+
+# Descriptions des données
+# moyenne, écart-type, assymétrie (skewness), coefficient d'applatissement,
+# nombre de NA dans chaque items
+
+moyennes=data.frame(matrix(data=NA,nrow=1,ncol=1))
+
+for i in (1:dim(data[2]) {
+  
+}
+          
+
 
 Correlation=matrix(data=NA,nrow=35,ncol=18)
 nomlignes=c()
