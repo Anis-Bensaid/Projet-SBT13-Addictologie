@@ -75,18 +75,19 @@ data$Age<-bd$age
 data$Genre <- ifelse(bd1$sex=="Un homme", 1, ifelse(bd1$sex=="Une femme", 2,ifelse(bd1$sex== "Indéterminé", NA ,ifelse(bd1$sex == "Ne sait pas", NA,NA))))
 # Niveau d'étude après le Bac
 data$Niveau <- ifelse(bd1$niv=="Bac +1", 1, ifelse(bd1$niv=="Bac +2", 2, ifelse(bd1$niv=="Bac +3",3, ifelse(bd1$niv=="Bac +4", 4, ifelse(bd1$niv=="Bac +5", 5, ifelse(bd1$niv=="Bac>+5", 6, NA))))))
-# Nivautre : c'est une colonne vide, elle n'a pas été remplie. Test : 
-# A <- bd1$nivautre
-# N = 16930
-# B=matrix(data = NA, nrow=N, ncol = 1)
-# for (i in (1:N)){
-#  if (is.na(A[i])){B[i]=0}
-#  else {B[i]=1}
-# }
-# S=0
-# for (i in (1:N)){
-#   if (is.null(B[i])){S=S+1}
-# }
+
+## Nivautre : c'est une colonne vide, elle n'a pas été remplie. Test : 
+## A <- bd1$nivautre
+## N = 16930
+## B=matrix(data = NA, nrow=N, ncol = 1)
+## for (i in (1:N)){
+##  if (is.na(A[i])){B[i]=0}
+##  else {B[i]=1}
+## }
+## S=0
+## for (i in (1:N)){
+##   if (is.null(B[i])){S=S+1}
+## }
 
 # Fréquence binge-drinking
 data$FreqBinge <- ifelse(bd1$frqoh== "Jamais", 0, ifelse(bd1$binge== "non", 0, ifelse(bd1$frqb1=="1 fois", 1, ifelse(bd1$frqb2=="2 fois", 2, ifelse(bd1$frqb3=="3 é 5 fois", 3, ifelse(bd1$frqb6=="6 é 9 fois", 4, ifelse(bd1$frqb10=="10 fois ou plus", 5, NA)))))))
