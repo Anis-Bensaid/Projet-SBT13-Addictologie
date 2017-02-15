@@ -1,5 +1,5 @@
 rm(list=ls())
-install.packages("readxl")
+# install.packages("readxl")
 library(readxl)
 
 # Haim base de données
@@ -14,7 +14,7 @@ library(readxl)
 # Emilio Base de données
 # bd <- read_excel("C:\Users\Emilio\Desktop\intercambio\clases\enjeux\sbt\Projet-SBT13-Addictologie\bdmieRpp2.xls")
 
-# Anis Base de donn?es
+# Anis Base de données
 # bd <- read_excel("D:\Users\enysb\Google Drive\Etudes\Git\Projet-SBT13-Addictologie\bdmieRpp2.xls")
 
 
@@ -27,8 +27,11 @@ Nc=dim(bd1)[2] # nombre de colonnes dans la base de données
 data=data.frame(matrix(data=NA,nrow=Nl,ncol=1))
 
 # ID de l'individu interrogé et du collecteur
-data$ID_indiv <-bd[1]
-data$collecteur <- bd[2]
+data$ID_indiv <-bd1[1]
+data$collecteur <- bd1[2]
+
+# Suppression d'une colonne inutile :
+data<-data[,-1]
 
 # on transforme les réponses de l'AQOLS en score et on les insére dans la data.frame
 data$a1 <- ifelse(bd1$A1=="Pas du tout", 0, ifelse(bd1$A1=="Un peu", 1,ifelse(bd1$A1== "Beaucoup", 2,ifelse(bd1$A1 == "Enormément", 3,NA))))
@@ -67,16 +70,16 @@ data$a33 <- ifelse(bd1$A33=="Pas du tout", 0, ifelse(bd1$A33=="Un peu", 1,ifelse
 data$a34 <- ifelse(bd1$A34=="Pas du tout", 0, ifelse(bd1$A34=="Un peu", 1,ifelse(bd1$A34== "Beaucoup", 2,ifelse(bd1$A34 == "Enormément", 3,NA))))
 data$atot <- data$a1+data$a2+data$a3+ data$a4+data$a5+data$a6+ data$a7+data$a8+data$a9+ data$a10+data$a11+data$a12+ data$a13+ data$a14+data$a15+data$a16+ data$a17+ data$a18+data$a19+ data$a20+data$a21+data$a22+ data$a23+ data$a24+data$a25+data$a26+ data$a27+data$a28+data$a29+ data$a30+data$a31+data$a32+ data$a33+ data$a34
 
-# suppression d'une colonne inutile :
-data<-data[,-1]
 # Age 
-data$Age<-bd$age
+data$Age<-bd1$age
 # Genre
 data$Genre <- ifelse(bd1$sex=="Un homme", 1, ifelse(bd1$sex=="Une femme", 2,ifelse(bd1$sex== "Indéterminé", NA ,ifelse(bd1$sex == "Ne sait pas", NA,NA))))
 # Niveau d'étude après le Bac
 data$Niveau <- ifelse(bd1$niv=="Bac +1", 1, ifelse(bd1$niv=="Bac +2", 2, ifelse(bd1$niv=="Bac +3",3, ifelse(bd1$niv=="Bac +4", 4, ifelse(bd1$niv=="Bac +5", 5, ifelse(bd1$niv=="Bac>+5", 6, NA))))))
 
-## Nivautre : c'est une colonne vide, elle n'a pas été remplie. Test : 
+## Nivautr (dans le tableau bd1) 
+# c'est une colonne vide, elle n'a pas été remplie par les personnes interrogées
+# Test : 
 ## A <- bd1$nivautre
 ## N = 16930
 ## B=matrix(data = NA, nrow=N, ncol = 1)
@@ -88,39 +91,75 @@ data$Niveau <- ifelse(bd1$niv=="Bac +1", 1, ifelse(bd1$niv=="Bac +2", 2, ifelse(
 ## for (i in (1:N)){
 ##   if (is.null(B[i])){S=S+1}
 ## }
+## on obtient S = 0
 
+# Discipline 
+data$Disc<-bd1$disc
+# Autre cursus 
+data$AutreCursus <- bd1[8]
 # Fréquence binge-drinking
-data$FreqBinge <- ifelse(bd1$frqoh== "Jamais", 0, ifelse(bd1$binge== "non", 0, ifelse(bd1$frqb1=="1 fois", 1, ifelse(bd1$frqb2=="2 fois", 2, ifelse(bd1$frqb3=="3 é 5 fois", 3, ifelse(bd1$frqb6=="6 é 9 fois", 4, ifelse(bd1$frqb10=="10 fois ou plus", 5, NA)))))))
+data$FreqBinge <- ifelse(bd1$frqoh== "Jamais", 0, ifelse(bd1$binge== "non", 0, ifelse(bd1$frqb1=="1 fois", 1, ifelse(bd1$frqb2=="2 fois", 2, ifelse(bd1$frqb3=="3 à 5 fois", 3, ifelse(bd1$frqb6=="6 à 9 fois", 4, ifelse(bd1$frqb10=="10 fois ou plus", 5, NA)))))))
 # Autres substances 
-data$Tabac <- ifelse(bd1$tbc== "jamais consommé", 0, ifelse(bd1$tbc== "il y a plus d'un an", 1, ifelse(bd1$tbc=="au cours de la derniére année", 1, ifelse(bd1$tbc=="au cours du mois dernier", 2, ifelse(bd1$tbc=="au cours de la derniére semaine", 3, NA)))))
-data$Cannabis <- ifelse(bd1$thc== "jamais consommé", 0, ifelse(bd1$thc== "il y a plus d'un an", 1, ifelse(bd1$thc=="au cours de la derniére année", 1, ifelse(bd1$thc=="au cours du mois dernier", 2, ifelse(bd1$thc=="au cours de la derniére semaine", 3, NA)))))
-data$Cocaine <- ifelse(bd1$coc== "jamais consommé", 0, ifelse(bd1$coc == "il y a plus d'un an", 1, ifelse(bd1$coc=="au cours de la derniére année", 1, ifelse(bd1$coc=="au cours du mois dernier", 2, ifelse(bd1$coc=="au cours de la derniére semaine", 3, NA)))))
-data$Heroine <- ifelse(bd1$hero== "jamais consommé", 0, ifelse(bd1$hero== "il y a plus d'un an", 1, ifelse(bd1$hero=="au cours de la derniére année", 1, ifelse(bd1$hero=="au cours du mois dernier", 2, ifelse(bd1$hero=="au cours de la derniére semaine", 3, NA)))))
-data$MD <- ifelse(bd1$md== "jamais consommé", 0, ifelse(bd1$md== "il y a plus d'un an", 1, ifelse(bd1$md=="au cours de la derniére année", 1, ifelse(bd1$md=="au cours du mois dernier", 2, ifelse(bd1$md=="au cours de la derniére semaine", 3, NA)))))
-data$Poppers <- ifelse(bd1$pop== "jamais consommé", 0, ifelse(bd1$pop== "il y a plus d'un an", 1, ifelse(bd1$pop=="au cours de la derniére année", 1, ifelse(bd1$pop=="au cours du mois dernier", 2, ifelse(bd1$pop=="au cours de la derniére semaine", 3, NA)))))
-data$Jeu <- ifelse(bd1$jeu== "jamais consommé", 0, ifelse(bd1$jeu== "il y a plus d'un an", 1, ifelse(bd1$jeu=="au cours de la derniére année", 1, ifelse(bd1$jeu=="au cours du mois dernier", 2, ifelse(bd1$jeu=="au cours de la derniére semaine", 3, NA)))))
+data$Tabac <- ifelse(bd1$tbc== "jamais consommé", 0, ifelse(bd1$tbc== "il y a plus d'un an", 1, ifelse(bd1$tbc=="au cours de la dernière année", 1, ifelse(bd1$tbc=="au cours du mois dernier", 2, ifelse(bd1$tbc=="au cours de la dernière semaine", 3, NA)))))
+data$Cannabis <- ifelse(bd1$thc== "jamais consommé", 0, ifelse(bd1$thc== "il y a plus d'un an", 1, ifelse(bd1$thc=="au cours de la dernière année", 1, ifelse(bd1$thc=="au cours du mois dernier", 2, ifelse(bd1$thc=="au cours de la dernière semaine", 3, NA)))))
+data$Cocaine <- ifelse(bd1$coc== "jamais consommé", 0, ifelse(bd1$coc == "il y a plus d'un an", 1, ifelse(bd1$coc=="au cours de la dernière année", 1, ifelse(bd1$coc=="au cours du mois dernier", 2, ifelse(bd1$coc=="au cours de la dernière semaine", 3, NA)))))
+data$Heroine <- ifelse(bd1$hero== "jamais consommé", 0, ifelse(bd1$hero== "il y a plus d'un an", 1, ifelse(bd1$hero=="au cours de la dernière année", 1, ifelse(bd1$hero=="au cours du mois dernier", 2, ifelse(bd1$hero=="au cours de la dernière semaine", 3, NA)))))
+data$MD <- ifelse(bd1$md== "jamais consommé", 0, ifelse(bd1$md== "il y a plus d'un an", 1, ifelse(bd1$md=="au cours de la dernière année", 1, ifelse(bd1$md=="au cours du mois dernier", 2, ifelse(bd1$md=="au cours de la dernière semaine", 3, NA)))))
+data$Poppers <- ifelse(bd1$pop== "jamais consommé", 0, ifelse(bd1$pop== "il y a plus d'un an", 1, ifelse(bd1$pop=="au cours de la dernière année", 1, ifelse(bd1$pop=="au cours du mois dernier", 2, ifelse(bd1$pop=="au cours de la dernière semaine", 3, NA)))))
+data$Jeu <- ifelse(bd1$jeu== "jamais consommé", 0, ifelse(bd1$jeu== "il y a plus d'un an", 1, ifelse(bd1$jeu=="au cours de la dernière année", 1, ifelse(bd1$jeu=="au cours du mois dernier", 2, ifelse(bd1$jeu=="au cours de la dernière semaine", 3, NA)))))
 #Argent
-data$Argent <- ifelse(bd1$fin=="Pas de difficultés financiéres  -    0", 0, ifelse(bd1$fin == "1", 1, ifelse(bd1$fin=="2", 2, ifelse(bd1$fin=="3", 3, ifelse(bd1$fin=="Difficultés financiéres trés importantes     -   4", 4, NA)))))
+data$Argent <- ifelse(bd1$fin=="Pas de difficultés financières  -    0", 0, ifelse(bd1$fin == "1", 1, ifelse(bd1$fin=="2", 2, ifelse(bd1$fin=="3", 3, ifelse(bd1$fin=="Difficultés financières trés importantes     -   4", 4, NA)))))
 # Audit-C et consommation d'alcool
 # Fréquence de consommation d'alcool
-data$FreqConso <- ifelse(bd1$frqoh=="Jamais", 0, ifelse(bd1$frqoh=="Une fois par mois ou moins", 1, ifelse(bd1$frqoh== "2 é 4 fois par mois", 2, ifelse(bd1$frqoh == "2 é 3 fois par semaine", 3, ifelse(bd1$frqoh=="4 fois par semaine ou plus", 4, NA)))))
-# Nombre de verres consommés en moyenne é une occasion
-data$NbVerreMoy <- ifelse(bd1$nbvrtyp=="1 ou 2", 0, ifelse(bd1$nbvrtyp =="3 ou 4", 1, ifelse(bd1$nbvrtyp == "5 ou 6", 2, ifelse(bd1$nbvrtyp == "7 é 9", 3, ifelse(bd1$nbvrtyp =="10 ou plus", 4, NA)))))
+data$FreqConso <- ifelse(bd1$frqoh=="Jamais", 0, ifelse(bd1$frqoh=="Une fois par mois ou moins", 1, ifelse(bd1$frqoh== "2 à 4 fois par mois", 2, ifelse(bd1$frqoh == "2 à 3 fois par semaine", 3, ifelse(bd1$frqoh=="4 fois par semaine ou plus", 4, NA)))))
+# Nombre de verres consommés en moyenne à une occasion
+data$NbVerreMoy <- ifelse(bd1$nbvrtyp=="1 ou 2", 0, ifelse(bd1$nbvrtyp =="3 ou 4", 1, ifelse(bd1$nbvrtyp == "5 ou 6", 2, ifelse(bd1$nbvrtyp == "7 à 9", 3, ifelse(bd1$nbvrtyp =="10 ou plus", 4, NA)))))
 #Fréquence de consommation de plus de six verres en une occasion
 data$FreqSupSixVerre <-bd1$sixvr
 #Audit-C
 data$Audit <- data$FreqConso + data$NbVerreMoy+ data$FreqSupSixVerre
 # Image
-# Faire la féte fait partie de l'image que j'ai de moi
+# Faire la fête fait partie de l'image que j'ai de moi
 data$FeteImagePerso <- bd1$idt1
-# Faire la féte fait partie de "qui je suis"
+# Faire la fête fait partie de "qui je suis"
 data$FeteEtre <- bd1$idt2
-# Faire la féte fait partie de ma personnalité
+# Faire la fête fait partie de ma personnalité
 data$FetePerso <-bd1$idt3
-# Faire la féte fait partie de mon quotidien
+# Faire la fête fait partie de mon quotidien
 data$FeteQuotidien <- bd1$idt4
-# Les autres considérent que faire la féte fait partie de ma personnalité
+# Les autres considérent que faire la fête fait partie de ma personnalité
 data$FeteImageAutre <- bd1$idt5
+# Mobilité 
+data$Mobilité <- bd1$eqmob
+# Autonomie
+data$Autonomie <- bd1$eqaut
+# Habitudes
+data$Habitudes <- bd1$eqhab
+# Douleurs/Malaise
+data$Douleur <- bd1$eqdoul
+# Dépression
+data$Depression <- bd1$eqdep
+
+# Lieu de résidence
+data$LieuRes <- bd1$logou
+# Seul
+data$Seul <- bd1$logwho1
+# En couple
+data$Couple <- bd1$logwho2
+# Avec les enfants
+data$Enfants <- bd1$logwho3
+# Colocation avec amis
+data$ColocFriend <- bd1$logwho4
+# Colocation avec autres personnes 
+data$ColocAutres <- bd1$logwho5
+# Maladie chronique Booléen
+data$MaladieChroniqueBool <- bd1$ald
+# Bourse 
+data$Data <- ifelse(bd1$bours=="Oui",1, ifelse(bd1$bours =="Non",0,NA))
+
+
+# Nous avons décidé de ne pas analyser la colonne "aldquoi" car les interrogés ont répondu librement
+
 
 
 # Descriptions des données
