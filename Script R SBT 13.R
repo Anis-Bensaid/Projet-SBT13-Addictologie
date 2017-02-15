@@ -1,5 +1,5 @@
 rm(list=ls())
-# install.packages("readxl")
+install.packages("readxl")
 library(readxl)
 
 # Haim base de données
@@ -15,7 +15,7 @@ library(readxl)
 # bd <- read_excel("C:\Users\Emilio\Desktop\intercambio\clases\enjeux\sbt\Projet-SBT13-Addictologie\bdmieRpp2.xls")
 
 # Anis Base de données
-# bd <- read_excel("D:\Users\enysb\Google Drive\Etudes\Git\Projet-SBT13-Addictologie\bdmieRpp2.xls")
+#bd <- read_excel("D:/Users/enysb/Google Drive/Etudes/Git/Projet-SBT13-Addictologie/bdmieRpp2.xls")
 
 
 bd1 <-bd[bd$age<31,]
@@ -108,7 +108,7 @@ data$MD <- ifelse(bd1$md== "jamais consommé", 0, ifelse(bd1$md== "il y a plus d
 data$Poppers <- ifelse(bd1$pop== "jamais consommé", 0, ifelse(bd1$pop== "il y a plus d'un an", 1, ifelse(bd1$pop=="au cours de la dernière année", 1, ifelse(bd1$pop=="au cours du mois dernier", 2, ifelse(bd1$pop=="au cours de la dernière semaine", 3, NA)))))
 data$Jeu <- ifelse(bd1$jeu== "jamais consommé", 0, ifelse(bd1$jeu== "il y a plus d'un an", 1, ifelse(bd1$jeu=="au cours de la dernière année", 1, ifelse(bd1$jeu=="au cours du mois dernier", 2, ifelse(bd1$jeu=="au cours de la dernière semaine", 3, NA)))))
 #Argent
-data$Argent <- ifelse(bd1$fin=="Pas de difficultés financières  -    0", 0, ifelse(bd1$fin == "1", 1, ifelse(bd1$fin=="2", 2, ifelse(bd1$fin=="3", 3, ifelse(bd1$fin=="Difficultés financières trés importantes     -   4", 4, NA)))))
+data$Argent <- ifelse(bd1$fin=="Pas de difficultés financières  -    0", 0, ifelse(bd1$fin == "1.000000", 1, ifelse(bd1$fin=="2.000000", 2, ifelse(bd1$fin=="3.000000", 3, ifelse(bd1$fin=="Difficultés financières trés importantes     -   4", 4, NA)))))
 # Audit-C et consommation d'alcool
 # Fréquence de consommation d'alcool
 data$FreqConso <- ifelse(bd1$frqoh=="Jamais", 0, ifelse(bd1$frqoh=="Une fois par mois ou moins", 1, ifelse(bd1$frqoh== "2 à 4 fois par mois", 2, ifelse(bd1$frqoh == "2 à 3 fois par semaine", 3, ifelse(bd1$frqoh=="4 fois par semaine ou plus", 4, NA)))))
@@ -160,7 +160,7 @@ data$Data <- ifelse(bd1$bours=="Oui",1, ifelse(bd1$bours =="Non",0,NA))
 
 # Nous avons décidé de ne pas analyser la colonne "aldquoi" car les interrogés ont répondu librement
 
-
+summary(data)
 
 # Descriptions des données
 # moyenne, écart-type, assymétrie (skewness), coefficient d'applatissement,
