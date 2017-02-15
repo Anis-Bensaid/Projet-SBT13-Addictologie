@@ -4,7 +4,7 @@ library(readxl)
 <<<<<<< Updated upstream
 bd <- read_excel("~/Desktop/Projet_SBT13/Github/SBT13/bdmieRpp2.xls")
 
-#Haïm base de données
+#Haim base de données
 # bd <- read_excel("~/Desktop/Projet_SBT13/Projet-SBT13-Addictologie-Github/bdmieRpp2.xls")
 
 # Arthur Base de données
