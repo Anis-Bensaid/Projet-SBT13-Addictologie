@@ -155,7 +155,7 @@ data$ColocAutres <- bd1$logwho5
 # Maladie chronique Booléen
 data$MaladieChroniqueBool <- bd1$ald
 # Bourse 
-data$Data <- ifelse(bd1$bours=="Oui",1, ifelse(bd1$bours =="Non",0,NA))
+data$Bourse <- ifelse(bd1$bours=="Oui",1, ifelse(bd1$bours =="Non",0,NA))
 
 
 # Nous avons décidé de ne pas analyser la colonne "aldquoi" car les interrogés ont répondu librement
@@ -166,11 +166,23 @@ data$Data <- ifelse(bd1$bours=="Oui",1, ifelse(bd1$bours =="Non",0,NA))
 # moyenne, écart-type, assymétrie (skewness), coefficient d'applatissement,
 # nombre de NA dans chaque items
 
-moyennes=data.frame(matrix(data=NA,nrow=1,ncol=1))
+Nom_stats = c("Moyenne","Mediane","Maximum","Minimum","Nb de NA","Ecart-type")
+N_stats = length(Nom_stats)
 
-for i in (1:dim(data[2]) {
-  
+info = matrix(data=NA,nrow=N_stats,ncol=Nc)
+rownames(info) <- Nom_stats
+
+for (i in (3:Nc)) {
+  U = summary(data[i])
+  info[1,i]=U[4] # moyenne 
+  info[2,i] = U[3] # médiane
+  info[3,i] = U[6] # maximum
+  info[4,i] = U[1] # Minimum
+  info[5,i] = U[7] # Nb de NA
+  info[6,i] = sd(as.vector(data[i])) #écart-type
 }
+
+# ne marche pas encore, il faut faire attention au type des données.
           
 
 
