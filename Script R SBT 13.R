@@ -11,8 +11,8 @@ library(readxl)
 #Benjamin base de donn?es
 #bd<- read_excel("~/GitHub/Projet-SBT13-Addictologie/bdmieRpp2.xls")
 
-# Emilio Base de données
-# bd <- read_excel("C:\Users\Emilio\Desktop\intercambio\clases\enjeux\sbt\Projet-SBT13-Addictologie\bdmieRpp2.xls")
+#Emilio Base de données
+bd <- read_excel("C:/Users/Emilio/Desktop/intercambio/clases/enjeux/sbt/Projet-SBT13-Addictologie/bdmieRpp2.xls")
 
 # Anis Base de données
 #bd <- read_excel("D:/Users/enysb/Google Drive/Etudes/Git/Projet-SBT13-Addictologie/bdmieRpp2.xls")
