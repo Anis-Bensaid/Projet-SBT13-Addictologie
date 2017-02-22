@@ -1,5 +1,8 @@
 rm(list=ls())
-# install.packages("readxl")
+# install.packages("readxl")a
+# install.packages(plot3D)
+
+library(FactoMineR)
 library(readxl)
 
 # Haim base de données
@@ -17,7 +20,7 @@ library(readxl)
 
 
 # Anis Base de données
-#bd <- read_excel("D:/Users/enysb/Google Drive/Etudes/Git/Projet-SBT13-Addictologie/bdmieRpp2.xls")
+bd <- read_excel("D:/Users/enysb/Google Drive/Etudes/Git/Projet-SBT13-Addictologie/bdmieRpp2.xls")
 
 
 bd1 <-bd[bd$age<31,]
@@ -29,8 +32,8 @@ Nc=dim(bd1)[2] # nombre de colonnes dans la base de données
 data=data.frame(matrix(data=NA,nrow=Nl,ncol=1))
 
 # ID de l'individu interrogé et du collecteur
-data$ID_indiv <-bd1[1]
-data$collecteur <- bd1[2]
+# data$ID_indiv <-bd1[1]
+# data$collecteur <- bd1[2]
 
 # Suppression d'une colonne inutile :
 data<-data[,-1]
@@ -216,25 +219,32 @@ for (i in (3:Nc)) {
 # ne marche pas encore, il faut faire attention au type des données.
           
 
+################################################
+# ## Correlation de Spearman :
+################################################
+# Correlation=matrix(data=NA,nrow=35,ncol=43)
+# nomlignes=c()
+# nomcolonnes=c()
+# 
+# for (i in (3:37)){nomlignes=c(nomlignes,names(data[i]))}
+# 
+# for (i in (38:80)){nomcolonnes=c(nomcolonnes,names(data[i]))}
+# 
+# for (i in (3:37))  
+#   
+# {for (j in (38:80)) 
+# {Correlation[i,j-35]=as.numeric(cor.test(as.numeric(unlist(data[i])), as.numeric(unlist(data[j])), method="spearman")[3])}}
+# 
+# 
+# rownames(Correlation)=nomlignes
+# colnames(Correlation)=nomcolonnes
+# 
+# persp3D(z = Correlation, ,theta=30,phi=15,zlab='p-value',expand=0.5,shade=0.8,ticktype="detailed")
+# View(Correlation)
 
-Correlation=matrix(data=NA,nrow=35,ncol=18)
-nomlignes=c()
-nomcolonnes=c()
 
-for (i in (1:35)){nomlignes=c(nomlignes,names(data[i]))}
-
-for (i in (36:52)){nomcolonnes=c(nomcolonnes,names(data[i]))}
-
-for (i in (1:35))  
-  
-{for (j in (36:52)) 
-{Correlation[i,j-35]=as.numeric(cor.test(as.numeric(unlist(data[i])), as.numeric(unlist(data[j])), method="spearman")[3])}}
-
-
-rownames(Correlation)=nomlignes
-colnames(Correlation)=nomcolonnes
-
-persp(z = Correlation, ,theta=30,phi=15,xlab='AQoLS',ylab='Consommations',zlab='p-value',col="lightgreen",expand=0.5,shade=0.8,ticktype="detailed")
-
-
-
+#############################################
+### ACP :
+#############################################
+res_pca <- PCA(data)
+plot.PCA(res_pca,col.quali="blue", label="quali")
