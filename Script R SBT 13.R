@@ -9,7 +9,7 @@ library(readxl)
 # bd <- read_excel("~/Desktop/Projet_SBT13/Projet-SBT13-Addictologie-Github/bdmieRpp2.xls")
 
 # Arthur Base de données
- bd <- read_excel("~/Documents/Projet Enjeux/Projet-SBT13-Addictologie/bdmieRpp2.xls")
+# bd <- read_excel("~/Documents/Projet Enjeux/Projet-SBT13-Addictologie/bdmieRpp2.xls")
 
 #Benjamin base de donn?es
 #bd<- read_excel("~/GitHub/Projet-SBT13-Addictologie/bdmieRpp2.xls")
@@ -31,12 +31,9 @@ Nl=dim(bd1)[1] #nombre de lignes
 
 data=data.frame(matrix(data=NA,nrow=Nl,ncol=1))
 
-<<<<<<< HEAD
 # ID de l'individu interrogé et du collecteur
-=======
 # ID de l'individu interrogé et du collecteur 
 # on n'a pas besoin d'utiliser les ID car toutes les données sont rassemblées dans un unique tableau
->>>>>>> Haïm
 # data$ID_indiv <-bd1[1]
 # data$collecteur <- bd1[2]
 
