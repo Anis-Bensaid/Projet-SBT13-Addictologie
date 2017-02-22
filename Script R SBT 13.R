@@ -24,7 +24,7 @@ library(readxl)
 
 
 bd1 <-bd[bd$age<31,]
-# on cherche la corrélation entre chaque item de AQOLS contre tout le reste 
+# on cherche la corrélation entre chaque item de AQOLS contre tout le reste
 
 # Il faut transformer les réponses aux autres questions en score et les ranger dans une matrice
 Nl=dim(bd1)[1] #nombre de lignes
@@ -32,7 +32,7 @@ Nl=dim(bd1)[1] #nombre de lignes
 data=data.frame(matrix(data=NA,nrow=Nl,ncol=1))
 
 # ID de l'individu interrogé et du collecteur
-# ID de l'individu interrogé et du collecteur 
+# ID de l'individu interrogé et du collecteur
 # on n'a pas besoin d'utiliser les ID car toutes les données sont rassemblées dans un unique tableau
 # data$ID_indiv <-bd1[1]
 # data$collecteur <- bd1[2]
@@ -77,16 +77,16 @@ data$a33 <- ifelse(bd1$A33=="Pas du tout", 0, ifelse(bd1$A33=="Un peu", 1,ifelse
 data$a34 <- ifelse(bd1$A34=="Pas du tout", 0, ifelse(bd1$A34=="Un peu", 1,ifelse(bd1$A34== "Beaucoup", 2,ifelse(bd1$A34 == "Enormément", 3,NA))))
 data$atot <- data$a1+data$a2+data$a3+ data$a4+data$a5+data$a6+ data$a7+data$a8+data$a9+ data$a10+data$a11+data$a12+ data$a13+ data$a14+data$a15+data$a16+ data$a17+ data$a18+data$a19+ data$a20+data$a21+data$a22+ data$a23+ data$a24+data$a25+data$a26+ data$a27+data$a28+data$a29+ data$a30+data$a31+data$a32+ data$a33+ data$a34
 
-# Age 
+# Age
 data$Age<-bd1$age
 # Genre
 data$Genre <- ifelse(bd1$sex=="Un homme", 1, ifelse(bd1$sex=="Une femme", 2,ifelse(bd1$sex== "Indéterminé", NA ,ifelse(bd1$sex == "Ne sait pas", NA,NA))))
 # Niveau d'étude après le Bac
 data$Niveau <- ifelse(bd1$niv=="Bac +1", 1, ifelse(bd1$niv=="Bac +2", 2, ifelse(bd1$niv=="Bac +3",3, ifelse(bd1$niv=="Bac +4", 4, ifelse(bd1$niv=="Bac +5", 5, ifelse(bd1$niv=="Bac>+5", 6, NA))))))
 
-## Nivautr (dans le tableau bd1) 
+## Nivautr (dans le tableau bd1)
 # c'est une colonne vide, elle n'a pas été remplie par les personnes interrogées
-# Test : 
+# Test :
 ## A <- bd1$nivautre
 ## N = 16930
 ## B=matrix(data = NA, nrow=N, ncol = 1)
@@ -100,7 +100,7 @@ data$Niveau <- ifelse(bd1$niv=="Bac +1", 1, ifelse(bd1$niv=="Bac +2", 2, ifelse(
 ## }
 ## on obtient S = 0
 
-# Discipline 
+# Discipline
 # data$Disc<-bd1$disc --> colonne qualitative, qu'on a préféré scinder en plusieurs colonnes avec un résultat
 # qualitatif
 data$StudyHuma <- ifelse(bd1$disc=="Sciences Humaines et sociales / Lettres / Langues / Art",1,NA)
@@ -123,7 +123,7 @@ data$StudyAutre[is.na(data$StudyAutre)]<--0
 
 # Fréquence binge-drinking
 data$FreqBinge <- ifelse(bd1$frqoh== "Jamais", 0, ifelse(bd1$binge== "non", 0, ifelse(bd1$frqb1=="1 fois", 1, ifelse(bd1$frqb2=="2 fois", 2, ifelse(bd1$frqb3=="3 à 5 fois", 3, ifelse(bd1$frqb6=="6 à 9 fois", 4, ifelse(bd1$frqb10=="10 fois ou plus", 5, NA)))))))
-# Autres substances 
+# Autres substances
 data$Tabac <- ifelse(bd1$tbc== "jamais consommé", 0, ifelse(bd1$tbc== "il y a plus d'un an", 1, ifelse(bd1$tbc=="au cours de la dernière année", 1, ifelse(bd1$tbc=="au cours du mois dernier", 2, ifelse(bd1$tbc=="au cours de la dernière semaine", 3, NA)))))
 data$Cannabis <- ifelse(bd1$thc== "jamais consommé", 0, ifelse(bd1$thc== "il y a plus d'un an", 1, ifelse(bd1$thc=="au cours de la dernière année", 1, ifelse(bd1$thc=="au cours du mois dernier", 2, ifelse(bd1$thc=="au cours de la dernière semaine", 3, NA)))))
 data$Cocaine <- ifelse(bd1$coc== "jamais consommé", 0, ifelse(bd1$coc == "il y a plus d'un an", 1, ifelse(bd1$coc=="au cours de la dernière année", 1, ifelse(bd1$coc=="au cours du mois dernier", 2, ifelse(bd1$coc=="au cours de la dernière semaine", 3, NA)))))
@@ -153,7 +153,7 @@ data$FetePerso <-bd1$idt3
 data$FeteQuotidien <- bd1$idt4
 # Les autres considérent que faire la fête fait partie de ma personnalité
 data$FeteImageAutre <- bd1$idt5
-# Mobilité 
+# Mobilité
 data$Mobilité <- bd1$eqmob
 # Autonomie
 data$Autonomie <- bd1$eqaut
@@ -164,7 +164,7 @@ data$Douleur <- bd1$eqdoul
 # Dépression
 data$Depression <- bd1$eqdep
 
-# Lieu de résidence : Famille/tuteur, logement indépendant, résidence collective, ailleurs 
+# Lieu de résidence : Famille/tuteur, logement indépendant, résidence collective, ailleurs
 data$LogFamille <- ifelse(bd1$logou=="Chez mes 2 parents /Chez ma mère / Chez mon père /Chez un autre membre de ma famille (oncle, tante...) / Chez mon tuteur",1,NA)
 data$LogFamille[is.na(data$LogFamille)]<--0
 data$LogInd <--ifelse(bd1$logou=="Dans un logement indépendant (en location, en colocation, dans un logement dont je suis propriétaire, au domicile d’un autre membre de ma famille...)",1,NA)
@@ -185,12 +185,12 @@ data$Enfants[is.na(data$Enfants)]<--0
 # Colocation avec amis
 data$ColocFriend <- ifelse(bd1$logwho4=="En colocation avec un ou des ami-e(s)",1,NA)
 data$ColocFriend[is.na(data$ColocFriend)]<--0
-# Colocation avec autres personnes 
+# Colocation avec autres personnes
 data$ColocAutres <- ifelse(bd1$logwho5=="En colocation avec une ou plusieurs autres personnes",1,NA)
 data$ColocAutres[is.na(data$ColocAutres)]<--0
 # Maladie chronique Booléen
 data$MaladieChroniqueBool <- ifelse(bd1$ald=="Oui",1,ifelse(bd1$ald=="Non",0,NA))
-# Bourse 
+# Bourse
 data$Bourse <- ifelse(bd1$bours=="Oui",1, ifelse(bd1$bours =="Non",0,NA))
 
 
@@ -211,7 +211,7 @@ colnames(info) <- colnames(data)
 
 for (i in (1:Nc)) {
   y=data[i]
-  info[1,i]<-apply(na.omit(y),2,mean) # moyenne 
+  info[1,i]<-apply(na.omit(y),2,mean) # moyenne
   info[2,i] <-apply(na.omit(y),2,median) # médiane
   info[3,i] <- max(na.omit(y)) # maximum
   info[4,i] <- min(na.omit(y)) # Minimum
@@ -219,30 +219,42 @@ for (i in (1:Nc)) {
   info[6,i] <- apply(na.omit(y), 2, sd) # écart-type
 }
 
-          
+
 
 ################################################
 # ## Correlation de Spearman :
 ################################################
-# Correlation=matrix(data=NA,nrow=35,ncol=43)
-# nomlignes=c()
-# nomcolonnes=c()
-# 
-# for (i in (3:37)){nomlignes=c(nomlignes,names(data[i]))}
-# 
-# for (i in (38:80)){nomcolonnes=c(nomcolonnes,names(data[i]))}
-# 
-# for (i in (3:37))  
-#   
-# {for (j in (38:80)) 
-# {Correlation[i,j-35]=as.numeric(cor.test(as.numeric(unlist(data[i])), as.numeric(unlist(data[j])), method="spearman")[3])}}
-# 
-# 
-# rownames(Correlation)=nomlignes
-# colnames(Correlation)=nomcolonnes
-# 
-# persp3D(z = Correlation, ,theta=30,phi=15,zlab='p-value',expand=0.5,shade=0.8,ticktype="detailed")
-# View(Correlation)
+
+CorrelationP=matrix(data=NA,nrow=35,ncol=43)
+CorrelationR=matrix(data=NA,nrow=35,ncol=43)
+nomlignes=c()
+nomcolonnes=c()
+for (i in (1:35)){nomlignes=c(nomlignes,names(data[i]))}
+for (i in (36:78)){nomcolonnes=c(nomcolonnes,names(data[i]))}
+rownames(CorrelationP)=nomlignes
+colnames(CorrelationP)=nomcolonnes
+rownames(CorrelationR)=nomlignes
+colnames(CorrelationR)=nomcolonnes
+
+for (i in (1:35))
+{for (j in (36:78)) {Test=as.numeric(cor.test(as.numeric(unlist(data[i])), as.numeric(unlist(data[j])), method="spearman")
+CorrelationR[i,j-35]=Test[4]
+CorrelationP[i,j-35]=Test[3]}}
+
+for (i in (1:35)) {
+  for (j in (36:78)) {
+    Test = as.numeric(cor.test(as.numeric(unlist(data[i])), as.numeric(unlist(data[j])), method="spearman")
+                      CorrelationR[i,j-35] <- Test[4]
+                      CorrelationP[i,j-35] <- Test[3]
+  }
+}
+
+View(CorrelationP)
+View(CorrelationR)
+
+persp3D(z = CorrelationP, theta=30,phi=15,xlab='AQoLS',ylab='Consommations',zlab='p-value',expand=0.5,shade=0.8,ticktype="detailed")
+persp3D(z = CorrelationR, theta=30,phi=15,xlab='AQoLS',ylab='Consommations',zlab='R',expand=0.5,shade=0.8,ticktype="detailed")
+
 
 
 #############################################
@@ -259,6 +271,17 @@ k=5
 kmeans(na.omit(data), k, iter.max = 10, nstart = 1,
        algorithm = c("Hartigan-Wong", "Lloyd", "Forgy",
                      "MacQueen"), trace=FALSE)
+#############################################
+### ACP :
+#############################################
+res_pca <- PCA(data)
+plot.PCA(res_pca,col.quali="blue", label="quali")
 
 
-
+#######################################################
+### K-means
+######################################################
+k=5
+kmeans(na.omit(data), k, iter.max = 10, nstart = 1,
+       algorithm = c("Hartigan-Wong", "Lloyd", "Forgy",
+                     "MacQueen"), trace=FALSE)
