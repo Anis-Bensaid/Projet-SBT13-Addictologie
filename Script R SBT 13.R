@@ -237,17 +237,10 @@ rownames(CorrelationR)=nomlignes
 colnames(CorrelationR)=nomcolonnes
 
 for (i in (1:35))
-{for (j in (36:78)) {Test=as.numeric(cor.test(as.numeric(unlist(data[i])), as.numeric(unlist(data[j])), method="spearman")
-CorrelationR[i,j-35]=Test[4]
-CorrelationP[i,j-35]=Test[3]}}
-
-for (i in (1:35)) {
-  for (j in (36:78)) {
-    Test = as.numeric(cor.test(as.numeric(unlist(data[i])), as.numeric(unlist(data[j])), method="spearman")
-                      CorrelationR[i,j-35] <- Test[4]
-                      CorrelationP[i,j-35] <- Test[3]
-  }
-}
+{for (j in (36:78))
+{Testspm=cor.test(as.numeric(unlist(data[i])), as.numeric(unlist(data[j])), method="spearman")
+CorrelationP[i,j-35]=as.numeric(Testspm[3])
+CorrelationR[i,j-35]=as.numeric(Testspm[3])}}
 
 View(CorrelationP)
 View(CorrelationR)
