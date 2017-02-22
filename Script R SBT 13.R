@@ -1,7 +1,7 @@
 rm(list=ls())
-# install.packages("readxl")a
+# install.packages("readxl")
 # install.packages(plot3D)
-
+# install.packages("FactoMineR")
 library(FactoMineR)
 library(readxl)
 
@@ -9,7 +9,7 @@ library(readxl)
 # bd <- read_excel("~/Desktop/Projet_SBT13/Projet-SBT13-Addictologie-Github/bdmieRpp2.xls")
 
 # Arthur Base de données
-# bd <- read_excel("~/Documents/Projet Enjeux/Projet-SBT13-Addictologie/bdmieRpp2.xls")
+ bd <- read_excel("~/Documents/Projet Enjeux/Projet-SBT13-Addictologie/bdmieRpp2.xls")
 
 #Benjamin base de donn?es
 #bd<- read_excel("~/GitHub/Projet-SBT13-Addictologie/bdmieRpp2.xls")
@@ -20,7 +20,7 @@ library(readxl)
 
 
 # Anis Base de données
-bd <- read_excel("D:/Users/enysb/Google Drive/Etudes/Git/Projet-SBT13-Addictologie/bdmieRpp2.xls")
+#bd <- read_excel("D:/Users/enysb/Google Drive/Etudes/Git/Projet-SBT13-Addictologie/bdmieRpp2.xls")
 
 
 bd1 <-bd[bd$age<31,]
