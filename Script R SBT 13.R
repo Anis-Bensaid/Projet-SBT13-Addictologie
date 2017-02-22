@@ -1,7 +1,8 @@
 rm(list=ls())
 # install.packages("readxl")
-# install.packages(plot3D)
+# install.packages("plot3D")
 # install.packages("FactoMineR")
+library(plot3D)
 library(FactoMineR)
 library(readxl)
 
@@ -240,7 +241,7 @@ for (i in (1:35))
 {for (j in (36:78))
 {Testspm=cor.test(as.numeric(unlist(data[i])), as.numeric(unlist(data[j])), method="spearman")
 CorrelationP[i,j-35]=as.numeric(Testspm[3])
-CorrelationR[i,j-35]=as.numeric(Testspm[3])}}
+CorrelationR[i,j-35]=as.numeric(Testspm[4])}}
 
 View(CorrelationP)
 View(CorrelationR)
@@ -250,20 +251,6 @@ persp3D(z = CorrelationR, theta=30,phi=15,xlab='AQoLS',ylab='Consommations',zlab
 
 
 
-#############################################
-### ACP :
-#############################################
-res_pca <- PCA(data)
-plot.PCA(res_pca,col.quali="blue", label="quali")
-
-
-#######################################################
-### K-means
-######################################################
-k=5
-kmeans(na.omit(data), k, iter.max = 10, nstart = 1,
-       algorithm = c("Hartigan-Wong", "Lloyd", "Forgy",
-                     "MacQueen"), trace=FALSE)
 #############################################
 ### ACP :
 #############################################
