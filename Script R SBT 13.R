@@ -248,3 +248,15 @@ for (i in (3:Nc)) {
 #############################################
 res_pca <- PCA(data)
 plot.PCA(res_pca,col.quali="blue", label="quali")
+
+
+#######################################################
+### K-means
+######################################################
+k=5
+kmeans(na.omit(data), k, iter.max = 10, nstart = 1,
+       algorithm = c("Hartigan-Wong", "Lloyd", "Forgy",
+                     "MacQueen"), trace=FALSE)
+
+
+
