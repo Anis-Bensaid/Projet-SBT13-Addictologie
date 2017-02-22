@@ -143,17 +143,22 @@ data$Depression <- bd1$eqdep
 # Lieu de résidence
 data$LieuRes <- bd1$logou
 # Seul
-data$Seul <- bd1$logwho1
+data$Seul <- ifelse(bd1$logwho1=="Je vis seul-e",1,NA)
+data$Seul[is.na(data$Seul)]<--0
 # En couple
-data$Couple <- bd1$logwho2
+data$Couple <- ifelse(bd1$logwho2=="Je vis en couple avec mon/ma petit-e ami-e ou conjoint-e",1,NA)
+data$Couple[is.na(data$Couple)]<--0
 # Avec les enfants
-data$Enfants <- bd1$logwho3
+data$Enfants <- ifelse(bd1$logwho3=="Avec mes enfants",1,NA)
+data$Enfants[is.na(data$Enfants)]<--0
 # Colocation avec amis
-data$ColocFriend <- bd1$logwho4
+data$ColocFriend <- ifelse(bd1$logwho4=="En colocation avec un ou des ami-e(s)",1,NA)
+data$ColocFriend[is.na(data$ColocFriend)]<--0
 # Colocation avec autres personnes 
-data$ColocAutres <- bd1$logwho5
+data$ColocAutres <- ifelse(bd1$logwho5=="En colocation avec une ou plusieurs autres personnes",1,NA)
+data$ColocAutres[is.na(data$ColocAutres)]<--0
 # Maladie chronique Booléen
-data$MaladieChroniqueBool <- bd1$ald
+data$MaladieChroniqueBool <- ifelse(bd1$ald=="Oui",1,ifelse(bd1$ald=="Non",0,NA))
 # Bourse 
 data$Bourse <- ifelse(bd1$bours=="Oui",1, ifelse(bd1$bours =="Non",0,NA))
 
@@ -179,7 +184,7 @@ for (i in (3:Nc)) {
   info[3,i] = U[6] # maximum
   info[4,i] = U[1] # Minimum
   info[5,i] = U[7] # Nb de NA
-  info[6,i] = sd(as.vector(data[i])) #écart-type
+  info[6,i] = sd(na.omit(data[i])) #écart-type
 }
 
 # ne marche pas encore, il faut faire attention au type des données.
