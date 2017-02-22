@@ -28,10 +28,15 @@ bd1 <-bd[bd$age<31,]
 
 # Il faut transformer les réponses aux autres questions en score et les ranger dans une matrice
 Nl=dim(bd1)[1] #nombre de lignes
-Nc=dim(bd1)[2] # nombre de colonnes dans la base de données
+
 data=data.frame(matrix(data=NA,nrow=Nl,ncol=1))
 
+<<<<<<< HEAD
 # ID de l'individu interrogé et du collecteur
+=======
+# ID de l'individu interrogé et du collecteur 
+# on n'a pas besoin d'utiliser les ID car toutes les données sont rassemblées dans un unique tableau
+>>>>>>> Haïm
 # data$ID_indiv <-bd1[1]
 # data$collecteur <- bd1[2]
 
@@ -194,29 +199,29 @@ data$Bourse <- ifelse(bd1$bours=="Oui",1, ifelse(bd1$bours =="Non",0,NA))
 
 # Nous avons décidé de ne pas analyser la colonne "aldquoi" car les interrogés ont répondu librement
 
-summary(data)
-
 # Descriptions des données
-# moyenne, écart-type, assymétrie (skewness), coefficient d'applatissement,
-# nombre de NA dans chaque items
+# moyenne, écart-type, nombre de NA dans chaque items
 
 Nom_stats = c("Moyenne","Mediane","Maximum","Minimum","Nb de NA","Ecart-type")
 N_stats = length(Nom_stats)
 
-info = matrix(data=NA,nrow=N_stats,ncol=Nc)
+Nc=dim(data)[2] # nombre d'items
+info=data.frame(matrix(data=NA,nrow=N_stats,ncol=Nc))
+# info = matrix(data=NA,nrow=N_stats,ncol=Nc)
 rownames(info) <- Nom_stats
+colnames(info) <- colnames(data)
 
-for (i in (3:Nc)) {
-  U = summary(data[i])
-  info[1,i]=U[4] # moyenne 
-  info[2,i] = U[3] # médiane
-  info[3,i] = U[6] # maximum
-  info[4,i] = U[1] # Minimum
-  info[5,i] = U[7] # Nb de NA
-  info[6,i] = sd(na.omit(data[i])) #écart-type
+
+for (i in (1:Nc)) {
+  y=data[i]
+  info[1,i]<-apply(na.omit(y),2,mean) # moyenne 
+  info[2,i] <-apply(na.omit(y),2,median) # médiane
+  info[3,i] <- max(na.omit(y)) # maximum
+  info[4,i] <- min(na.omit(y)) # Minimum
+  info[5,i] <- length(data[i][is.na(data[i])]) #nb de NA
+  info[6,i] <- apply(na.omit(y), 2, sd) # écart-type
 }
 
-# ne marche pas encore, il faut faire attention au type des données.
           
 
 ################################################
