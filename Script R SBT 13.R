@@ -1,5 +1,5 @@
 rm(list=ls())
-install.packages("readxl")
+# install.packages("readxl")
 library(readxl)
 
 # Haim base de données
@@ -94,9 +94,26 @@ data$Niveau <- ifelse(bd1$niv=="Bac +1", 1, ifelse(bd1$niv=="Bac +2", 2, ifelse(
 ## on obtient S = 0
 
 # Discipline 
-data$Disc<-bd1$disc
-# Autre cursus 
-data$AutreCursus <- bd1[8]
+# data$Disc<-bd1$disc --> colonne qualitative, qu'on a préféré scinder en plusieurs colonnes avec un résultat
+# qualitatif
+data$StudyHuma <- ifelse(bd1$disc=="Sciences Humaines et sociales / Lettres / Langues / Art",1,NA)
+data$StudyHuma[is.na(data$StudyHuma)]<--0
+data$StudyProf <- ifelse(bd1$disc=="Enseignement / STAPS",1,NA)
+data$StudyProf[is.na(data$StudyProf)]<--0
+data$StudyLawEco <- ifelse(bd1$disc=="Droit / Eco-gestion / Management",1,NA)
+data$StudyLawEco[is.na(data$StudyLawEco)]<--0
+data$StudyScience <- ifelse(bd1$disc=="Sciences / Ingénierie /Architecture",1,NA)
+data$StudyScience[is.na(data$StudyScience)]<--0
+data$StudyMed <- ifelse(bd1$disc=="Santé",1,NA)
+data$StudyMed[is.na(data$StudyMed)]<--0
+data$StudyMed <- ifelse(bd1$disc=="Santé",1,NA)
+data$StudyMed[is.na(data$StudyMed)]<--0
+data$StudyAutre <- ifelse(bd1$disc=="Autre (veuillez préciser)",1,NA)
+data$StudyAutre[is.na(data$StudyAutre)]<--0
+
+# Autre cursus, c'est une donnée qualitative qui nous semble inutilisable
+# data$AutreCursus <- bd1[8]
+
 # Fréquence binge-drinking
 data$FreqBinge <- ifelse(bd1$frqoh== "Jamais", 0, ifelse(bd1$binge== "non", 0, ifelse(bd1$frqb1=="1 fois", 1, ifelse(bd1$frqb2=="2 fois", 2, ifelse(bd1$frqb3=="3 à 5 fois", 3, ifelse(bd1$frqb6=="6 à 9 fois", 4, ifelse(bd1$frqb10=="10 fois ou plus", 5, NA)))))))
 # Autres substances 
@@ -140,8 +157,15 @@ data$Douleur <- bd1$eqdoul
 # Dépression
 data$Depression <- bd1$eqdep
 
-# Lieu de résidence
-data$LieuRes <- bd1$logou
+# Lieu de résidence : Famille/tuteur, logement indépendant, résidence collective, ailleurs 
+data$LogFamille <- ifelse(bd1$logou=="Chez mes 2 parents /Chez ma mère / Chez mon père /Chez un autre membre de ma famille (oncle, tante...) / Chez mon tuteur",1,NA)
+data$LogFamille[is.na(data$LogFamille)]<--0
+data$LogInd <--ifelse(bd1$logou=="Dans un logement indépendant (en location, en colocation, dans un logement dont je suis propriétaire, au domicile d’un autre membre de ma famille...)",1,NA)
+data$LogInd [is.na(data$LogInd )]<--0
+data$LogRes <--ifelse(bd1$logou=="En résidence collective (foyer, internat, résidence universitaire...)",1,NA)
+data$LogRes[is.na(data$LogRes)]<--0
+data$LogAutre <--ifelse(bd1$logou=="Ailleurs",1,NA)
+data$LogAutre[is.na(data$LogAutre)]<--0
 # Seul
 data$Seul <- ifelse(bd1$logwho1=="Je vis seul-e",1,NA)
 data$Seul[is.na(data$Seul)]<--0
