@@ -6,6 +6,7 @@ library(plot3D)
 library(FactoMineR)
 library(readxl)
 
+
 # Haim base de données
 # bd <- read_excel("~/Desktop/Projet_SBT13/Projet-SBT13-Addictologie-Github/bdmieRpp2.xls")
 
@@ -21,7 +22,7 @@ library(readxl)
 
 
 # Anis Base de données
-#bd <- read_excel("D:/Users/enysb/Google Drive/Etudes/Git/Projet-SBT13-Addictologie/bdmieRpp2.xls")
+bd <- read_excel("D:/Users/enysb/Google Drive/Etudes/Git/Projet-SBT13-Addictologie/bdmieRpp2.xls")
 
 
 bd1 <-bd[bd$age<31,]
@@ -223,7 +224,7 @@ for (i in (1:Nc)) {
 
 
 ################################################
-# ## Correlation de Spearman :
+### Correlation de Spearman :
 ################################################
 
 CorrelationP=matrix(data=NA,nrow=35,ncol=43)
@@ -251,17 +252,52 @@ persp3D(z = CorrelationR, theta=30,phi=15,xlab='AQoLS',ylab='Consommations',zlab
 
 
 
-#############################################
-### ACP :
-#############################################
-res_pca <- PCA(data)
-plot.PCA(res_pca,col.quali="blue", label="quali")
-
-
 #######################################################
 ### K-means
 ######################################################
 k=5
-kmeans(na.omit(data), k, iter.max = 10, nstart = 1,
-       algorithm = c("Hartigan-Wong", "Lloyd", "Forgy",
-                     "MacQueen"), trace=FALSE)
+clus= kmeans(na.omit(data), k, iter.max = 10, nstart = 1, algorithm = c("Hartigan-Wong", "Lloyd", "Forgy","MacQueen"), trace=FALSE)
+(clus$cluster)
+
+
+
+#############################################
+### ACP :
+#############################################
+
+#On applique la méthode de l'Analyse par composantes principales à l'aide de la fonction PCA du package FactoMineR
+res_pca <- PCA(data,ncp=30)
+
+#La fonction plot.PCA permet d'afficher la représentation des variables () et des individus (Individuals factor map (PCA)) dans le plan des deux premiers facteurs principaux
+plot.PCA(res_pca,col.quali="blue", label="quali")
+
+
+
+#####################################################
+### classification ascendante hiérarchique
+#####################################################
+
+# Les calcules pour faire la Classification ascendante hiérarchique sont trop lourds vu la quantité de données dont on dispose. 
+# On décide de réduire la matrice des distance en réduisant le nombre de dimension à l'aide de l'ACP.
+
+
+
+# La fonction dist prend comme argument la dataframe et retourne la matrice des distances en utilisant la norme euclidienne
+d.dataacp=dist(res_pca$ind$coord)
+
+# La fonction hclust permet prend comme argument la dataframe et la matrice de distances et retourne la Classification ascendante hiérarchique
+cah.ward <- hclust(d.dataacp,method="ward.D2")
+
+# Le plot de cah.ward donne le Dendogramme de la classification hiérarchique
+plot(cah.ward)
+
+
+
+
+# regression PLS
+# regarder les question où il y a le plus de données manquantes et peut-être les enlever.
+# complete case
+# regarder le nombre de na par lignes
+# Enregistrer les variables saveRDS
+# méthodes explicatives : Anova ou faire des ACP sur les consommation et des ACP sur les quali.
+
