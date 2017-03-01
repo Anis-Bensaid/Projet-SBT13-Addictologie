@@ -567,7 +567,7 @@ plot.PCA(res_pca,col.quali="blue", label="quali")
 
 
 #####################################################
-### classification ascendante hiérarchique
+### classification  hiérarchique ascendante
 #####################################################
 
 # Les calcules pour faire la Classification ascendante hiérarchique sont trop lourds vu la quantité de données dont on dispose. 
@@ -579,13 +579,14 @@ plot.PCA(res_pca,col.quali="blue", label="quali")
 d.dataacp=dist(res_pca$ind$coord)
 
 # La fonction hclust permet prend comme argument la dataframe et la matrice de distances et retourne la Classification ascendante hiérarchique
-cah.ward <- hclust(d.dataacp,method="ward.D2")
+cha=hclust(d.dataacp,method="ward.D2")
 
 # Le plot de cah.ward donne le Dendogramme de la classification hiérarchique
-plot(cah.ward)
+# plot(cah.ward)
 
+rect.hclust(cha,10)
 
-
+clustercha=cutree(cha, 10)
 
 # regression PLS
 # regarder les question où il y a le plus de données manquantes et peut-être les enlever.
@@ -593,7 +594,7 @@ plot(cah.ward)
 # regarder le nombre de na par lignes
 # Enregistrer les variables saveRDS
 # méthodes explicatives : Anova ou faire des ACP sur les consommation et des ACP sur les quali.
-
+cluster1=data[clustercha==1,]
 
 
 
