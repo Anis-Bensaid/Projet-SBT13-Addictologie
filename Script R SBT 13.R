@@ -6,6 +6,10 @@ library(plot3D)
 library(FactoMineR)
 library(readxl)
 
+#########################
+### Lecture de la BDD ###
+#########################
+
 # Haim base de données
 #bd <- read_excel("~/Desktop/Projet_SBT13/Projet-SBT13-Addictologie-Github/bdmieRpp2.xls")
 
@@ -23,6 +27,9 @@ library(readxl)
 # Anis Base de données
 #bd <- read_excel("D:/Users/enysb/Google Drive/Etudes/Git/Projet-SBT13-Addictologie/bdmieRpp2.xls")
 
+#################################
+### Restructuration de la BDD ###
+#################################
 
 bd1 <-bd[bd$age<31,]
 # on cherche la corrélation entre chaque item de AQOLS contre tout le reste
@@ -197,8 +204,10 @@ data$Bourse <- ifelse(bd1$bours=="Oui",1, ifelse(bd1$bours =="Non",0,NA))
 
 # Nous avons décidé de ne pas analyser la colonne "aldquoi" car les interrogés ont répondu librement
 
-# Descriptions des données
-# moyenne, écart-type, nombre de NA dans chaque items
+###########################################################
+###            Descriptions des données                 ###
+### moyenne, écart-type, nombre de NA dans chaque items ###
+###########################################################
 
 Nom_stats = c("Moyenne","Mediane","Maximum","Minimum","Nb de NA","Ecart-type")
 N_stats = length(Nom_stats)
@@ -234,9 +243,9 @@ taux_global=100*sum(reponses$Total)/(Nc*Nl) # taux global de réponses manquante
 
 
 
-################################################
-### Correlation de Spearman :
-################################################
+###############################
+### Correlation de Spearman ###
+###############################
 
 CorrelationP=matrix(data=NA,nrow=35,ncol=43)
 CorrelationR=matrix(data=NA,nrow=35,ncol=43)
@@ -263,18 +272,18 @@ persp3D(z = CorrelationR, theta=30,phi=15,xlab='AQoLS',ylab='Consommations',zlab
 
 
 
-#######################################################
-### K-means
-######################################################
+###############
+### K-means ###
+###############
 k=5
 clus= kmeans(na.omit(data), k, iter.max = 10, nstart = 1, algorithm = c("Hartigan-Wong", "Lloyd", "Forgy","MacQueen"), trace=FALSE)
 (clus$cluster)
 
 
 
-#############################################
-### ACP :
-#############################################
+###########
+### ACP ###
+###########
 
 
 res_pca <- PCA(data,ncp=30)
@@ -284,28 +293,9 @@ plot.PCA(res_pca,col.quali="blue", label="quali")
 
 
 
-#####################################################
-### classification  hiérarchique ascendante
-#####################################################
-
-# Les calcules pour faire la Classification ascendante hiérarchique sont trop lourds vu la quantité de données dont on dispose. 
-# On décide de réduire la matrice des distance en réduisant le nombre de dimension à l'aide de l'ACP.
-
-
-
-# La fonction dist prend comme argument la dataframe et retourne la matrice des distances en utilisant la norme euclidienne
-distdataacp=dist(res_pca$ind$coord)
-
-# La fonction hclust prend comme argument la dataframe et la matrice de distances et retourne la Classification ascendante hiérarchique
-cha=hclust(distdataacp,method="ward.D2")
-
-# Le plot de cah.ward donne le Dendogramme de la classification hiérarchique
-# plot(CHA)
-
-rect.hclust(cha,10)
-
-clustercha=cutree(cha, 10)
-
+###############################################
+### classification  hiérarchique ascendante ###
+###############################################
 
 
 ClusterCHA=function(dimacp,nbclus,data){
