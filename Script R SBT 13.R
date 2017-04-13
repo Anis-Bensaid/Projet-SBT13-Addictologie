@@ -265,7 +265,7 @@ clus= kmeans(na.omit(data), k, iter.max = 10, nstart = 1, algorithm = c("Hartiga
 ### ACP :
 #############################################
 
-#On applique la méthode de l'Analyse par composantes principales à l'aide de la fonction PCA du package FactoMineR
+
 res_pca <- PCA(data,ncp=30)
 
 #La fonction plot.PCA permet d'afficher la représentation des variables () et des individus (Individuals factor map (PCA)) dans le plan des deux premiers facteurs principaux
@@ -283,26 +283,53 @@ plot.PCA(res_pca,col.quali="blue", label="quali")
 
 
 # La fonction dist prend comme argument la dataframe et retourne la matrice des distances en utilisant la norme euclidienne
-d.dataacp=dist(res_pca$ind$coord)
+distdataacp=dist(res_pca$ind$coord)
 
-# La fonction hclust permet prend comme argument la dataframe et la matrice de distances et retourne la Classification ascendante hiérarchique
-cha=hclust(d.dataacp,method="ward.D2")
+# La fonction hclust prend comme argument la dataframe et la matrice de distances et retourne la Classification ascendante hiérarchique
+cha=hclust(distdataacp,method="ward.D2")
 
 # Le plot de cah.ward donne le Dendogramme de la classification hiérarchique
-# plot(cah.ward)
+# plot(CHA)
 
 rect.hclust(cha,10)
 
 clustercha=cutree(cha, 10)
 
-# regression PLS
-# regarder les question où il y a le plus de données manquantes et peut-être les enlever.
-# complete case
-# regarder le nombre de na par lignes
-# Enregistrer les variables saveRDS
-# méthodes explicatives : Anova ou faire des ACP sur les consommation et des ACP sur les quali.
-cluster1=data[clustercha==1,]
 
+
+ClusterCHA=function(dimacp,nbclus,data){
+  #On applique la méthode de l'Analyse par composantes principales 
+  #à l'aide de la fonction PCA du package FactoMineR
+  ACP=PCA(data,ncp=dimacp)
+  
+  #La fonction plot.PCA permet d'afficher la représentation des variables
+  #et des individus (Individuals factor map (PCA)) dans le plan des deux premiers facteurs principaux
+  #plot.PCA(ACP,col.quali="blue", label="quali")
+  
+  # La fonction dist prend comme argument la dataframe et retourne
+  #la matrice des distances en utilisant la norme euclidienne
+  Distance=dist(ACP$ind$coord)
+  
+  # La fonction hclust prend comme argument la dataframe et la 
+  # matrice de distances et retourne la Classification ascendante hiérarchique
+  CHA=hclust(Distance,method="ward.D2")
+  
+  # Le plot de cah.ward donne le Dendogramme de la classification hiérarchique
+  # plot(CHA)
+  # rect.hclust(CHA,nbclus)
+  
+  # La fonction cutree permet de couper le dendogramme et donne nbclus clusters
+  Repartition=cutree(CHA,nbclus)
+  
+  # On range les clusters dans une liste Clusters de dataframes
+  Clusters=list()
+  for (i in 1:nbclus){
+    Clusters[[i]]=data[Repartition==i,]
+  }
+  return(Clusters)
+}
+
+Clusters=ClusterCHA(30,10,data)
 
 
 
