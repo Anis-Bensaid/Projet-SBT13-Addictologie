@@ -1,14 +1,13 @@
 rm(list=ls())
 # install.packages("readxl")
 # install.packages("plot3D")
-# install.packages("FactoMineR")
+# install.packages("FactoMineR") 
 library(plot3D)
 library(FactoMineR)
 library(readxl)
 
-
 # Haim base de données
-# bd <- read_excel("~/Desktop/Projet_SBT13/Projet-SBT13-Addictologie-Github/bdmieRpp2.xls")
+#bd <- read_excel("~/Desktop/Projet_SBT13/Projet-SBT13-Addictologie-Github/bdmieRpp2.xls")
 
 # Arthur Base de données
 # bd <- read_excel("~/Documents/Projet Enjeux/Projet-SBT13-Addictologie/bdmieRpp2.xls")
@@ -22,7 +21,7 @@ library(readxl)
 
 
 # Anis Base de données
-bd <- read_excel("D:/Users/enysb/Google Drive/Etudes/Git/Projet-SBT13-Addictologie/bdmieRpp2.xls")
+#bd <- read_excel("D:/Users/enysb/Google Drive/Etudes/Git/Projet-SBT13-Addictologie/bdmieRpp2.xls")
 
 
 bd1 <-bd[bd$age<31,]
@@ -36,7 +35,7 @@ data=data.frame(matrix(data=NA,nrow=Nl,ncol=1))
 # ID de l'individu interrogé et du collecteur
 # ID de l'individu interrogé et du collecteur
 # on n'a pas besoin d'utiliser les ID car toutes les données sont rassemblées dans un unique tableau
-# data$ID_indiv <-bd1[1]
+data$ID_indiv <-bd1[1]
 # data$collecteur <- bd1[2]
 
 # Suppression d'une colonne inutile :
@@ -205,21 +204,33 @@ Nom_stats = c("Moyenne","Mediane","Maximum","Minimum","Nb de NA","Ecart-type")
 N_stats = length(Nom_stats)
 
 Nc=dim(data)[2] # nombre d'items
-info=data.frame(matrix(data=NA,nrow=N_stats,ncol=Nc))
-# info = matrix(data=NA,nrow=N_stats,ncol=Nc)
+info=data.frame(matrix(data=NA,nrow=N_stats,ncol=Nc-1))
 rownames(info) <- Nom_stats
-colnames(info) <- colnames(data)
+colnames(info) <- colnames(data)[2:Nc]
 
 
-for (i in (1:Nc)) {
+for (i in (2:Nc)) {
   y=data[i]
-  info[1,i]<-apply(na.omit(y),2,mean) # moyenne
-  info[2,i] <-apply(na.omit(y),2,median) # médiane
-  info[3,i] <- max(na.omit(y)) # maximum
-  info[4,i] <- min(na.omit(y)) # Minimum
-  info[5,i] <- length(data[i][is.na(data[i])]) #nb de NA
-  info[6,i] <- apply(na.omit(y), 2, sd) # écart-type
+  info[1,i-1]<-apply(na.omit(y),2,mean) # moyenne
+  info[2,i-1] <-apply(na.omit(y),2,median) # médiane
+  info[3,i-1] <- max(na.omit(y)) # maximum
+  info[4,i-1] <- min(na.omit(y)) # Minimum
+  info[5,i-1] <- length(data[i][is.na(data[i])]) #nb de NA
+  info[6,i-1] <- apply(na.omit(y), 2, sd) # écart-type
 }
+
+# Données manquantes 
+# Taux de réponse de chaque individu et individu dont le nombre de reponses sont insuffisants
+
+reponses=1*cbind(data[1],is.na(data[2:Nc])) # le 1* permet de changer les False/True en 0/1
+reponses$Total <- rowSums(reponses[,3:Nc]) # nombre d'items où l'individu n'a pas repondu 
+reponses$Pourcent <- 100*reponses$Total/Nc # taux de "non-réponse" 
+faible_taux=reponses[reponses$Pourcent>60,] 
+fort_taux=reponses[reponses$Pourcent<=0,]
+
+taux_global=100*sum(reponses$Total)/(Nc*Nl) # taux global de réponses manquantes
+
+# Méthode des plus proches voisins
 
 
 
