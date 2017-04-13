@@ -275,10 +275,19 @@ persp3D(z = CorrelationR, theta=30,phi=15,xlab='AQoLS',ylab='Consommations',zlab
 ###############
 ### K-means ###
 ###############
-k=5
-clus= kmeans(na.omit(data), k, iter.max = 10, nstart = 1, algorithm = c("Hartigan-Wong", "Lloyd", "Forgy","MacQueen"), trace=FALSE)
-(clus$cluster)
 
+Kmeans=function(data,nbclus){
+  clus= kmeans(na.omit(data), nbclus, iter.max = 10, nstart = 1, algorithm = c("Hartigan-Wong", "Lloyd", "Forgy","MacQueen"), trace=FALSE)
+  Repartition=clus$cluster
+  # On range les clusters dans une liste Clusters de dataframes
+  Clusters=list()
+  for (i in 1:nbclus){
+    Clusters[[i]]=data[Repartition==i,]
+  }
+  return(Clusters)
+}
+
+KClusters=Kmeans(data,10)
 
 
 ###########
@@ -333,6 +342,31 @@ ClusterCHA=function(dimacp,nbclus,data){
 Clusters=ClusterCHA(30,10,data)
 
 
+################################################
+### Tri des cluster selon la moyenne de atot ###
+################################################
+
+ClassificationClusters=function(Clusters){
+  nbclus=length(Clusters)
+  ordre=(1:nbclus)
+  for (i in (2:nbclus)){
+    Temp=as.integer(ordre[i])
+    j=i
+    print(i)
+    
+    while(j>1 & summary(Clusters[[ordre[j-1]]]$atot)["Mean"]<summary(Clusters[[Temp]]$atot)["Mean"]){
+      print(j>1 & summary(Clusters[[ordre[j-1]]]$atot)["Mean"]<summary(Clusters[[Temp]]$atot)["Mean"])
+      ordre[j]=as.integer(ordre[j-1])
+      j=j-1
+      print(ordre)
+    }
+    ordre[j]=Temp
+    print(ordre)
+  }
+  return(ordre)
+}
+
+
 
 
 # regression PLS
@@ -341,4 +375,10 @@ Clusters=ClusterCHA(30,10,data)
 # regarder le nombre de na par lignes
 # Enregistrer les variables saveRDS
 # méthodes explicatives : Anova ou faire des ACP sur les consommation et des ACP sur les quali.
-
+i=1
+j=10
+while(i<10 & j>1){
+  i=i+1
+  j=j-1
+  print(i)
+}
