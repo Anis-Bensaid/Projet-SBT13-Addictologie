@@ -6,9 +6,12 @@ library(plot3D)
 library(FactoMineR)
 library(readxl)
 
-#########################
-### Lecture de la BDD ###
-#########################
+# Packages pour la méthode des plus proches voisins 
+install.packages("VIM")
+library(VIM)
+source("http://bioconductor.org/biocLite.R") # essayer avec http:// if not supported
+biocLite("impute") #équivalent de install.packages
+## le package "impute" ne se charge pas directement sur mon ordinateur, il faut donc contourner le pb
 
 # Haim base de données
 #bd <- read_excel("~/Desktop/Projet_SBT13/Projet-SBT13-Addictologie-Github/bdmieRpp2.xls")
@@ -25,11 +28,8 @@ library(readxl)
 
 
 # Anis Base de données
-#bd <- read_excel("D:/Users/enysb/Google Drive/Etudes/Git/Projet-SBT13-Addictologie/bdmieRpp2.xls")
+bd <- read_excel("D:/Users/enysb/Google Drive/Etudes/Git/Projet-SBT13-Addictologie/bdmieRpp2.xls")
 
-#################################
-### Restructuration de la BDD ###
-#################################
 
 bd1 <-bd[bd$age<31,]
 # on cherche la corrélation entre chaque item de AQOLS contre tout le reste
@@ -204,12 +204,10 @@ data$Bourse <- ifelse(bd1$bours=="Oui",1, ifelse(bd1$bours =="Non",0,NA))
 
 # Nous avons décidé de ne pas analyser la colonne "aldquoi" car les interrogés ont répondu librement
 
-###########################################################
-###            Descriptions des données                 ###
-### moyenne, écart-type, nombre de NA dans chaque items ###
-###########################################################
+# Descriptions des données
+# moyenne, écart-type, nombre de NA dans chaque items
 
-Nom_stats = c("Moyenne","Mediane","Maximum","Minimum","Nb de NA","Ecart-type")
+Nom_stats = c("Moyenne","Mediane","Maximum","Minimum","Nb de NA","Ecart-type","Part de NA")
 N_stats = length(Nom_stats)
 
 Nc=dim(data)[2] # nombre d'items
@@ -217,16 +215,17 @@ info=data.frame(matrix(data=NA,nrow=N_stats,ncol=Nc-1))
 rownames(info) <- Nom_stats
 colnames(info) <- colnames(data)[2:Nc]
 
-
 for (i in (2:Nc)) {
   y=data[i]
   info[1,i-1]<-apply(na.omit(y),2,mean) # moyenne
   info[2,i-1] <-apply(na.omit(y),2,median) # médiane
   info[3,i-1] <- max(na.omit(y)) # maximum
   info[4,i-1] <- min(na.omit(y)) # Minimum
-  info[5,i-1] <- length(data[i][is.na(data[i])]) #nb de NA
+  info[5,i-1] <- sum(1*is.na(data[i])) #nb de NA
   info[6,i-1] <- apply(na.omit(y), 2, sd) # écart-type
+  info[7,i-1] <- sum(1*is.na(data[i]))/Nl # Part de NA
 }
+
 
 # Données manquantes 
 # Taux de réponse de chaque individu et individu dont le nombre de reponses sont insuffisants
@@ -239,7 +238,55 @@ fort_taux=reponses[reponses$Pourcent<=0,]
 
 taux_global=100*sum(reponses$Total)/(Nc*Nl) # taux global de réponses manquantes
 
+###########################################
 # Méthode des plus proches voisins
+###########################################
+
+aggr(data, col=c('navyblue','red'), numbers=TRUE, combined = FALSE, sortVars=TRUE, labels=names(data), cex.axis=.7, gap=3, ylab=c("Histogram of missing data","Pattern"))
+# graphique de gauche pour illustrer la part de données manquantes
+
+
+# imputation
+
+NA_max_col=max(info[7,])
+NA_max_row= max(reponses$Pourcent)/100
+
+mat = impute.knn(as.matrix(data),k=79,rowmax=NA_max_row,colmax=NA_max_col)
+full_data = mat$data
+
+# information sur la nouvelle matrice de données
+info_full=data.frame(matrix(data=NA,nrow=N_stats,ncol=Nc-1))
+rownames(info_full) <- Nom_stats
+colnames(info_full) <- colnames(data)[2:Nc]
+
+for (i in (2:Nc)) {
+  y=full_data[,i]
+  info_full[1,i-1]<- mean(y) # moyenne
+  info_full[2,i-1] <-median(y) # médiane
+  info_full[3,i-1] <- max(y) # maximum
+  info_full[4,i-1] <- min(y) # Minimum
+  info_full[5,i-1] <- sum(1*is.na(full_data[i])) #nb de NA
+  info_full[6,i-1] <- sd(y) # écart-type
+  info_full[7,i-1] <- sum(1*is.na(full_data[i]))/Nl # Part de NA
+}
+# j'aimerais évaluer l'écart entre les statistiques de la base de données non corrigée et 
+# les statistiques de la base corrigée
+
+erreur_impute=data.frame(matrix(data=NA,nrow=5,ncol=Nc-1))
+rownames(erreur_impute) <- c("Moyenne","Mediane","Maximum","Minimum","Ecart-type")
+colnames(erreur_impute) <- colnames(data)[2:Nc]
+for (i in (2:Nc)) {
+  y=full_data[,i]
+  erreur_impute[1,i-1]<- abs(info[1,i-1]-info_full[1,i-1]) # moyenne
+  erreur_impute[2,i-1] <-abs(info[2,i-1]-info_full[2,i-1]) # médiane
+  erreur_impute[3,i-1] <- abs(info[3,i-1]-info_full[3,i-1]) # maximum
+  erreur_impute[4,i-1] <- abs(info[4,i-1]-info_full[4,i-1]) # Minimum
+  erreur_impute[5,i-1] <- abs(info[6,i-1]-info_full[6,i-1]) # écart-type
+}
+
+aggr(full_data, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(data), cex.axis=.7, gap=3, ylab=c("Histogram of missing data","Pattern"))
+# ce dernier affichage est une petite vérification graphique pour s'assurer 
+# qu'il n'y a plus de données manquantes
 
 
 
@@ -339,35 +386,35 @@ ClusterCHA=function(dimacp,nbclus,data){
   return(Clusters)
 }
 
-Clusters=ClusterCHA(30,10,data)
+Clusters=ClusterCHA(30,10,full_data)
+#Pour accéder au ième Cluster il faut utiliser Clusters[[i]] DEUX CROCHETS !
 
+##########################
+### Etude des Clusters ###
+##########################
 
-################################################
-### Tri des cluster selon la moyenne de atot ###
-################################################
-
+#ClassificationClusters prend en argument une liste de clusters et retourne les 
+#indinces des clusters triés par ordre décroissant celon la valeur moyenne de atot
 ClassificationClusters=function(Clusters){
   nbclus=length(Clusters)
   ordre=(1:nbclus)
   for (i in (2:nbclus)){
     Temp=as.integer(ordre[i])
     j=i
-    print(i)
-    
-    while(j>1 & summary(Clusters[[ordre[j-1]]]$atot)["Mean"]<summary(Clusters[[Temp]]$atot)["Mean"]){
-      print(j>1 & summary(Clusters[[ordre[j-1]]]$atot)["Mean"]<summary(Clusters[[Temp]]$atot)["Mean"])
+    while(j>1 && summary(as.data.frame(Clusters[[ordre[j-1]]])$atot)["Mean"]<summary(as.data.frame(Clusters[[Temp]])$atot)["Mean"]){
       ordre[j]=as.integer(ordre[j-1])
       j=j-1
-      print(ordre)
     }
     ordre[j]=Temp
-    print(ordre)
   }
   return(ordre)
 }
 
+ordreCHA=ClassificationClusters(Clusters)
+print(ordreCHA[1])
 
-
+summary(Clusters[[ordreCHA[1]]])
+View(Clusters[[ordreCHA[[1]]]])
 
 # regression PLS
 # regarder les question où il y a le plus de données manquantes et peut-être les enlever.
@@ -375,10 +422,4 @@ ClassificationClusters=function(Clusters){
 # regarder le nombre de na par lignes
 # Enregistrer les variables saveRDS
 # méthodes explicatives : Anova ou faire des ACP sur les consommation et des ACP sur les quali.
-i=1
-j=10
-while(i<10 & j>1){
-  i=i+1
-  j=j-1
-  print(i)
-}
+
