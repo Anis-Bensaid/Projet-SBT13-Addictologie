@@ -1,13 +1,20 @@
 rm(list=ls())
 # install.packages("readxl")
 # install.packages("plot3D")
-# install.packages("FactoMineR")
+# install.packages("FactoMineR") 
 library(plot3D)
 library(FactoMineR)
 library(readxl)
 
+# Packages pour la méthode des plus proches voisins 
+install.packages("VIM")
+library(VIM)
+source("http://bioconductor.org/biocLite.R") # essayer avec http:// if not supported
+biocLite("impute") #équivalent de install.packages
+## le package "impute" ne se charge pas directement sur mon ordinateur, il faut donc contourner le pb
+
 # Haim base de données
-# bd <- read_excel("~/Desktop/Projet_SBT13/Projet-SBT13-Addictologie-Github/bdmieRpp2.xls")
+#bd <- read_excel("~/Desktop/Projet_SBT13/Projet-SBT13-Addictologie-Github/bdmieRpp2.xls")
 
 # Arthur Base de données
 # bd <- read_excel("~/Documents/Projet Enjeux/Projet-SBT13-Addictologie/bdmieRpp2.xls")
@@ -35,7 +42,7 @@ data=data.frame(matrix(data=NA,nrow=Nl,ncol=1))
 # ID de l'individu interrogé et du collecteur
 # ID de l'individu interrogé et du collecteur
 # on n'a pas besoin d'utiliser les ID car toutes les données sont rassemblées dans un unique tableau
-# data$ID_indiv <-bd1[1]
+data$ID_indiv <-bd1[1]
 # data$collecteur <- bd1[2]
 
 # Suppression d'une colonne inutile :
@@ -200,31 +207,92 @@ data$Bourse <- ifelse(bd1$bours=="Oui",1, ifelse(bd1$bours =="Non",0,NA))
 # Descriptions des données
 # moyenne, écart-type, nombre de NA dans chaque items
 
-Nom_stats = c("Moyenne","Mediane","Maximum","Minimum","Nb de NA","Ecart-type")
+Nom_stats = c("Moyenne","Mediane","Maximum","Minimum","Nb de NA","Ecart-type","Part de NA")
 N_stats = length(Nom_stats)
 
 Nc=dim(data)[2] # nombre d'items
-info=data.frame(matrix(data=NA,nrow=N_stats,ncol=Nc))
-# info = matrix(data=NA,nrow=N_stats,ncol=Nc)
+info=data.frame(matrix(data=NA,nrow=N_stats,ncol=Nc-1))
 rownames(info) <- Nom_stats
-colnames(info) <- colnames(data)
+colnames(info) <- colnames(data)[2:Nc]
 
-
-for (i in (1:Nc)) {
+for (i in (2:Nc)) {
   y=data[i]
-  info[1,i]<-apply(na.omit(y),2,mean) # moyenne
-  info[2,i] <-apply(na.omit(y),2,median) # médiane
-  info[3,i] <- max(na.omit(y)) # maximum
-  info[4,i] <- min(na.omit(y)) # Minimum
-  info[5,i] <- length(data[i][is.na(data[i])]) #nb de NA
-  info[6,i] <- apply(na.omit(y), 2, sd) # écart-type
+  info[1,i-1]<-apply(na.omit(y),2,mean) # moyenne
+  info[2,i-1] <-apply(na.omit(y),2,median) # médiane
+  info[3,i-1] <- max(na.omit(y)) # maximum
+  info[4,i-1] <- min(na.omit(y)) # Minimum
+  info[5,i-1] <- sum(1*is.na(data[i])) #nb de NA
+  info[6,i-1] <- apply(na.omit(y), 2, sd) # écart-type
+  info[7,i-1] <- sum(1*is.na(data[i]))/Nl # Part de NA
 }
 
 
+# Données manquantes 
+# Taux de réponse de chaque individu et individu dont le nombre de reponses sont insuffisants
 
-################################################
-# ## Correlation de Spearman :
-################################################
+reponses=1*cbind(data[1],is.na(data[2:Nc])) # le 1* permet de changer les False/True en 0/1
+reponses$Total <- rowSums(reponses[,3:Nc]) # nombre d'items où l'individu n'a pas repondu 
+reponses$Pourcent <- 100*reponses$Total/Nc # taux de "non-réponse" 
+faible_taux=reponses[reponses$Pourcent>60,] 
+fort_taux=reponses[reponses$Pourcent<=0,]
+
+taux_global=100*sum(reponses$Total)/(Nc*Nl) # taux global de réponses manquantes
+
+###########################################
+# Méthode des plus proches voisins
+###########################################
+
+aggr(data, col=c('navyblue','red'), numbers=TRUE, combined = FALSE, sortVars=TRUE, labels=names(data), cex.axis=.7, gap=3, ylab=c("Histogram of missing data","Pattern"))
+# graphique de gauche pour illustrer la part de données manquantes
+
+
+# imputation
+
+NA_max_col=max(info[7,])
+NA_max_row= max(reponses$Pourcent)/100
+
+mat = impute.knn(as.matrix(data),k=79,rowmax=NA_max_row,colmax=NA_max_col)
+full_data = mat$data
+
+# information sur la nouvelle matrice de données
+info_full=data.frame(matrix(data=NA,nrow=N_stats,ncol=Nc-1))
+rownames(info_full) <- Nom_stats
+colnames(info_full) <- colnames(data)[2:Nc]
+
+for (i in (2:Nc)) {
+  y=full_data[,i]
+  info_full[1,i-1]<- mean(y) # moyenne
+  info_full[2,i-1] <-median(y) # médiane
+  info_full[3,i-1] <- max(y) # maximum
+  info_full[4,i-1] <- min(y) # Minimum
+  info_full[5,i-1] <- sum(1*is.na(full_data[i])) #nb de NA
+  info_full[6,i-1] <- sd(y) # écart-type
+  info_full[7,i-1] <- sum(1*is.na(full_data[i]))/Nl # Part de NA
+}
+# j'aimerais évaluer l'écart entre les statistiques de la base de données non corrigée et 
+# les statistiques de la base corrigée
+
+erreur_impute=data.frame(matrix(data=NA,nrow=5,ncol=Nc-1))
+rownames(erreur_impute) <- c("Moyenne","Mediane","Maximum","Minimum","Ecart-type")
+colnames(erreur_impute) <- colnames(data)[2:Nc]
+for (i in (2:Nc)) {
+  y=full_data[,i]
+  erreur_impute[1,i-1]<- abs(info[1,i-1]-info_full[1,i-1]) # moyenne
+  erreur_impute[2,i-1] <-abs(info[2,i-1]-info_full[2,i-1]) # médiane
+  erreur_impute[3,i-1] <- abs(info[3,i-1]-info_full[3,i-1]) # maximum
+  erreur_impute[4,i-1] <- abs(info[4,i-1]-info_full[4,i-1]) # Minimum
+  erreur_impute[5,i-1] <- abs(info[6,i-1]-info_full[6,i-1]) # écart-type
+}
+
+aggr(full_data, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(data), cex.axis=.7, gap=3, ylab=c("Histogram of missing data","Pattern"))
+# ce dernier affichage est une petite vérification graphique pour s'assurer 
+# qu'il n'y a plus de données manquantes
+
+
+
+###############################
+### Correlation de Spearman ###
+###############################
 
 CorrelationP=matrix(data=NA,nrow=35,ncol=43)
 CorrelationR=matrix(data=NA,nrow=35,ncol=43)
@@ -251,17 +319,107 @@ persp3D(z = CorrelationR, theta=30,phi=15,xlab='AQoLS',ylab='Consommations',zlab
 
 
 
-#############################################
-### ACP :
-#############################################
-res_pca <- PCA(data)
+###############
+### K-means ###
+###############
+
+Kmeans=function(data,nbclus){
+  clus= kmeans(na.omit(data), nbclus, iter.max = 10, nstart = 1, algorithm = c("Hartigan-Wong", "Lloyd", "Forgy","MacQueen"), trace=FALSE)
+  Repartition=clus$cluster
+  # On range les clusters dans une liste Clusters de dataframes
+  Clusters=list()
+  for (i in 1:nbclus){
+    Clusters[[i]]=data[Repartition==i,]
+  }
+  return(Clusters)
+}
+
+KClusters=Kmeans(data,10)
+
+
+###########
+### ACP ###
+###########
+
+
+res_pca <- PCA(data,ncp=30)
+
+#La fonction plot.PCA permet d'afficher la représentation des variables () et des individus (Individuals factor map (PCA)) dans le plan des deux premiers facteurs principaux
 plot.PCA(res_pca,col.quali="blue", label="quali")
 
 
-#######################################################
-### K-means
-######################################################
-k=5
-kmeans(na.omit(data), k, iter.max = 10, nstart = 1,
-       algorithm = c("Hartigan-Wong", "Lloyd", "Forgy",
-                     "MacQueen"), trace=FALSE)
+
+###############################################
+### classification  hiérarchique ascendante ###
+###############################################
+
+
+ClusterCHA=function(dimacp,nbclus,data){
+  #On applique la méthode de l'Analyse par composantes principales 
+  #à l'aide de la fonction PCA du package FactoMineR
+  ACP=PCA(data,ncp=dimacp)
+  
+  #La fonction plot.PCA permet d'afficher la représentation des variables
+  #et des individus (Individuals factor map (PCA)) dans le plan des deux premiers facteurs principaux
+  #plot.PCA(ACP,col.quali="blue", label="quali")
+  
+  # La fonction dist prend comme argument la dataframe et retourne
+  #la matrice des distances en utilisant la norme euclidienne
+  Distance=dist(ACP$ind$coord)
+  
+  # La fonction hclust prend comme argument la dataframe et la 
+  # matrice de distances et retourne la Classification ascendante hiérarchique
+  CHA=hclust(Distance,method="ward.D2")
+  
+  # Le plot de cah.ward donne le Dendogramme de la classification hiérarchique
+  # plot(CHA)
+  # rect.hclust(CHA,nbclus)
+  
+  # La fonction cutree permet de couper le dendogramme et donne nbclus clusters
+  Repartition=cutree(CHA,nbclus)
+  
+  # On range les clusters dans une liste Clusters de dataframes
+  Clusters=list()
+  for (i in 1:nbclus){
+    Clusters[[i]]=data[Repartition==i,]
+  }
+  return(Clusters)
+}
+
+Clusters=ClusterCHA(30,10,full_data)
+#Pour accéder au ième Cluster il faut utiliser Clusters[[i]] DEUX CROCHETS !
+
+##########################
+### Etude des Clusters ###
+##########################
+
+#ClassificationClusters prend en argument une liste de clusters et retourne les 
+#indinces des clusters triés par ordre décroissant celon la valeur moyenne de atot
+ClassificationClusters=function(Clusters){
+  nbclus=length(Clusters)
+  ordre=(1:nbclus)
+  for (i in (2:nbclus)){
+    Temp=as.integer(ordre[i])
+    j=i
+    while(j>1 && summary(as.data.frame(Clusters[[ordre[j-1]]])$atot)["Mean"]<summary(as.data.frame(Clusters[[Temp]])$atot)["Mean"]){
+      ordre[j]=as.integer(ordre[j-1])
+      j=j-1
+    }
+    ordre[j]=Temp
+  }
+  return(ordre)
+}
+
+ordreCHA=ClassificationClusters(Clusters)
+print(ordreCHA[1])
+
+summary(Clusters[[ordreCHA[1]]])
+View(Clusters[[ordreCHA[[1]]]])
+
+# regression PLS
+# regarder les question où il y a le plus de données manquantes et peut-être les enlever.
+# complete case
+# regarder le nombre de na par lignes
+# Enregistrer les variables saveRDS
+# méthodes explicatives : Anova ou faire des ACP sur les consommation et des ACP sur les quali.
+
