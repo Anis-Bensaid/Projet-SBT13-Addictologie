@@ -28,7 +28,7 @@ biocLite("impute") #équivalent de install.packages
 
 
 # Anis Base de données
-bd <- read_excel("D:/Users/enysb/Google Drive/Etudes/Git/Projet-SBT13-Addictologie/bdmieRpp2.xls")
+#bd <- read_excel("D:/Users/enysb/Google Drive/Etudes/Git/Projet-SBT13-Addictologie/bdmieRpp2.xls")
 
 
 bd1 <-bd[bd$age<31,]
@@ -258,11 +258,13 @@ full_data$Audit <- full_data$FreqConso + full_data$NbVerreMoy+ full_data$FreqSup
 
 
 # information sur la nouvelle matrice de données
-info_full=data.frame(matrix(data=NA,nrow=N_stats,ncol=Nc-1))
+Ncf=dim(full_data)[2]
+info_full=data.frame(matrix(data=NA,nrow=N_stats,ncol=Ncf-1))
 rownames(info_full) <- Nom_stats
-colnames(info_full) <- colnames(data)[2:Nc]
+colnames(info_full) <- colnames(full_data)[2:Ncf]
 
-for (i in (2:Nc)) {
+Ncf=dim(full_data)[2]
+for (i in (2:Ncf)) {
   y=full_data[,i]
   info_full[1,i-1]<- mean(y) # moyenne
   info_full[2,i-1] <-median(y) # médiane
@@ -416,9 +418,13 @@ ClassificationClusters=function(Clusters){
 ordreCHA=ClassificationClusters(Clusters)
 print(ordreCHA)
 
-View(Clusters[[10]])
 
-# SYNC
+for (i in (1:10)) {
+  print(ordreCHA[i])
+  print(dim(Clusters[[ordreCHA[i]]]))
+}
+
+summary(Clusters[[5]])
 
 # regression PLS
 # regarder les question où il y a le plus de données manquantes et peut-être les enlever.
