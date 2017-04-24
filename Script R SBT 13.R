@@ -83,7 +83,6 @@ data$a31 <- ifelse(bd1$A11=="Pas du tout", 0, ifelse(bd1$A31=="Un peu", 1,ifelse
 data$a32 <- ifelse(bd1$A32=="Pas du tout", 0, ifelse(bd1$A32=="Un peu", 1,ifelse(bd1$A32== "Beaucoup", 2,ifelse(bd1$A32 == "Enormément", 3,NA))))
 data$a33 <- ifelse(bd1$A33=="Pas du tout", 0, ifelse(bd1$A33=="Un peu", 1,ifelse(bd1$A33== "Beaucoup", 2,ifelse(bd1$A33 == "Enormément", 3,NA))))
 data$a34 <- ifelse(bd1$A34=="Pas du tout", 0, ifelse(bd1$A34=="Un peu", 1,ifelse(bd1$A34== "Beaucoup", 2,ifelse(bd1$A34 == "Enormément", 3,NA))))
-data$atot <- data$a1+data$a2+data$a3+ data$a4+data$a5+data$a6+ data$a7+data$a8+data$a9+ data$a10+data$a11+data$a12+ data$a13+ data$a14+data$a15+data$a16+ data$a17+ data$a18+data$a19+ data$a20+data$a21+data$a22+ data$a23+ data$a24+data$a25+data$a26+ data$a27+data$a28+data$a29+ data$a30+data$a31+data$a32+ data$a33+ data$a34
 
 # Age
 data$Age<-bd1$age
@@ -148,8 +147,8 @@ data$FreqConso <- ifelse(bd1$frqoh=="Jamais", 0, ifelse(bd1$frqoh=="Une fois par
 data$NbVerreMoy <- ifelse(bd1$nbvrtyp=="1 ou 2", 0, ifelse(bd1$nbvrtyp =="3 ou 4", 1, ifelse(bd1$nbvrtyp == "5 ou 6", 2, ifelse(bd1$nbvrtyp == "7 à 9", 3, ifelse(bd1$nbvrtyp =="10 ou plus", 4, NA)))))
 #Fréquence de consommation de plus de six verres en une occasion
 data$FreqSupSixVerre <-bd1$sixvr
-#Audit-C
-data$Audit <- data$FreqConso + data$NbVerreMoy+ data$FreqSupSixVerre
+
+
 # Image
 # Faire la fête fait partie de l'image que j'ai de moi
 data$FeteImagePerso <- bd1$idt1
@@ -253,6 +252,10 @@ NA_max_row= max(reponses$Pourcent)/100
 
 mat = impute.knn(as.matrix(data),k=79,rowmax=NA_max_row,colmax=NA_max_col)
 full_data = mat$data
+full_data$atot <- full_data$a1+full_data$a2+full_data$a3+ full_data$a4+full_data$a5+full_data$a6+ full_data$a7+full_data$a8+full_data$a9+ full_data$a10+full_data$a11+full_data$a12+ full_data$a13+ full_data$a14+full_data$a15+full_data$a16+ full_data$a17+ full_data$a18+full_data$a19+ full_data$a20+full_data$full_a21+full_data$a22+ full_data$a23+ full_data$a24+full_data$a25+full_data$a26+ full_data$a27+full_data$a28+full_data$a29+ full_data$a30+full_data$a31+full_data$a32+ full_data$a33+ full_data$a34
+#Audit-C
+full_data$Audit <- full_data$FreqConso + full_data$NbVerreMoy+ full_data$FreqSupSixVerre
+
 
 # information sur la nouvelle matrice de données
 info_full=data.frame(matrix(data=NA,nrow=N_stats,ncol=Nc-1))
@@ -293,30 +296,30 @@ aggr(full_data, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=nam
 ###############################
 ### Correlation de Spearman ###
 ###############################
-
-CorrelationP=matrix(data=NA,nrow=35,ncol=43)
-CorrelationR=matrix(data=NA,nrow=35,ncol=43)
-nomlignes=c()
-nomcolonnes=c()
-for (i in (1:35)){nomlignes=c(nomlignes,names(data[i]))}
-for (i in (36:78)){nomcolonnes=c(nomcolonnes,names(data[i]))}
-rownames(CorrelationP)=nomlignes
-colnames(CorrelationP)=nomcolonnes
-rownames(CorrelationR)=nomlignes
-colnames(CorrelationR)=nomcolonnes
-
-for (i in (1:35))
-{for (j in (36:78))
-{Testspm=cor.test(as.numeric(unlist(data[i])), as.numeric(unlist(data[j])), method="spearman")
-CorrelationP[i,j-35]=as.numeric(Testspm[3])
-CorrelationR[i,j-35]=as.numeric(Testspm[4])}}
-
-View(CorrelationP)
-View(CorrelationR)
-
-persp3D(z = CorrelationP, theta=30,phi=15,xlab='AQoLS',ylab='Consommations',zlab='p-value',expand=0.5,shade=0.8,ticktype="detailed")
-persp3D(z = CorrelationR, theta=30,phi=15,xlab='AQoLS',ylab='Consommations',zlab='R',expand=0.5,shade=0.8,ticktype="detailed")
-
+# 
+# CorrelationP=matrix(data=NA,nrow=35,ncol=43)
+# CorrelationR=matrix(data=NA,nrow=35,ncol=43)
+# nomlignes=c()
+# nomcolonnes=c()
+# for (i in (1:35)){nomlignes=c(nomlignes,names(data[i]))}
+# for (i in (36:78)){nomcolonnes=c(nomcolonnes,names(data[i]))}
+# rownames(CorrelationP)=nomlignes
+# colnames(CorrelationP)=nomcolonnes
+# rownames(CorrelationR)=nomlignes
+# colnames(CorrelationR)=nomcolonnes
+# 
+# for (i in (1:35))
+# {for (j in (36:78))
+# {Testspm=cor.test(as.numeric(unlist(data[i])), as.numeric(unlist(data[j])), method="spearman")
+# CorrelationP[i,j-35]=as.numeric(Testspm[3])
+# CorrelationR[i,j-35]=as.numeric(Testspm[4])}}
+# 
+# View(CorrelationP)
+# View(CorrelationR)
+# 
+# persp3D(z = CorrelationP, theta=30,phi=15,xlab='AQoLS',ylab='Consommations',zlab='p-value',expand=0.5,shade=0.8,ticktype="detailed")
+# persp3D(z = CorrelationR, theta=30,phi=15,xlab='AQoLS',ylab='Consommations',zlab='R',expand=0.5,shade=0.8,ticktype="detailed")
+# 
 
 
 ###############
