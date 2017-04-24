@@ -1,9 +1,20 @@
 rm(list=ls())
-install.packages("readxl")
+# install.packages("readxl")
+# install.packages("plot3D")
+# install.packages("FactoMineR") 
+library(plot3D)
+library(FactoMineR)
 library(readxl)
 
+# Packages pour la méthode des plus proches voisins 
+install.packages("VIM")
+library(VIM)
+source("http://bioconductor.org/biocLite.R") # essayer avec http:// if not supported
+biocLite("impute") #équivalent de install.packages
+## le package "impute" ne se charge pas directement sur mon ordinateur, il faut donc contourner le pb
+
 # Haim base de données
-# bd <- read_excel("~/Desktop/Projet_SBT13/Projet-SBT13-Addictologie-Github/bdmieRpp2.xls")
+#bd <- read_excel("~/Desktop/Projet_SBT13/Projet-SBT13-Addictologie-Github/bdmieRpp2.xls")
 
 # Arthur Base de données
 # bd <- read_excel("~/Documents/Projet Enjeux/Projet-SBT13-Addictologie/bdmieRpp2.xls")
@@ -11,24 +22,28 @@ library(readxl)
 #Benjamin base de donn?es
 #bd<- read_excel("~/GitHub/Projet-SBT13-Addictologie/bdmieRpp2.xls")
 
+
 # Emilio Base de données
-# bd <- read_excel("C:\Users\Emilio\Desktop\intercambio\clases\enjeux\sbt\Projet-SBT13-Addictologie\bdmieRpp2.xls")
+#bd <- read_excel("C:/Users/Emilio/Desktop/intercambio/clases/enjeux/sbt/Projet-SBT13-Addictologie/bdmieRpp2.xls")
+
 
 # Anis Base de données
 #bd <- read_excel("D:/Users/enysb/Google Drive/Etudes/Git/Projet-SBT13-Addictologie/bdmieRpp2.xls")
 
 
 bd1 <-bd[bd$age<31,]
-# on cherche la corrélation entre chaque item de AQOLS contre tout le reste 
+# on cherche la corrélation entre chaque item de AQOLS contre tout le reste
 
 # Il faut transformer les réponses aux autres questions en score et les ranger dans une matrice
 Nl=dim(bd1)[1] #nombre de lignes
-Nc=dim(bd1)[2] # nombre de colonnes dans la base de données
+
 data=data.frame(matrix(data=NA,nrow=Nl,ncol=1))
 
 # ID de l'individu interrogé et du collecteur
+# ID de l'individu interrogé et du collecteur
+# on n'a pas besoin d'utiliser les ID car toutes les données sont rassemblées dans un unique tableau
 data$ID_indiv <-bd1[1]
-data$collecteur <- bd1[2]
+# data$collecteur <- bd1[2]
 
 # Suppression d'une colonne inutile :
 data<-data[,-1]
@@ -70,16 +85,16 @@ data$a33 <- ifelse(bd1$A33=="Pas du tout", 0, ifelse(bd1$A33=="Un peu", 1,ifelse
 data$a34 <- ifelse(bd1$A34=="Pas du tout", 0, ifelse(bd1$A34=="Un peu", 1,ifelse(bd1$A34== "Beaucoup", 2,ifelse(bd1$A34 == "Enormément", 3,NA))))
 data$atot <- data$a1+data$a2+data$a3+ data$a4+data$a5+data$a6+ data$a7+data$a8+data$a9+ data$a10+data$a11+data$a12+ data$a13+ data$a14+data$a15+data$a16+ data$a17+ data$a18+data$a19+ data$a20+data$a21+data$a22+ data$a23+ data$a24+data$a25+data$a26+ data$a27+data$a28+data$a29+ data$a30+data$a31+data$a32+ data$a33+ data$a34
 
-# Age 
+# Age
 data$Age<-bd1$age
 # Genre
 data$Genre <- ifelse(bd1$sex=="Un homme", 1, ifelse(bd1$sex=="Une femme", 2,ifelse(bd1$sex== "Indéterminé", NA ,ifelse(bd1$sex == "Ne sait pas", NA,NA))))
 # Niveau d'étude après le Bac
 data$Niveau <- ifelse(bd1$niv=="Bac +1", 1, ifelse(bd1$niv=="Bac +2", 2, ifelse(bd1$niv=="Bac +3",3, ifelse(bd1$niv=="Bac +4", 4, ifelse(bd1$niv=="Bac +5", 5, ifelse(bd1$niv=="Bac>+5", 6, NA))))))
 
-## Nivautr (dans le tableau bd1) 
+## Nivautr (dans le tableau bd1)
 # c'est une colonne vide, elle n'a pas été remplie par les personnes interrogées
-# Test : 
+# Test :
 ## A <- bd1$nivautre
 ## N = 16930
 ## B=matrix(data = NA, nrow=N, ncol = 1)
@@ -93,13 +108,30 @@ data$Niveau <- ifelse(bd1$niv=="Bac +1", 1, ifelse(bd1$niv=="Bac +2", 2, ifelse(
 ## }
 ## on obtient S = 0
 
-# Discipline 
-data$Disc<-bd1$disc
-# Autre cursus 
-data$AutreCursus <- bd1[8]
+# Discipline
+# data$Disc<-bd1$disc --> colonne qualitative, qu'on a préféré scinder en plusieurs colonnes avec un résultat
+# qualitatif
+data$StudyHuma <- ifelse(bd1$disc=="Sciences Humaines et sociales / Lettres / Langues / Art",1,NA)
+data$StudyHuma[is.na(data$StudyHuma)]<--0
+data$StudyProf <- ifelse(bd1$disc=="Enseignement / STAPS",1,NA)
+data$StudyProf[is.na(data$StudyProf)]<--0
+data$StudyLawEco <- ifelse(bd1$disc=="Droit / Eco-gestion / Management",1,NA)
+data$StudyLawEco[is.na(data$StudyLawEco)]<--0
+data$StudyScience <- ifelse(bd1$disc=="Sciences / Ingénierie /Architecture",1,NA)
+data$StudyScience[is.na(data$StudyScience)]<--0
+data$StudyMed <- ifelse(bd1$disc=="Santé",1,NA)
+data$StudyMed[is.na(data$StudyMed)]<--0
+data$StudyMed <- ifelse(bd1$disc=="Santé",1,NA)
+data$StudyMed[is.na(data$StudyMed)]<--0
+data$StudyAutre <- ifelse(bd1$disc=="Autre (veuillez préciser)",1,NA)
+data$StudyAutre[is.na(data$StudyAutre)]<--0
+
+# Autre cursus, c'est une donnée qualitative qui nous semble inutilisable
+# data$AutreCursus <- bd1[8]
+
 # Fréquence binge-drinking
 data$FreqBinge <- ifelse(bd1$frqoh== "Jamais", 0, ifelse(bd1$binge== "non", 0, ifelse(bd1$frqb1=="1 fois", 1, ifelse(bd1$frqb2=="2 fois", 2, ifelse(bd1$frqb3=="3 à 5 fois", 3, ifelse(bd1$frqb6=="6 à 9 fois", 4, ifelse(bd1$frqb10=="10 fois ou plus", 5, NA)))))))
-# Autres substances 
+# Autres substances
 data$Tabac <- ifelse(bd1$tbc== "jamais consommé", 0, ifelse(bd1$tbc== "il y a plus d'un an", 1, ifelse(bd1$tbc=="au cours de la dernière année", 1, ifelse(bd1$tbc=="au cours du mois dernier", 2, ifelse(bd1$tbc=="au cours de la dernière semaine", 3, NA)))))
 data$Cannabis <- ifelse(bd1$thc== "jamais consommé", 0, ifelse(bd1$thc== "il y a plus d'un an", 1, ifelse(bd1$thc=="au cours de la dernière année", 1, ifelse(bd1$thc=="au cours du mois dernier", 2, ifelse(bd1$thc=="au cours de la dernière semaine", 3, NA)))))
 data$Cocaine <- ifelse(bd1$coc== "jamais consommé", 0, ifelse(bd1$coc == "il y a plus d'un an", 1, ifelse(bd1$coc=="au cours de la dernière année", 1, ifelse(bd1$coc=="au cours du mois dernier", 2, ifelse(bd1$coc=="au cours de la dernière semaine", 3, NA)))))
@@ -129,7 +161,7 @@ data$FetePerso <-bd1$idt3
 data$FeteQuotidien <- bd1$idt4
 # Les autres considérent que faire la fête fait partie de ma personnalité
 data$FeteImageAutre <- bd1$idt5
-# Mobilité 
+# Mobilité
 data$Mobilité <- bd1$eqmob
 # Autonomie
 data$Autonomie <- bd1$eqaut
@@ -140,8 +172,15 @@ data$Douleur <- bd1$eqdoul
 # Dépression
 data$Depression <- bd1$eqdep
 
-# Lieu de résidence
-data$LieuRes <- bd1$logou
+# Lieu de résidence : Famille/tuteur, logement indépendant, résidence collective, ailleurs
+data$LogFamille <- ifelse(bd1$logou=="Chez mes 2 parents /Chez ma mère / Chez mon père /Chez un autre membre de ma famille (oncle, tante...) / Chez mon tuteur",1,NA)
+data$LogFamille[is.na(data$LogFamille)]<--0
+data$LogInd <--ifelse(bd1$logou=="Dans un logement indépendant (en location, en colocation, dans un logement dont je suis propriétaire, au domicile d’un autre membre de ma famille...)",1,NA)
+data$LogInd [is.na(data$LogInd )]<--0
+data$LogRes <--ifelse(bd1$logou=="En résidence collective (foyer, internat, résidence universitaire...)",1,NA)
+data$LogRes[is.na(data$LogRes)]<--0
+data$LogAutre <--ifelse(bd1$logou=="Ailleurs",1,NA)
+data$LogAutre[is.na(data$LogAutre)]<--0
 # Seul
 data$Seul <- ifelse(bd1$logwho1=="Je vis seul-e",1,NA)
 data$Seul[is.na(data$Seul)]<--0
@@ -154,61 +193,233 @@ data$Enfants[is.na(data$Enfants)]<--0
 # Colocation avec amis
 data$ColocFriend <- ifelse(bd1$logwho4=="En colocation avec un ou des ami-e(s)",1,NA)
 data$ColocFriend[is.na(data$ColocFriend)]<--0
-# Colocation avec autres personnes 
+# Colocation avec autres personnes
 data$ColocAutres <- ifelse(bd1$logwho5=="En colocation avec une ou plusieurs autres personnes",1,NA)
 data$ColocAutres[is.na(data$ColocAutres)]<--0
 # Maladie chronique Booléen
 data$MaladieChroniqueBool <- ifelse(bd1$ald=="Oui",1,ifelse(bd1$ald=="Non",0,NA))
-# Bourse 
+# Bourse
 data$Bourse <- ifelse(bd1$bours=="Oui",1, ifelse(bd1$bours =="Non",0,NA))
 
 
 # Nous avons décidé de ne pas analyser la colonne "aldquoi" car les interrogés ont répondu librement
 
-summary(data)
-
 # Descriptions des données
-# moyenne, écart-type, assymétrie (skewness), coefficient d'applatissement,
-# nombre de NA dans chaque items
+# moyenne, écart-type, nombre de NA dans chaque items
 
-Nom_stats = c("Moyenne","Mediane","Maximum","Minimum","Nb de NA","Ecart-type")
+Nom_stats = c("Moyenne","Mediane","Maximum","Minimum","Nb de NA","Ecart-type","Part de NA")
 N_stats = length(Nom_stats)
 
-info = matrix(data=NA,nrow=N_stats,ncol=Nc)
+Nc=dim(data)[2] # nombre d'items
+info=data.frame(matrix(data=NA,nrow=N_stats,ncol=Nc-1))
 rownames(info) <- Nom_stats
+colnames(info) <- colnames(data)[2:Nc]
 
-for (i in (3:Nc)) {
-  U = summary(data[i])
-  info[1,i]=U[4] # moyenne 
-  info[2,i] = U[3] # médiane
-  info[3,i] = U[6] # maximum
-  info[4,i] = U[1] # Minimum
-  info[5,i] = U[7] # Nb de NA
-  info[6,i] = sd(na.omit(data[i])) #écart-type
+for (i in (2:Nc)) {
+  y=data[i]
+  info[1,i-1]<-apply(na.omit(y),2,mean) # moyenne
+  info[2,i-1] <-apply(na.omit(y),2,median) # médiane
+  info[3,i-1] <- max(na.omit(y)) # maximum
+  info[4,i-1] <- min(na.omit(y)) # Minimum
+  info[5,i-1] <- sum(1*is.na(data[i])) #nb de NA
+  info[6,i-1] <- apply(na.omit(y), 2, sd) # écart-type
+  info[7,i-1] <- sum(1*is.na(data[i]))/Nl # Part de NA
 }
 
-# ne marche pas encore, il faut faire attention au type des données.
-          
+
+# Données manquantes 
+# Taux de réponse de chaque individu et individu dont le nombre de reponses sont insuffisants
+
+reponses=1*cbind(data[1],is.na(data[2:Nc])) # le 1* permet de changer les False/True en 0/1
+reponses$Total <- rowSums(reponses[,3:Nc]) # nombre d'items où l'individu n'a pas repondu 
+reponses$Pourcent <- 100*reponses$Total/Nc # taux de "non-réponse" 
+faible_taux=reponses[reponses$Pourcent>60,] 
+fort_taux=reponses[reponses$Pourcent<=0,]
+
+taux_global=100*sum(reponses$Total)/(Nc*Nl) # taux global de réponses manquantes
+
+###########################################
+# Méthode des plus proches voisins
+###########################################
+
+aggr(data, col=c('navyblue','red'), numbers=TRUE, combined = FALSE, sortVars=TRUE, labels=names(data), cex.axis=.7, gap=3, ylab=c("Histogram of missing data","Pattern"))
+# graphique de gauche pour illustrer la part de données manquantes
 
 
-Correlation=matrix(data=NA,nrow=35,ncol=18)
+# imputation
+
+NA_max_col=max(info[7,])
+NA_max_row= max(reponses$Pourcent)/100
+
+mat = impute.knn(as.matrix(data),k=79,rowmax=NA_max_row,colmax=NA_max_col)
+full_data = mat$data
+
+# information sur la nouvelle matrice de données
+info_full=data.frame(matrix(data=NA,nrow=N_stats,ncol=Nc-1))
+rownames(info_full) <- Nom_stats
+colnames(info_full) <- colnames(data)[2:Nc]
+
+for (i in (2:Nc)) {
+  y=full_data[,i]
+  info_full[1,i-1]<- mean(y) # moyenne
+  info_full[2,i-1] <-median(y) # médiane
+  info_full[3,i-1] <- max(y) # maximum
+  info_full[4,i-1] <- min(y) # Minimum
+  info_full[5,i-1] <- sum(1*is.na(full_data[i])) #nb de NA
+  info_full[6,i-1] <- sd(y) # écart-type
+  info_full[7,i-1] <- sum(1*is.na(full_data[i]))/Nl # Part de NA
+}
+# j'aimerais évaluer l'écart entre les statistiques de la base de données non corrigée et 
+# les statistiques de la base corrigée
+
+erreur_impute=data.frame(matrix(data=NA,nrow=5,ncol=Nc-1))
+rownames(erreur_impute) <- c("Moyenne","Mediane","Maximum","Minimum","Ecart-type")
+colnames(erreur_impute) <- colnames(data)[2:Nc]
+for (i in (2:Nc)) {
+  y=full_data[,i]
+  erreur_impute[1,i-1]<- abs(info[1,i-1]-info_full[1,i-1]) # moyenne
+  erreur_impute[2,i-1] <-abs(info[2,i-1]-info_full[2,i-1]) # médiane
+  erreur_impute[3,i-1] <- abs(info[3,i-1]-info_full[3,i-1]) # maximum
+  erreur_impute[4,i-1] <- abs(info[4,i-1]-info_full[4,i-1]) # Minimum
+  erreur_impute[5,i-1] <- abs(info[6,i-1]-info_full[6,i-1]) # écart-type
+}
+
+aggr(full_data, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(data), cex.axis=.7, gap=3, ylab=c("Histogram of missing data","Pattern"))
+# ce dernier affichage est une petite vérification graphique pour s'assurer 
+# qu'il n'y a plus de données manquantes
+
+
+
+###############################
+### Correlation de Spearman ###
+###############################
+
+CorrelationP=matrix(data=NA,nrow=35,ncol=43)
+CorrelationR=matrix(data=NA,nrow=35,ncol=43)
 nomlignes=c()
 nomcolonnes=c()
-
 for (i in (1:35)){nomlignes=c(nomlignes,names(data[i]))}
+for (i in (36:78)){nomcolonnes=c(nomcolonnes,names(data[i]))}
+rownames(CorrelationP)=nomlignes
+colnames(CorrelationP)=nomcolonnes
+rownames(CorrelationR)=nomlignes
+colnames(CorrelationR)=nomcolonnes
 
-for (i in (36:52)){nomcolonnes=c(nomcolonnes,names(data[i]))}
+for (i in (1:35))
+{for (j in (36:78))
+{Testspm=cor.test(as.numeric(unlist(data[i])), as.numeric(unlist(data[j])), method="spearman")
+CorrelationP[i,j-35]=as.numeric(Testspm[3])
+CorrelationR[i,j-35]=as.numeric(Testspm[4])}}
 
-for (i in (1:35))  
+View(CorrelationP)
+View(CorrelationR)
+
+persp3D(z = CorrelationP, theta=30,phi=15,xlab='AQoLS',ylab='Consommations',zlab='p-value',expand=0.5,shade=0.8,ticktype="detailed")
+persp3D(z = CorrelationR, theta=30,phi=15,xlab='AQoLS',ylab='Consommations',zlab='R',expand=0.5,shade=0.8,ticktype="detailed")
+
+
+
+###############
+### K-means ###
+###############
+
+Kmeans=function(data,nbclus){
+  clus= kmeans(na.omit(data), nbclus, iter.max = 10, nstart = 1, algorithm = c("Hartigan-Wong", "Lloyd", "Forgy","MacQueen"), trace=FALSE)
+  Repartition=clus$cluster
+  # On range les clusters dans une liste Clusters de dataframes
+  Clusters=list()
+  for (i in 1:nbclus){
+    Clusters[[i]]=data[Repartition==i,]
+  }
+  return(Clusters)
+}
+
+KClusters=Kmeans(data,10)
+
+
+###########
+### ACP ###
+###########
+
+
+res_pca <- PCA(data,ncp=30)
+
+#La fonction plot.PCA permet d'afficher la représentation des variables () et des individus (Individuals factor map (PCA)) dans le plan des deux premiers facteurs principaux
+plot.PCA(res_pca,col.quali="blue", label="quali")
+
+
+
+###############################################
+### classification  hiérarchique ascendante ###
+###############################################
+
+
+ClusterCHA=function(dimacp,nbclus,data){
+  #On applique la méthode de l'Analyse par composantes principales 
+  #à l'aide de la fonction PCA du package FactoMineR
+  ACP=PCA(data,ncp=dimacp)
   
-{for (j in (36:52)) 
-{Correlation[i,j-35]=as.numeric(cor.test(as.numeric(unlist(data[i])), as.numeric(unlist(data[j])), method="spearman")[3])}}
+  #La fonction plot.PCA permet d'afficher la représentation des variables
+  #et des individus (Individuals factor map (PCA)) dans le plan des deux premiers facteurs principaux
+  #plot.PCA(ACP,col.quali="blue", label="quali")
+  
+  # La fonction dist prend comme argument la dataframe et retourne
+  #la matrice des distances en utilisant la norme euclidienne
+  Distance=dist(ACP$ind$coord)
+  
+  # La fonction hclust prend comme argument la dataframe et la 
+  # matrice de distances et retourne la Classification ascendante hiérarchique
+  CHA=hclust(Distance,method="ward.D2")
+  
+  # Le plot de cah.ward donne le Dendogramme de la classification hiérarchique
+  # plot(CHA)
+  # rect.hclust(CHA,nbclus)
+  
+  # La fonction cutree permet de couper le dendogramme et donne nbclus clusters
+  Repartition=cutree(CHA,nbclus)
+  
+  # On range les clusters dans une liste Clusters de dataframes
+  Clusters=list()
+  for (i in 1:nbclus){
+    Clusters[[i]]=data[Repartition==i,]
+  }
+  return(Clusters)
+}
 
+Clusters=ClusterCHA(30,10,full_data)
+#Pour accéder au ième Cluster il faut utiliser Clusters[[i]] DEUX CROCHETS !
 
-rownames(Correlation)=nomlignes
-colnames(Correlation)=nomcolonnes
+##########################
+### Etude des Clusters ###
+##########################
 
-persp(z = Correlation, ,theta=30,phi=15,xlab='AQoLS',ylab='Consommations',zlab='p-value',col="lightgreen",expand=0.5,shade=0.8,ticktype="detailed")
+#ClassificationClusters prend en argument une liste de clusters et retourne les 
+#indinces des clusters triés par ordre décroissant celon la valeur moyenne de atot
+ClassificationClusters=function(Clusters){
+  nbclus=length(Clusters)
+  ordre=(1:nbclus)
+  for (i in (2:nbclus)){
+    Temp=as.integer(ordre[i])
+    j=i
+    while(j>1 && summary(as.data.frame(Clusters[[ordre[j-1]]])$atot)["Mean"]<summary(as.data.frame(Clusters[[Temp]])$atot)["Mean"]){
+      ordre[j]=as.integer(ordre[j-1])
+      j=j-1
+    }
+    ordre[j]=Temp
+  }
+  return(ordre)
+}
 
+ordreCHA=ClassificationClusters(Clusters)
+print(ordreCHA[1])
 
+summary(Clusters[[ordreCHA[1]]])
+View(Clusters[[ordreCHA[[1]]]])
+
+# regression PLS
+# regarder les question où il y a le plus de données manquantes et peut-être les enlever.
+# complete case
+# regarder le nombre de na par lignes
+# Enregistrer les variables saveRDS
+# méthodes explicatives : Anova ou faire des ACP sur les consommation et des ACP sur les quali.
 
