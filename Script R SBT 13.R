@@ -28,7 +28,7 @@ biocLite("impute") #équivalent de install.packages
 
 
 # Anis Base de données
-#bd <- read_excel("D:/Users/enysb/Google Drive/Etudes/Git/Projet-SBT13-Addictologie/bdmieRpp2.xls")
+bd <- read_excel("D:/Users/enysb/Google Drive/Etudes/Git/Projet-SBT13-Addictologie/bdmieRpp2.xls")
 
 
 bd1 <-bd[bd$age<31,]
@@ -418,7 +418,7 @@ print(ordreCHA)
 
 View(Clusters[[10]])
 
-
+# SYNC
 
 # regression PLS
 # regarder les question où il y a le plus de données manquantes et peut-être les enlever.
