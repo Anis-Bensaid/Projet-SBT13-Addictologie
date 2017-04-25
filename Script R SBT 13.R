@@ -7,14 +7,14 @@ library(FactoMineR)
 library(readxl)
 
 # Packages pour la méthode des plus proches voisins 
-install.packages("VIM")
+# install.packages("VIM")
 library(VIM)
 source("http://bioconductor.org/biocLite.R") # essayer avec http:// if not supported
 biocLite("impute") #équivalent de install.packages
 ## le package "impute" ne se charge pas directement sur mon ordinateur, il faut donc contourner le pb
 
 # Haim base de données
-#bd <- read_excel("~/Desktop/Projet_SBT13/Projet-SBT13-Addictologie-Github/bdmieRpp2.xls")
+bd <- read_excel("~/Desktop/Projet_SBT13/Projet-SBT13-Addictologie-Github/bdmieRpp2.xls")
 
 # Arthur Base de données
 # bd <- read_excel("~/Documents/Projet Enjeux/Projet-SBT13-Addictologie/bdmieRpp2.xls")
@@ -391,7 +391,8 @@ ClusterCHA=function(dimacp,nbclus,data){
   return(Clusters)
 }
 
-Clusters=ClusterCHA(30,10,full_data)
+Clusters=ClusterCHA(30,10,full_data[,2:Ncf])
+# on doit enlever les ID
 #Pour accéder au ième Cluster il faut utiliser Clusters[[i]] DEUX CROCHETS !
 
 ##########################
@@ -424,12 +425,12 @@ for (i in (1:10)) {
   print(dim(Clusters[[ordreCHA[i]]]))
 }
 
-summary(Clusters[[5]])
-
+summary(Clusters[[8]])
+View(Clusters[[10]])
 # regression PLS
 # regarder les question où il y a le plus de données manquantes et peut-être les enlever.
 # complete case
 # regarder le nombre de na par lignes
 # Enregistrer les variables saveRDS
 # méthodes explicatives : Anova ou faire des ACP sur les consommation et des ACP sur les quali.
-
+View(full_data[,2:Ncf])
