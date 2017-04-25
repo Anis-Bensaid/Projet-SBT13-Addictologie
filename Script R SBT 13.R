@@ -172,11 +172,14 @@ data$Douleur <- bd1$eqdoul
 data$Depression <- bd1$eqdep
 
 # Lieu de résidence : Famille/tuteur, logement indépendant, résidence collective, ailleurs
-data$LogFamille <- ifelse(bd1$logou=="Chez mes 2 parents /Chez ma mère / Chez mon père /Chez un autre membre de ma famille (oncle, tante...) / Chez mon tuteur",1,0)
-data$LogInd <-ifelse(bd1$logou=="Dans un logement indépendant (en location, en colocation, dans un logement dont je suis propriétaire, au domicile d’un autre membre de ma famille...)",1,0)
-data$LogRes <-ifelse(bd1$logou=="En résidence collective (foyer, internat, résidence universitaire...)",1,0)
-data$LogAutre <-ifelse(bd1$logou=="Ailleurs",1,0)
-
+data$LogFamille <- ifelse(bd1$logou=="Chez mes 2 parents /Chez ma mère / Chez mon père /Chez un autre membre de ma famille (oncle, tante...) / Chez mon tuteur",1,NA)
+data$LogFamille[is.na(data$LogFamille)]<-0
+data$LogInd <-ifelse(bd1$logou=="Dans un logement indépendant (en location, en colocation, dans un logement dont je suis propriétaire, au domicile d’un autre membre de ma famille...)",1,NA)
+data$LogInd [is.na(data$LogInd )]<-0
+data$LogRes <-ifelse(bd1$logou=="En résidence collective (foyer, internat, résidence universitaire...)",1,NA)
+data$LogRes[is.na(data$LogRes)]<-0
+data$LogAutre <-ifelse(bd1$logou=="Ailleurs",1,NA)
+data$LogAutre[is.na(data$LogAutre)]<-0
 # Seul
 data$Seul <- ifelse(bd1$logwho1=="Je vis seul-e",1,NA)
 data$Seul[is.na(data$Seul)]<--0
@@ -418,7 +421,7 @@ print(ordreCHA)
 
 
 for (i in (1:10)) {
-  print(i)
+  print(data$Couple <- i)
   print(dim(Clusters[[ordreCHA[i]]]))
 }
 
