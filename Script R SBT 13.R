@@ -250,7 +250,7 @@ aggr(data, col=c('navyblue','red'), numbers=TRUE, combined = FALSE, sortVars=TRU
 NA_max_col=max(info[7,])
 NA_max_row= max(reponses$Pourcent)/100
 
-mat = impute.knn(as.matrix(data),k=79,rowmax=NA_max_row,colmax=NA_max_col)
+mat = impute.knn(as.matrix(data),k=100,rowmax=NA_max_row,colmax=NA_max_col)
 full_data = as.data.frame(mat$data) 
 full_data$atot <- full_data$a1 + full_data$a2 + full_data$a3 + full_data$a4 + full_data$a5 + full_data$a6 + full_data$a7 + full_data$a8 + full_data$a9 + full_data$a10 + full_data$a11 + full_data$a12 + full_data$a13 + full_data$a14 + full_data$a15 + full_data$a16 + full_data$a17 + full_data$a18 + full_data$a19 + full_data$a20 + full_data$a21 + full_data$a22 + full_data$a23 + full_data$a24 + full_data$a25+full_data$a26+ full_data$a27+full_data$a28+full_data$a29+ full_data$a30+full_data$a31+full_data$a32+ full_data$a33+ full_data$a34
 #Audit-C
