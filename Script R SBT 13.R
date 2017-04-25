@@ -391,7 +391,7 @@ ClusterCHA=function(dimacp,nbclus,data){
   return(Clusters)
 }
 
-Clusters=ClusterCHA(30,10,full_data[,2:Ncf])
+Clusters=ClusterCHA(30,10,full_data[,c(2:36,78,79)]) # aqols
 # on doit enlever les ID
 #Pour accéder au ième Cluster il faut utiliser Clusters[[i]] DEUX CROCHETS !
 
@@ -425,7 +425,9 @@ for (i in (1:10)) {
   print(dim(Clusters[[ordreCHA[i]]]))
 }
 
-summary(Clusters[[8]])
+quantile(full_data$atot,0.99)
+
+summary(Clusters[[9]])
 View(Clusters[[10]])
 # regression PLS
 # regarder les question où il y a le plus de données manquantes et peut-être les enlever.
