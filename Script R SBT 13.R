@@ -14,7 +14,7 @@ biocLite("impute") #équivalent de install.packages
 ## le package "impute" ne se charge pas directement sur mon ordinateur, il faut donc contourner le pb
 
 # Haim base de données
-bd <- read_excel("~/Desktop/Projet_SBT13/Projet-SBT13-Addictologie-Github/bdmieRpp2.xls")
+#bd <- read_excel("~/Desktop/Projet_SBT13/Projet-SBT13-Addictologie-Github/bdmieRpp2.xls")
 
 # Arthur Base de données
 # bd <- read_excel("~/Documents/Projet Enjeux/Projet-SBT13-Addictologie/bdmieRpp2.xls")
@@ -28,7 +28,7 @@ bd <- read_excel("~/Desktop/Projet_SBT13/Projet-SBT13-Addictologie-Github/bdmieR
 
 
 # Anis Base de données
-bd <- read_excel("D:/Users/enysb/Google Drive/Etudes/Git/Projet-SBT13-Addictologie/bdmieRpp2.xls")
+#bd <- read_excel("D:/Users/enysb/Google Drive/Etudes/Git/Projet-SBT13-Addictologie/bdmieRpp2.xls")
 
 
 bd1 <-bd[bd$age<31,]
@@ -174,10 +174,10 @@ data$Depression <- bd1$eqdep
 # Lieu de résidence : Famille/tuteur, logement indépendant, résidence collective, ailleurs
 data$LogFamille <- ifelse(bd1$logou=="Chez mes 2 parents /Chez ma mère / Chez mon père /Chez un autre membre de ma famille (oncle, tante...) / Chez mon tuteur",1,NA)
 data$LogFamille[is.na(data$LogFamille)]<-0
-data$LogInd <-ifelse(bd1$logou=="Dans un logement indépendant (en location, en colocation, dans un logement dont je suis propriétaire, au domicile d’un autre membre de ma famille...)",1,NA)
-data$LogInd [is.na(data$LogInd )]<-0
-data$LogRes <-ifelse(bd1$logou=="En résidence collective (foyer, internat, résidence universitaire...)",1,NA)
-data$LogRes[is.na(data$LogRes)]<-0
+data$LogInd <-ifelse(bd1$logou=='"Dans un logement indépendant (en location, en colocation, dans un logement dont je suis propriétaire, au domicile d’un autre membre de ma famille...)"',1,NA)
+data$LogInd [is.na(data$LogInd)]<-0
+data$LogRes <-ifelse(bd1$logou=="En résidence collective (foyer, internat, résidence universitaire…)",1,NA)
+data$LogRes[is.na(data$LogRes)]<- 0
 data$LogAutre <-ifelse(bd1$logou=="Ailleurs",1,NA)
 data$LogAutre[is.na(data$LogAutre)]<-0
 # Seul
@@ -238,7 +238,7 @@ fort_taux=reponses[reponses$Pourcent<=0,]
 taux_global=100*sum(reponses$Total)/(Nc*Nl) # taux global de réponses manquantes
 
 ###########################################
-# Méthode des plus proches voisins
+###  Méthode des plus proches voisins   ###
 ###########################################
 
 aggr(data, col=c('navyblue','red'), numbers=TRUE, combined = FALSE, sortVars=TRUE, labels=names(data), cex.axis=.7, gap=3, ylab=c("Histogram of missing data","Pattern"))
@@ -347,22 +347,109 @@ KClusters=Kmeans(data,10)
 ###########
 
 
-res_pca <- PCA(data,ncp=30)
 
+ACP <- PCA(full_data,ncp=30)
 #La fonction plot.PCA permet d'afficher la représentation des variables () et des individus (Individuals factor map (PCA)) dans le plan des deux premiers facteurs principaux
-plot.PCA(res_pca,col.quali="blue", label="quali")
+plot.PCA(ACP,col.quali="blue", label="quali")
 
 
+## On détermine le nombre de dimension à concerver à l'aide du critère du coude
+## Histogramme des valeurs propores
+barplot(ACP$eig[1:dim(full_data)[2],2], main="Histogramme des valeurs propres", 
+        names.arg=1:dim(full_data)[2], xlab="Axes", ylab="Pourcentage d'inertie", 
+        cex.axis=0.8, font.lab=3, ylim=c(0, 12), col="orange")
+
+
+
+
+## Variables retenues
+
+DBACP=data.frame(matrix(data=NA,nrow=Nl,ncol=1))
+DBACP<-DBACP[,-1]
+DBACP$a1<-full_data$a1
+DBACP$a2<-full_data$a2
+DBACP$a3<-full_data$a3
+DBACP$a4<-full_data$a4
+DBACP$a5<-full_data$a5
+DBACP$a6<-full_data$a6
+DBACP$a7<-full_data$a7
+DBACP$a8<-full_data$a8
+DBACP$a9<-full_data$a9
+DBACP$a10<-full_data$a10
+DBACP$a11<-full_data$a11
+DBACP$a12<-full_data$a12
+DBACP$a13<-full_data$a13
+DBACP$a14<-full_data$a14
+DBACP$a15<-full_data$a15
+DBACP$a16<-full_data$a16
+DBACP$a17<-full_data$a17
+DBACP$a18<-full_data$a18
+DBACP$a19<-full_data$a19
+DBACP$a20<-full_data$a20
+DBACP$a21<-full_data$a21
+DBACP$a22<-full_data$a22
+DBACP$a23<-full_data$a23
+DBACP$a24<-full_data$a24
+DBACP$a25<-full_data$a25
+DBACP$a26<-full_data$a26
+DBACP$a27<-full_data$a27
+DBACP$a28<-full_data$a28
+DBACP$a29<-full_data$a29
+DBACP$a30<-full_data$a30
+DBACP$a31<-full_data$a31
+DBACP$a32<-full_data$a32
+DBACP$a33<-full_data$a33
+DBACP$a34<-full_data$a34
+DBACP$atot<-full_data$atot
+DBACP$Genre<-full_data$Genre
+DBACP$Douleur<-full_data$Douleur
+DBACP$Depression<-full_data$Depression
+DBACP$Mobilité<-full_data$Mobilité
+DBACP$Autonomie<-full_data$Autonomie
+DBACP$Habitudes<-full_data$Habitudes
+DBACP$FeteImagePerso<-full_data$FeteImagePerso
+DBACP$FeteEtre<-full_data$FeteEtre
+DBACP$FetePerso<-full_data$FetePerso
+DBACP$FeteQuotidien<-full_data$FeteQuotidien
+DBACP$FeteImageAutre<-full_data$FeteImageAutre
+DBACP$Tabac<-full_data$Tabac
+DBACP$Cannabis<-full_data$Cannabis
+DBACP$NbVerreMoy<-full_data$NbVerreMoy
+DBACP$FreqBinge<-full_data$FreqBinge
+DBACP$FreqConso<-full_data$FreqConso
+DBACP$FreqSupSixVerre<-full_data$FreqSupSixVerre
+DBACP$Audit<-full_data$Audit
+
+ACP2 <- PCA(DBACP,ncp=7,graph=T)
+#La fonction plot.PCA permet d'afficher la représentation des variables () et des individus (Individuals factor map (PCA)) dans le plan des deux premiers facteurs principaux
+plot.PCA(ACP2,col.quali="blue", label="quali")
+
+
+## On détermine le nombre de dimension à concerver à l'aide du critère du coude
+## Histogramme des valeurs propores
+barplot(ACP2$eig[1:dim(full_data)[2],2], main="Histogramme des valeurs propres", 
+        names.arg=1:dim(full_data)[2], xlab="Axes", ylab="Pourcentage d'inertie", 
+        cex.axis=0.8, font.lab=3, ylim=c(0, 12), col="orange")
+
+## Test de Clusters
+
+Distance=dist(ACP2$ind$coord)
+
+CHA=hclust(Distance,method="ward.D2")
+
+Repartition=cutree(CHA,10)
+
+Cluster1=full_data[Repartition==1,]
 
 ###############################################
 ### classification  hiérarchique ascendante ###
 ###############################################
 
 
-ClusterCHA=function(dimacp,nbclus,data){
+ClusterCHA=function(dimacp,nbclus,dataACP,fulldata){
   #On applique la méthode de l'Analyse par composantes principales 
   #à l'aide de la fonction PCA du package FactoMineR
-  ACP=PCA(data,ncp=dimacp)
+  ACP=PCA(dataACP,ncp=dimacp)
   
   #La fonction plot.PCA permet d'afficher la représentation des variables
   #et des individus (Individuals factor map (PCA)) dans le plan des deux premiers facteurs principaux
@@ -386,25 +473,29 @@ ClusterCHA=function(dimacp,nbclus,data){
   # On range les clusters dans une liste Clusters de dataframes
   Clusters=list()
   for (i in 1:nbclus){
-    Clusters[[i]]=data[Repartition==i,]
+    Clusters[[i]]=fulldata[Repartition==i,]
   }
   return(Clusters)
 }
 
-Clusters=ClusterCHA(30,10,data) # aqols
+Clusters=ClusterCHA(7,5,DBACP,full_data)
+
 # on doit enlever les ID
 #Pour accéder au ième Cluster il faut utiliser Clusters[[i]] DEUX CROCHETS !
+
+
 
 ##########################
 ### Etude des Clusters ###
 ##########################
+
 
 #ClassificationClusters prend en argument une liste de clusters et retourne les 
 #indinces des clusters triés par ordre décroissant celon la valeur moyenne de atot
 ClassificationClusters=function(Clusters){
   nbclus=length(Clusters)
   ordre=(1:nbclus)
-  for (i in (2:nbclus)){
+  for (i in (1:nbclus)){
     Temp=as.integer(ordre[i])
     j=i
     while(j>1 && summary(as.data.frame(Clusters[[ordre[j-1]]])$atot)["Mean"]<summary(as.data.frame(Clusters[[Temp]])$atot)["Mean"]){
@@ -420,19 +511,28 @@ ordreCHA=ClassificationClusters(Clusters)
 print(ordreCHA)
 
 
-for (i in (1:10)) {
-  print(data$Couple <- i)
+## Etude individuelle des Clusters
+
+for (i in (1:length(Clusters))) {
+  print(ordreCHA[i])
   print(dim(Clusters[[ordreCHA[i]]]))
 }
 
+
+
+summary(Clusters[[5]])
+View(Clusters[[5]])
+
+
 quantile(full_data$atot,0.99)
 
-summary(Clusters[[9]])
-View(Clusters[[10]])
+
+
 # regression PLS
 # regarder les question où il y a le plus de données manquantes et peut-être les enlever.
 # complete case
 # regarder le nombre de na par lignes
 # Enregistrer les variables saveRDS
 # méthodes explicatives : Anova ou faire des ACP sur les consommation et des ACP sur les quali.
-View(full_data[,2:Ncf])
+
+
