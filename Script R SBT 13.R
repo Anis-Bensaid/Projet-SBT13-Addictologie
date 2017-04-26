@@ -35,8 +35,8 @@ biocLite("impute") #équivalent de install.packages
 
 
 # Anis Base de données
-# bd <- read_excel("D:/Users/enysb/Google Drive/Etudes/Git/Projet-SBT13-Addictologie/bdmieRpp2.xls")
-# setwd("D:/Users/enysb/Google Drive/Etudes/Git/Projet-SBT13-Addictologie")
+bd <- read_excel("D:/Users/enysb/Google Drive/Etudes/Git/Projet-SBT13-Addictologie/bdmieRpp2.xls")
+setwd("D:/Users/enysb/Google Drive/Etudes/Git/Projet-SBT13-Addictologie")
 
 
 #############################################
@@ -353,6 +353,8 @@ NA_max_row= max(reponses$Pourcent)/100
 
 mat = impute.knn(as.matrix(data),k=100,rowmax=NA_max_row,colmax=NA_max_col)
 full_data = as.data.frame(mat$data) 
+
+#Atot
 full_data$atot <- full_data$a1 + full_data$a2 + full_data$a3 + full_data$a4 + full_data$a5 + full_data$a6 + full_data$a7 + full_data$a8 + full_data$a9 + full_data$a10 + full_data$a11 + full_data$a12 + full_data$a13 + full_data$a14 + full_data$a15 + full_data$a16 + full_data$a17 + full_data$a18 + full_data$a19 + full_data$a20 + full_data$a21 + full_data$a22 + full_data$a23 + full_data$a24 + full_data$a25+full_data$a26+ full_data$a27+full_data$a28+full_data$a29+ full_data$a30+full_data$a31+full_data$a32+ full_data$a33+ full_data$a34
 #Audit-C
 full_data$Audit <- full_data$FreqConso + full_data$NbVerreMoy+ full_data$FreqSupSixVerre
@@ -410,7 +412,7 @@ for (i in (2:Nc)) {
 #Pour cette partie il faut avoir les bases full_data. Pour celà il faut utiliser setwd pour définir le chemin vers la BDD
 
 # setwd("D:/Users/enysb/Google Drive/Etudes/Git/Projet-SBT13-Addictologie")
-# full_data2=read.csv2("full_data.csv")
+# full_data=read.csv2("full_data.csv")
 
 
 
@@ -575,8 +577,8 @@ Distance=dist(ACP2$ind$coord)
 #hclust permet de créer les clusters avec la méthode de WARD
 CHA=hclust(Distance,method="ward.D2")
 
-#plot permet de tracer le dendrograme :
-plot(CHA)
+#plot permet de tracer le dendrograme : ATTENTION ! NECESSITE UNE MACHINE PERFORMANTE !
+#plot(CHA)
 
 #cutree(tree,k) permet de couper le dendrograme pour former k clusters:
 Repartition=cutree(CHA,7)
@@ -598,8 +600,8 @@ ClusterCHA=function(dimacp,nbclus,dataACP,fulldata){
   #à l'aide de la fonction PCA du package FactoMineR
   print("ACP encours ... ")
   ACP=PCA(dataACP,ncp=dimacp)
+  print(c("Pourcentage de variabilité expliqué :",ACP2$eig$`cumulative percentage of variance`[dimacp]))
   plot.PCA(ACP2,col.quali="blue", label="quali")
-  print(c("Nombre de dimensions à garder dans les résultats :",dimacp))
   print("Traçage de l'histogramme des valeurs propres ...")
   barplot(ACP$eig[1:dim(dataACP)[2],2], main="Histogramme des valeurs propres", 
           names.arg=1:dim(dataACP)[2], xlab="Axes", ylab="Pourcentage d'inertie", 
@@ -636,12 +638,12 @@ ClusterCHA=function(dimacp,nbclus,dataACP,fulldata){
   return(Clusters)
 }
 
+#Il faut utiliser les flèches pour voir les différents graphiques
 
-Clusters=ClusterCHA(12,7,DBACP,full_data)
-
+Clusters=ClusterCHA(7,5,DBACP,full_data)
 
 #Pour accéder au ième Cluster il faut utiliser Clusters[[i]] DEUX CROCHETS !
-#Il faut utiliser les flèches pour voir les différents graphiques
+
 
 
 ##########################
