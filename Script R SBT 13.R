@@ -14,7 +14,7 @@ biocLite("impute") #équivalent de install.packages
 ## le package "impute" ne se charge pas directement sur mon ordinateur, il faut donc contourner le pb
 
 # Haim base de données
-#bd <- read_excel("~/Desktop/Projet_SBT13/Projet-SBT13-Addictologie-Github/bdmieRpp2.xls")
+bd <- read_excel("~/Desktop/Projet_SBT13/Projet-SBT13-Addictologie-Github/bdmieRpp2.xls")
 
 # Arthur Base de données
 # bd <- read_excel("~/Documents/Projet Enjeux/Projet-SBT13-Addictologie/bdmieRpp2.xls")
@@ -110,20 +110,19 @@ data$Niveau <- ifelse(bd1$niv=="Bac +1", 1, ifelse(bd1$niv=="Bac +2", 2, ifelse(
 # Discipline
 # data$Disc<-bd1$disc --> colonne qualitative, qu'on a préféré scinder en plusieurs colonnes avec un résultat
 # qualitatif
-data$StudyHuma <- ifelse(bd1$disc=="Sciences Humaines et sociales / Lettres / Langues / Art",1,NA)
-data$StudyHuma[is.na(data$StudyHuma)]<--0
-data$StudyProf <- ifelse(bd1$disc=="Enseignement / STAPS",1,NA)
-data$StudyProf[is.na(data$StudyProf)]<--0
-data$StudyLawEco <- ifelse(bd1$disc=="Droit / Eco-gestion / Management",1,NA)
-data$StudyLawEco[is.na(data$StudyLawEco)]<--0
-data$StudyScience <- ifelse(bd1$disc=="Sciences / Ingénierie /Architecture",1,NA)
-data$StudyScience[is.na(data$StudyScience)]<--0
-data$StudyMed <- ifelse(bd1$disc=="Santé",1,NA)
-data$StudyMed[is.na(data$StudyMed)]<--0
-data$StudyMed <- ifelse(bd1$disc=="Santé",1,NA)
-data$StudyMed[is.na(data$StudyMed)]<--0
-data$StudyAutre <- ifelse(bd1$disc=="Autre (veuillez préciser)",1,NA)
-data$StudyAutre[is.na(data$StudyAutre)]<--0
+study <- unique(bd1$disc)
+data$StudyHuma <- ifelse(bd1$disc==study[3],1,NA)
+data$StudyHuma[is.na(data$StudyHuma)]<-0
+data$StudyProf <- ifelse(bd1$disc==study[1],1,NA)
+data$StudyProf[is.na(data$StudyProf)]<-0
+data$StudyLawEco <- ifelse(bd1$disc==study[4],1,NA)
+data$StudyLawEco[is.na(data$StudyLawEco)]<-0
+data$StudyScience <- ifelse(bd1$disc==study[2],1,NA)
+data$StudyScience[is.na(data$StudyScience)]<-0
+data$StudyMed <- ifelse(bd1$disc==study[5],1,NA)
+data$StudyMed[is.na(data$StudyMed)]<-0
+data$StudyAutre <- ifelse(bd1$disc==study[6],1,NA)
+data$StudyAutre[is.na(data$StudyAutre)]<-0
 
 # Autre cursus, c'est une donnée qualitative qui nous semble inutilisable
 # data$AutreCursus <- bd1[8]
@@ -139,7 +138,8 @@ data$MD <- ifelse(bd1$md== "jamais consommé", 0, ifelse(bd1$md== "il y a plus d
 data$Poppers <- ifelse(bd1$pop== "jamais consommé", 0, ifelse(bd1$pop== "il y a plus d'un an", 1, ifelse(bd1$pop=="au cours de la dernière année", 1, ifelse(bd1$pop=="au cours du mois dernier", 2, ifelse(bd1$pop=="au cours de la dernière semaine", 3, NA)))))
 data$Jeu <- ifelse(bd1$jeu== "jamais consommé", 0, ifelse(bd1$jeu== "il y a plus d'un an", 1, ifelse(bd1$jeu=="au cours de la dernière année", 1, ifelse(bd1$jeu=="au cours du mois dernier", 2, ifelse(bd1$jeu=="au cours de la dernière semaine", 3, NA)))))
 #Argent
-data$Argent <- ifelse(bd1$fin=="Pas de difficultés financières  -    0", 0, ifelse(bd1$fin == "1.000000", 1, ifelse(bd1$fin=="2.000000", 2, ifelse(bd1$fin=="3.000000", 3, ifelse(bd1$fin=="Difficultés financières trés importantes     -   4", 4, NA)))))
+fin <- unique(bd1$fin)
+data$Argent <- ifelse(bd1$fin==fin[2], 0, ifelse(bd1$fin == fin[1], 1, ifelse(bd1$fin==fin[5], 2, ifelse(bd1$fin==fin[3], 3, ifelse(bd1$fin==fin[6], 4, NA)))))
 # Audit-C et consommation d'alcool
 # Fréquence de consommation d'alcool
 data$FreqConso <- ifelse(bd1$frqoh=="Jamais", 0, ifelse(bd1$frqoh=="Une fois par mois ou moins", 1, ifelse(bd1$frqoh== "2 à 4 fois par mois", 2, ifelse(bd1$frqoh == "2 à 3 fois par semaine", 3, ifelse(bd1$frqoh=="4 fois par semaine ou plus", 4, NA)))))
@@ -172,13 +172,14 @@ data$Douleur <- bd1$eqdoul
 data$Depression <- bd1$eqdep
 
 # Lieu de résidence : Famille/tuteur, logement indépendant, résidence collective, ailleurs
-data$LogFamille <- ifelse(bd1$logou=="Chez mes 2 parents /Chez ma mère / Chez mon père /Chez un autre membre de ma famille (oncle, tante...) / Chez mon tuteur",1,NA)
+log <- unique(bd1$logou)
+data$LogFamille <- ifelse(bd1$logou==log[1],1,NA)
 data$LogFamille[is.na(data$LogFamille)]<-0
-data$LogInd <-ifelse(bd1$logou=='"Dans un logement indépendant (en location, en colocation, dans un logement dont je suis propriétaire, au domicile d’un autre membre de ma famille...)"',1,NA)
+data$LogInd <-ifelse(bd1$logou==log[3],1,NA)
 data$LogInd [is.na(data$LogInd)]<-0
-data$LogRes <-ifelse(bd1$logou=="En résidence collective (foyer, internat, résidence universitaire…)",1,NA)
+data$LogRes <-ifelse(bd1$logou==log[2],1,NA)
 data$LogRes[is.na(data$LogRes)]<- 0
-data$LogAutre <-ifelse(bd1$logou=="Ailleurs",1,NA)
+data$LogAutre <-ifelse(bd1$logou==log[5],1,NA)
 data$LogAutre[is.na(data$LogAutre)]<-0
 # Seul
 data$Seul <- ifelse(bd1$logwho1=="Je vis seul-e",1,NA)
@@ -241,7 +242,7 @@ taux_global=100*sum(reponses$Total)/(Nc*Nl) # taux global de réponses manquante
 ###  Méthode des plus proches voisins   ###
 ###########################################
 
-aggr(data, col=c('navyblue','red'), numbers=TRUE, combined = FALSE, sortVars=TRUE, labels=names(data), cex.axis=.7, gap=3, ylab=c("Histogram of missing data","Pattern"))
+#aggr(data, col=c('navyblue','red'), numbers=TRUE, combined = FALSE, sortVars=TRUE, labels=names(data), cex.axis=.7, gap=3, ylab=c("Histogram of missing data","Pattern"))
 # graphique de gauche pour illustrer la part de données manquantes
 
 
@@ -289,7 +290,7 @@ for (i in (2:Nc)) {
   erreur_impute[5,i-1] <- abs(info[6,i-1]-info_full[6,i-1]) # écart-type
 }
 
-aggr(full_data, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(data), cex.axis=.7, gap=3, ylab=c("Histogram of missing data","Pattern"))
+#aggr(full_data, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(data), cex.axis=.7, gap=3, ylab=c("Histogram of missing data","Pattern"))
 # ce dernier affichage est une petite vérification graphique pour s'assurer 
 # qu'il n'y a plus de données manquantes
 
@@ -510,6 +511,24 @@ ClassificationClusters=function(Clusters){
 ordreCHA=ClassificationClusters(Clusters)
 print(ordreCHA)
 
+#classement à partir de Audit C
+ClassificationClustersC=function(Clusters){
+  nbclus=length(Clusters)
+  ordre=(1:nbclus)
+  for (i in (1:nbclus)){
+    Temp=as.integer(ordre[i])
+    j=i
+    while(j>1 && summary(as.data.frame(Clusters[[ordre[j-1]]])$Audit)["Mean"]<summary(as.data.frame(Clusters[[Temp]])$Audit)["Mean"]){
+      ordre[j]=as.integer(ordre[j-1])
+      j=j-1
+    }
+    ordre[j]=Temp
+  }
+  return(ordre)
+}
+
+ordreCHAC=ClassificationClustersC(Clusters)
+print(ordreCHAC)
 
 ## Etude individuelle des Clusters
 
