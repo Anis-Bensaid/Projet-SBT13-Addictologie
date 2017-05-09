@@ -7,14 +7,21 @@ library(FactoMineR)
 library(readxl)
 
 # Packages pour la méthode des plus proches voisins 
-install.packages("VIM")
+# install.packages("VIM")
 library(VIM)
 source("http://bioconductor.org/biocLite.R") # essayer avec http:// if not supported
 biocLite("impute") #équivalent de install.packages
 ## le package "impute" ne se charge pas directement sur mon ordinateur, il faut donc contourner le pb
 
+
+
+#####################################
+### Lecture de la base de données ###
+#####################################
+
+
 # Haim base de données
-#bd <- read_excel("~/Desktop/Projet_SBT13/Projet-SBT13-Addictologie-Github/bdmieRpp2.xls")
+# bd <- read_excel("~/Desktop/Projet_SBT13/Projet-SBT13-Addictologie-Github/bdmieRpp2.xls")
 
 # Arthur Base de données
 # bd <- read_excel("~/Documents/Projet Enjeux/Projet-SBT13-Addictologie/bdmieRpp2.xls")
@@ -28,8 +35,13 @@ biocLite("impute") #équivalent de install.packages
 
 
 # Anis Base de données
-#bd <- read_excel("D:/Users/enysb/Google Drive/Etudes/Git/Projet-SBT13-Addictologie/bdmieRpp2.xls")
+bd <- read_excel("D:/Users/enysb/Google Drive/Etudes/Git/Projet-SBT13-Addictologie/bdmieRpp2.xls")
+setwd("D:/Users/enysb/Google Drive/Etudes/Git/Projet-SBT13-Addictologie")
 
+
+#############################################
+### Restructuration de la base de données ###
+#############################################
 
 bd1 <-bd[bd$age<31,]
 # on cherche la corrélation entre chaque item de AQOLS contre tout le reste
@@ -49,48 +61,116 @@ data$ID_indiv <-bd1[1]
 data<-data[,-1]
 
 # on transforme les réponses de l'AQOLS en score et on les insére dans la data.frame
-data$a1 <- ifelse(bd1$A1=="Pas du tout", 0, ifelse(bd1$A1=="Un peu", 1,ifelse(bd1$A1== "Beaucoup", 2,ifelse(bd1$A1 == "Enormément", 3,NA))))
-data$a2 <- ifelse(bd1$A2=="Pas du tout", 0, ifelse(bd1$A2=="Un peu", 1,ifelse(bd1$A2== "Beaucoup", 2,ifelse(bd1$A2 == "Enormément", 3,NA))))
-data$a3 <- ifelse(bd1$A3=="Pas du tout", 0, ifelse(bd1$A3=="Un peu", 1,ifelse(bd1$A3== "Beaucoup", 2,ifelse(bd1$A3 == "Enormément", 3,NA))))
-data$a4 <- ifelse(bd1$A4=="Pas du tout", 0, ifelse(bd1$A4=="Un peu", 1,ifelse(bd1$A4== "Beaucoup", 2,ifelse(bd1$A4 == "Enormément", 3,NA))))
-data$a5 <- ifelse(bd1$A5=="Pas du tout", 0, ifelse(bd1$A5=="Un peu", 1,ifelse(bd1$A5== "Beaucoup", 2,ifelse(bd1$A5== "Enormément", 3,NA))))
-data$a6 <- ifelse(bd1$A6=="Pas du tout", 0, ifelse(bd1$A6=="Un peu", 1,ifelse(bd1$A6== "Beaucoup", 2,ifelse(bd1$A6 == "Enormément", 3,NA))))
-data$a7 <- ifelse(bd1$A7=="Pas du tout", 0, ifelse(bd1$A7=="Un peu", 1,ifelse(bd1$A7== "Beaucoup", 2,ifelse(bd1$A7 == "Enormément", 3,NA))))
-data$a8 <- ifelse(bd1$A8=="Pas du tout", 0, ifelse(bd1$A8=="Un peu", 1,ifelse(bd1$A8== "Beaucoup", 2,ifelse(bd1$A8 == "Enormément", 3,NA))))
-data$a9 <- ifelse(bd1$A9=="Pas du tout", 0, ifelse(bd1$A9=="Un peu", 1,ifelse(bd1$A9== "Beaucoup", 2,ifelse(bd1$A9 == "Enormément", 3,NA))))
-data$a10 <- ifelse(bd1$A10=="Pas du tout", 0, ifelse(bd1$A10=="Un peu", 1,ifelse(bd1$A10== "Beaucoup", 2,ifelse(bd1$A10 == "Enormément", 3,NA))))
-data$a11 <- ifelse(bd1$A11=="Pas du tout", 0, ifelse(bd1$A11=="Un peu", 1,ifelse(bd1$A11== "Beaucoup", 2,ifelse(bd1$A11 == "Enormément", 3,NA))))
-data$a12 <- ifelse(bd1$A12=="Pas du tout", 0, ifelse(bd1$A12=="Un peu", 1,ifelse(bd1$A12== "Beaucoup", 2,ifelse(bd1$A12 == "Enormément", 3,NA))))
-data$a13 <- ifelse(bd1$A13=="Pas du tout", 0, ifelse(bd1$A13=="Un peu", 1,ifelse(bd1$A13== "Beaucoup", 2,ifelse(bd1$A13 == "Enormément", 3,NA))))
-data$a14 <- ifelse(bd1$A14=="Pas du tout", 0, ifelse(bd1$A14=="Un peu", 1,ifelse(bd1$A14== "Beaucoup", 2,ifelse(bd1$A14 == "Enormément", 3,NA))))
-data$a15 <- ifelse(bd1$A15=="Pas du tout", 0, ifelse(bd1$A15=="Un peu", 1,ifelse(bd1$A15== "Beaucoup", 2,ifelse(bd1$A15 == "Enormément", 3,NA))))
-data$a16 <- ifelse(bd1$A16=="Pas du tout", 0, ifelse(bd1$A16=="Un peu", 1,ifelse(bd1$A16== "Beaucoup", 2,ifelse(bd1$A16 == "Enormément", 3,NA))))
-data$a17 <- ifelse(bd1$A17=="Pas du tout", 0, ifelse(bd1$A17=="Un peu", 1,ifelse(bd1$A17== "Beaucoup", 2,ifelse(bd1$A17 == "Enormément", 3,NA))))
-data$a18 <- ifelse(bd1$A18=="Pas du tout", 0, ifelse(bd1$A18=="Un peu", 1,ifelse(bd1$A18== "Beaucoup", 2,ifelse(bd1$A18 == "Enormément", 3,NA))))
-data$a19 <- ifelse(bd1$A19=="Pas du tout", 0, ifelse(bd1$A19=="Un peu", 1,ifelse(bd1$A19== "Beaucoup", 2,ifelse(bd1$A19 == "Enormément", 3,NA))))
-data$a20 <- ifelse(bd1$A20=="Pas du tout", 0, ifelse(bd1$A20=="Un peu", 1,ifelse(bd1$A1== "Beaucoup", 2,ifelse(bd1$A1 == "Enormément", 3,NA))))
-data$a21 <- ifelse(bd1$A1=="Pas du tout", 0, ifelse(bd1$A21=="Un peu", 1,ifelse(bd1$A21== "Beaucoup", 2,ifelse(bd1$A21 == "Enormément", 3,NA))))
-data$a22 <- ifelse(bd1$A22=="Pas du tout", 0, ifelse(bd1$A22=="Un peu", 1,ifelse(bd1$A22== "Beaucoup", 2,ifelse(bd1$A22 == "Enormément", 3,NA))))
-data$a23 <- ifelse(bd1$A23=="Pas du tout", 0, ifelse(bd1$A23=="Un peu", 1,ifelse(bd1$A23== "Beaucoup", 2,ifelse(bd1$A23 == "Enormément", 3,NA))))
-data$a24 <- ifelse(bd1$A24=="Pas du tout", 0, ifelse(bd1$A24=="Un peu", 1,ifelse(bd1$A24== "Beaucoup", 2,ifelse(bd1$A24 == "Enormément", 3,NA))))
-data$a25 <- ifelse(bd1$A25=="Pas du tout", 0, ifelse(bd1$A25=="Un peu", 1,ifelse(bd1$A25== "Beaucoup", 2,ifelse(bd1$A25== "Enormément", 3,NA))))
-data$a26 <- ifelse(bd1$A26=="Pas du tout", 0, ifelse(bd1$A26=="Un peu", 1,ifelse(bd1$A26== "Beaucoup", 2,ifelse(bd1$A26 == "Enormément", 3,NA))))
-data$a27 <- ifelse(bd1$A27=="Pas du tout", 0, ifelse(bd1$A27=="Un peu", 1,ifelse(bd1$A27== "Beaucoup", 2,ifelse(bd1$A27 == "Enormément", 3,NA))))
-data$a28 <- ifelse(bd1$A28=="Pas du tout", 0, ifelse(bd1$A28=="Un peu", 1,ifelse(bd1$A28== "Beaucoup", 2,ifelse(bd1$A28 == "Enormément", 3,NA))))
-data$a29 <- ifelse(bd1$A29=="Pas du tout", 0, ifelse(bd1$A29=="Un peu", 1,ifelse(bd1$A29== "Beaucoup", 2,ifelse(bd1$A29 == "Enormément", 3,NA))))
-data$a30 <- ifelse(bd1$A30=="Pas du tout", 0, ifelse(bd1$A30=="Un peu", 1,ifelse(bd1$A30== "Beaucoup", 2,ifelse(bd1$A30 == "Enormément", 3,NA))))
-data$a31 <- ifelse(bd1$A11=="Pas du tout", 0, ifelse(bd1$A31=="Un peu", 1,ifelse(bd1$A31== "Beaucoup", 2,ifelse(bd1$A31 == "Enormément", 3,NA))))
-data$a32 <- ifelse(bd1$A32=="Pas du tout", 0, ifelse(bd1$A32=="Un peu", 1,ifelse(bd1$A32== "Beaucoup", 2,ifelse(bd1$A32 == "Enormément", 3,NA))))
-data$a33 <- ifelse(bd1$A33=="Pas du tout", 0, ifelse(bd1$A33=="Un peu", 1,ifelse(bd1$A33== "Beaucoup", 2,ifelse(bd1$A33 == "Enormément", 3,NA))))
-data$a34 <- ifelse(bd1$A34=="Pas du tout", 0, ifelse(bd1$A34=="Un peu", 1,ifelse(bd1$A34== "Beaucoup", 2,ifelse(bd1$A34 == "Enormément", 3,NA))))
-data$atot <- data$a1+data$a2+data$a3+ data$a4+data$a5+data$a6+ data$a7+data$a8+data$a9+ data$a10+data$a11+data$a12+ data$a13+ data$a14+data$a15+data$a16+ data$a17+ data$a18+data$a19+ data$a20+data$a21+data$a22+ data$a23+ data$a24+data$a25+data$a26+ data$a27+data$a28+data$a29+ data$a30+data$a31+data$a32+ data$a33+ data$a34
+a1unique <- unique(bd1$A1)
+data$a1 <- ifelse(bd1$A1== a1unique[1], 0, ifelse(bd1$A1== a1unique[2], 1,ifelse(bd1$A1==a1unique[4], 2,ifelse(bd1$A1==a1unique[3], 3,NA))))
+
+a2unique <- unique(bd1$A2)
+data$a2 <- ifelse(bd1$A2== a2unique[1], 0, ifelse(bd1$A2== a2unique[3], 1,ifelse(bd1$A2==a2unique[2], 2,ifelse(bd1$A2==a2unique[4], 3,NA))))
+
+a3unique <- unique(bd1$A3)
+data$a3 <- ifelse(bd1$A3== a3unique[1], 0, ifelse(bd1$A3== a3unique[2], 1,ifelse(bd1$A3==a3unique[3], 2,ifelse(bd1$A3==a3unique[4], 3,NA))))
+
+a4unique <- unique(bd1$A4)
+data$a4 <- ifelse(bd1$A4== a4unique[1], 0, ifelse(bd1$A4== a4unique[2], 1,ifelse(bd1$A4==a4unique[3], 2,ifelse(bd1$A4==a4unique[4], 3,NA))))
+
+a5unique <- unique(bd1$A5)
+data$a5 <- ifelse(bd1$A5== a5unique[1], 0, ifelse(bd1$A5== a5unique[2], 1,ifelse(bd1$A5==a5unique[3], 2,ifelse(bd1$A5==a5unique[4], 3,NA))))
+
+a6unique <- unique(bd1$A6)
+data$a6 <- ifelse(bd1$A6== a6unique[1], 0, ifelse(bd1$A6== a6unique[2], 1,ifelse(bd1$A6==a6unique[3], 2,ifelse(bd1$A6==a6unique[4], 3,NA))))
+
+a7unique <- unique(bd1$A7)
+data$a7 <- ifelse(bd1$A7== a7unique[1], 0, ifelse(bd1$A7== a7unique[2], 1,ifelse(bd1$A7==a7unique[3], 2,ifelse(bd1$A7==a7unique[4], 3,NA))))
+
+a8unique <- unique(bd1$A8)
+data$a8 <- ifelse(bd1$A8== a8unique[1], 0, ifelse(bd1$A8== a8unique[2], 1,ifelse(bd1$A8==a8unique[3], 2,ifelse(bd1$A8==a8unique[4], 3,NA))))
+
+a9unique <- unique(bd1$A9)
+data$a9 <- ifelse(bd1$A9== a9unique[1], 0, ifelse(bd1$A9== a9unique[2], 1,ifelse(bd1$A9==a9unique[3], 2,ifelse(bd1$A9==a9unique[4], 3,NA))))
+
+a10unique <- unique(bd1$A10)
+data$a10 <- ifelse(bd1$A10== a10unique[1], 0, ifelse(bd1$A10== a10unique[2], 1,ifelse(bd1$A10==a10unique[3], 2,ifelse(bd1$A10==a10unique[4], 3,NA))))
+
+a11unique <- unique(bd1$A11)
+data$a11 <- ifelse(bd1$A11== a11unique[1], 0, ifelse(bd1$A11== a11unique[2], 1,ifelse(bd1$A11==a11unique[3], 2,ifelse(bd1$A11==a11unique[4], 3,NA))))
+
+a12unique <- unique(bd1$A12)
+data$a12 <- ifelse(bd1$A12== a12unique[1], 0, ifelse(bd1$A12== a12unique[3], 1,ifelse(bd1$A12==a12unique[2], 2,ifelse(bd1$A12==a12unique[4], 3,NA))))
+
+a13unique <- unique(bd1$A13)
+data$a13 <- ifelse(bd1$A13== a13unique[1], 0, ifelse(bd1$A13== a13unique[2], 1,ifelse(bd1$A13==a13unique[3], 2,ifelse(bd1$A13==a13unique[4], 3,NA))))
+
+a14unique <- unique(bd1$A14)
+data$a14 <- ifelse(bd1$A14== a14unique[1], 0, ifelse(bd1$A14== a14unique[2], 1,ifelse(bd1$A14==a14unique[3], 2,ifelse(bd1$A14==a14unique[4], 3,NA))))
+
+a15unique <- unique(bd1$A15)
+data$a15 <- ifelse(bd1$A15== a15unique[1], 0, ifelse(bd1$A15== a15unique[2], 1,ifelse(bd1$A15==a15unique[3], 2,ifelse(bd1$A15==a15unique[4], 3,NA))))
+
+a16unique <- unique(bd1$A16)
+data$a16 <- ifelse(bd1$A16== a16unique[1], 0, ifelse(bd1$A16== a16unique[2], 1,ifelse(bd1$A16==a16unique[3], 2,ifelse(bd1$A16==a16unique[4], 3,NA))))
+
+a17unique <- unique(bd1$A17)
+data$a17 <- ifelse(bd1$A17== a17unique[2], 0, ifelse(bd1$A17== a17unique[1], 1,ifelse(bd1$A17==a17unique[3], 2,ifelse(bd1$A17==a17unique[4], 3,NA))))
+
+a18unique <- unique(bd1$A18)
+data$a18 <- ifelse(bd1$A18== a18unique[1], 0, ifelse(bd1$A18== a18unique[2], 1,ifelse(bd1$A18==a18unique[3], 2,ifelse(bd1$A18==a18unique[4], 3,NA))))
+
+a19unique <- unique(bd1$A19)
+data$a19 <- ifelse(bd1$A19== a19unique[1], 0, ifelse(bd1$A19== a19unique[2], 1,ifelse(bd1$A19==a19unique[3], 2,ifelse(bd1$A19==a19unique[4], 3,NA))))
+
+a20unique <- unique(bd1$A20)
+data$a20 <- ifelse(bd1$A20== a20unique[1], 0, ifelse(bd1$A20== a20unique[3], 1,ifelse(bd1$A20==a20unique[2], 2,ifelse(bd1$A20==a20unique[4], 3,NA))))
+
+a21unique <- unique(bd1$A21)
+data$a21 <- ifelse(bd1$A21== a21unique[1], 0, ifelse(bd1$A21== a21unique[2], 1,ifelse(bd1$A21==a21unique[3], 2,ifelse(bd1$A21==a21unique[4], 3,NA))))
+
+a22unique <- unique(bd1$A22)
+data$a22 <- ifelse(bd1$A22== a22unique[2], 0, ifelse(bd1$A22== a22unique[1], 1,ifelse(bd1$A22==a22unique[3], 2,ifelse(bd1$A22==a22unique[4], 3,NA))))
+
+a23unique <- unique(bd1$A23)
+data$a23 <- ifelse(bd1$A23== a23unique[1], 0, ifelse(bd1$A23== a23unique[2], 1,ifelse(bd1$A23==a23unique[3], 2,ifelse(bd1$A23==a23unique[4], 3,NA))))
+
+a24unique <- unique(bd1$A24)
+data$a24 <- ifelse(bd1$A24== a24unique[2], 0, ifelse(bd1$A24== a24unique[1], 1,ifelse(bd1$A24==a24unique[4], 2,ifelse(bd1$A24==a24unique[3], 3,NA))))
+
+a25unique <- unique(bd1$A25)
+data$a25 <- ifelse(bd1$A25== a25unique[1], 0, ifelse(bd1$A25== a25unique[2], 1,ifelse(bd1$A25==a25unique[4], 2,ifelse(bd1$A25==a25unique[3], 3,NA))))
+
+a26unique <- unique(bd1$A26)
+data$a26 <- ifelse(bd1$A26== a26unique[2], 0, ifelse(bd1$A26== a26unique[1], 1,ifelse(bd1$A26==a26unique[4], 2,ifelse(bd1$A26==a26unique[3], 3,NA))))
+
+a27unique <- unique(bd1$A27)
+data$a27 <- ifelse(bd1$A27== a27unique[1], 0, ifelse(bd1$A27== a27unique[2], 1,ifelse(bd1$A27==a27unique[3], 2,ifelse(bd1$A27==a27unique[4], 3,NA))))
+
+a28unique <- unique(bd1$A28)
+data$a28 <- ifelse(bd1$A28== a28unique[1], 0, ifelse(bd1$A28== a28unique[2], 1,ifelse(bd1$A28==a28unique[3], 2,ifelse(bd1$A28==a28unique[4], 3,NA))))
+
+a29unique <- unique(bd1$A29)
+data$a29 <- ifelse(bd1$A29== a29unique[1], 0, ifelse(bd1$A29== a29unique[2], 1,ifelse(bd1$A29==a29unique[4], 2,ifelse(bd1$A29==a29unique[3], 3,NA))))
+
+a30unique <- unique(bd1$A30)
+data$a30 <- ifelse(bd1$A30== a30unique[1], 0, ifelse(bd1$A30== a30unique[2], 1,ifelse(bd1$A30==a30unique[3], 2,ifelse(bd1$A30==a30unique[4], 3,NA))))
+
+a31unique <- unique(bd1$A31)
+data$a31 <- ifelse(bd1$A31== a31unique[1], 0, ifelse(bd1$A31== a31unique[2], 1,ifelse(bd1$A31==a31unique[3], 2,ifelse(bd1$A31==a31unique[4], 3,NA))))
+
+a32unique <- unique(bd1$A32)
+data$a32 <- ifelse(bd1$A32== a32unique[1], 0, ifelse(bd1$A32== a32unique[2], 1,ifelse(bd1$A32==a32unique[3], 2,ifelse(bd1$A32==a32unique[4], 3,NA))))
+
+a33unique <- unique(bd1$A33)
+data$a33 <- ifelse(bd1$A33== a33unique[1], 0, ifelse(bd1$A33== a33unique[2], 1,ifelse(bd1$A33==a33unique[3], 2,ifelse(bd1$A33==a33unique[4], 3,NA))))
+
+a34unique <- unique(bd1$A34)
+data$a34 <- ifelse(bd1$A34== a34unique[2], 0, ifelse(bd1$A34== a34unique[1], 1,ifelse(bd1$A34==a34unique[3], 2,ifelse(bd1$A34==a34unique[4], 3,NA))))
 
 # Age
 data$Age<-bd1$age
 # Genre
-data$Genre <- ifelse(bd1$sex=="Un homme", 1, ifelse(bd1$sex=="Une femme", 2,ifelse(bd1$sex== "Indéterminé", NA ,ifelse(bd1$sex == "Ne sait pas", NA,NA))))
+genreunique <- unique(bd1$sex)
+data$Genre <- ifelse(bd1$sex== genreunique[2], 1, ifelse(bd1$sex==genreunique[1], 2,ifelse(bd1$sex== genreunique[5], NA ,ifelse(bd1$sex == genreunique[3], NA,NA))))
 # Niveau d'étude après le Bac
-data$Niveau <- ifelse(bd1$niv=="Bac +1", 1, ifelse(bd1$niv=="Bac +2", 2, ifelse(bd1$niv=="Bac +3",3, ifelse(bd1$niv=="Bac +4", 4, ifelse(bd1$niv=="Bac +5", 5, ifelse(bd1$niv=="Bac>+5", 6, NA))))))
+niveauunique <- unique(bd1$niv)
+data$Niveau <- ifelse(bd1$niv==niveauunique[3], 1, ifelse(bd1$niv==niveauunique[1], 2, ifelse(bd1$niv==niveauunique[4],3, ifelse(bd1$niv==niveauunique[5], 4, ifelse(bd1$niv==niveauunique[6],5, ifelse(bd1$niv==niveauunique[2], 6, NA))))))
 
 ## Nivautr (dans le tableau bd1)
 # c'est une colonne vide, elle n'a pas été remplie par les personnes interrogées
@@ -111,45 +191,63 @@ data$Niveau <- ifelse(bd1$niv=="Bac +1", 1, ifelse(bd1$niv=="Bac +2", 2, ifelse(
 # Discipline
 # data$Disc<-bd1$disc --> colonne qualitative, qu'on a préféré scinder en plusieurs colonnes avec un résultat
 # qualitatif
-data$StudyHuma <- ifelse(bd1$disc=="Sciences Humaines et sociales / Lettres / Langues / Art",1,NA)
-data$StudyHuma[is.na(data$StudyHuma)]<--0
-data$StudyProf <- ifelse(bd1$disc=="Enseignement / STAPS",1,NA)
-data$StudyProf[is.na(data$StudyProf)]<--0
-data$StudyLawEco <- ifelse(bd1$disc=="Droit / Eco-gestion / Management",1,NA)
-data$StudyLawEco[is.na(data$StudyLawEco)]<--0
-data$StudyScience <- ifelse(bd1$disc=="Sciences / Ingénierie /Architecture",1,NA)
-data$StudyScience[is.na(data$StudyScience)]<--0
-data$StudyMed <- ifelse(bd1$disc=="Santé",1,NA)
-data$StudyMed[is.na(data$StudyMed)]<--0
-data$StudyMed <- ifelse(bd1$disc=="Santé",1,NA)
-data$StudyMed[is.na(data$StudyMed)]<--0
-data$StudyAutre <- ifelse(bd1$disc=="Autre (veuillez préciser)",1,NA)
-data$StudyAutre[is.na(data$StudyAutre)]<--0
+study <- unique(bd1$disc)
+data$StudyHuma <- ifelse(bd1$disc==study[3],1,NA)
+data$StudyHuma[is.na(data$StudyHuma)]<-0
+data$StudyProf <- ifelse(bd1$disc==study[1],1,NA)
+data$StudyProf[is.na(data$StudyProf)]<-0
+data$StudyLawEco <- ifelse(bd1$disc==study[4],1,NA)
+data$StudyLawEco[is.na(data$StudyLawEco)]<-0
+data$StudyScience <- ifelse(bd1$disc==study[2],1,NA)
+data$StudyScience[is.na(data$StudyScience)]<-0
+data$StudyMed <- ifelse(bd1$disc==study[5],1,NA)
+data$StudyMed[is.na(data$StudyMed)]<-0
+data$StudyAutre <- ifelse(bd1$disc==study[6],1,NA)
+data$StudyAutre[is.na(data$StudyAutre)]<-0
 
 # Autre cursus, c'est une donnée qualitative qui nous semble inutilisable
 # data$AutreCursus <- bd1[8]
 
 # Fréquence binge-drinking
-data$FreqBinge <- ifelse(bd1$frqoh== "Jamais", 0, ifelse(bd1$binge== "non", 0, ifelse(bd1$frqb1=="1 fois", 1, ifelse(bd1$frqb2=="2 fois", 2, ifelse(bd1$frqb3=="3 à 5 fois", 3, ifelse(bd1$frqb6=="6 à 9 fois", 4, ifelse(bd1$frqb10=="10 fois ou plus", 5, NA)))))))
+data$FreqBinge <- ifelse(bd1$frqoh== "Jamais", 0, ifelse(bd1$binge== "non", 0, ifelse(bd1$frqb1=="1 fois", 1, ifelse(bd1$frqb2=="2 fois", 2, ifelse(bd1$frqb3=="3 ? 5 fois", 3, ifelse(bd1$frqb6=="6 ? 9 fois", 4, ifelse(bd1$frqb10=="10 fois ou plus", 5, NA)))))))
+
 # Autres substances
-data$Tabac <- ifelse(bd1$tbc== "jamais consommé", 0, ifelse(bd1$tbc== "il y a plus d'un an", 1, ifelse(bd1$tbc=="au cours de la dernière année", 1, ifelse(bd1$tbc=="au cours du mois dernier", 2, ifelse(bd1$tbc=="au cours de la dernière semaine", 3, NA)))))
-data$Cannabis <- ifelse(bd1$thc== "jamais consommé", 0, ifelse(bd1$thc== "il y a plus d'un an", 1, ifelse(bd1$thc=="au cours de la dernière année", 1, ifelse(bd1$thc=="au cours du mois dernier", 2, ifelse(bd1$thc=="au cours de la dernière semaine", 3, NA)))))
-data$Cocaine <- ifelse(bd1$coc== "jamais consommé", 0, ifelse(bd1$coc == "il y a plus d'un an", 1, ifelse(bd1$coc=="au cours de la dernière année", 1, ifelse(bd1$coc=="au cours du mois dernier", 2, ifelse(bd1$coc=="au cours de la dernière semaine", 3, NA)))))
-data$Heroine <- ifelse(bd1$hero== "jamais consommé", 0, ifelse(bd1$hero== "il y a plus d'un an", 1, ifelse(bd1$hero=="au cours de la dernière année", 1, ifelse(bd1$hero=="au cours du mois dernier", 2, ifelse(bd1$hero=="au cours de la dernière semaine", 3, NA)))))
-data$MD <- ifelse(bd1$md== "jamais consommé", 0, ifelse(bd1$md== "il y a plus d'un an", 1, ifelse(bd1$md=="au cours de la dernière année", 1, ifelse(bd1$md=="au cours du mois dernier", 2, ifelse(bd1$md=="au cours de la dernière semaine", 3, NA)))))
-data$Poppers <- ifelse(bd1$pop== "jamais consommé", 0, ifelse(bd1$pop== "il y a plus d'un an", 1, ifelse(bd1$pop=="au cours de la dernière année", 1, ifelse(bd1$pop=="au cours du mois dernier", 2, ifelse(bd1$pop=="au cours de la dernière semaine", 3, NA)))))
-data$Jeu <- ifelse(bd1$jeu== "jamais consommé", 0, ifelse(bd1$jeu== "il y a plus d'un an", 1, ifelse(bd1$jeu=="au cours de la dernière année", 1, ifelse(bd1$jeu=="au cours du mois dernier", 2, ifelse(bd1$jeu=="au cours de la dernière semaine", 3, NA)))))
+tabacunique <- unique(bd1$tbc)
+data$Tabac <- ifelse(bd1$tbc== tabacunique[3], 0, ifelse(bd1$tbc== tabacunique[4], 1, ifelse(bd1$tbc==tabacunique[2], 1, ifelse(bd1$tbc==tabacunique[5], 2, ifelse(bd1$tbc==tabacunique[1], 3, NA)))))
+
+cannabisunique <- unique(bd1$thc)
+data$Cannabis <- ifelse(bd1$thc== cannabisunique[4], 0, ifelse(bd1$thc== cannabisunique[5], 1, ifelse(bd1$thc==cannabisunique[3], 1, ifelse(bd1$thc==cannabisunique[1], 2, ifelse(bd1$thc==cannabisunique[2], 3, NA)))))
+
+cocaunique <- unique(bd1$coc)
+data$Cocaine <- ifelse(bd1$coc== cocaunique[2], 0, ifelse(bd1$coc == cocaunique[4], 1, ifelse(bd1$coc== cocaunique[1], 1, ifelse(bd1$coc==cocaunique[5], 2, ifelse(bd1$coc==cocaunique[6], 3, NA)))))
+
+herounique<- unique(bd1$hero)
+data$Heroine <- ifelse(bd1$hero== herounique[2], 0, ifelse(bd1$hero== herounique[1], 1, ifelse(bd1$hero==herounique[6], 1, ifelse(bd1$hero==herounique[7], 2, ifelse(bd1$hero==herounique[4], 3, NA)))))
+
+MDunique<-unique(bd1$md)
+data$MD <- ifelse(bd1$md== MDunique[2], 0, ifelse(bd1$md== MDunique[4], 1, ifelse(bd1$md==MDunique[1], 1, ifelse(bd1$md==MDunique[6], 2, ifelse(bd1$md==MDunique[5], 3, NA)))))
+
+popunique<-unique(bd1$pop)
+data$Poppers <- ifelse(bd1$pop== popunique[1], 0, ifelse(bd1$pop== popunique[2], 1, ifelse(bd1$pop==popunique[4], 1, ifelse(bd1$pop==popunique[6], 2, ifelse(bd1$pop==popunique[5], 3, NA)))))
+
+jeuunique<-unique(bd1$jeu)
+data$Jeu <- ifelse(bd1$jeu== jeuunique[1], 0, ifelse(bd1$jeu== jeuunique[2], 1, ifelse(bd1$jeu==jeuunique[6], 1, ifelse(bd1$jeu==jeuunique[4], 2, ifelse(bd1$jeu==jeuunique[5], 3, NA)))))
+
 #Argent
-data$Argent <- ifelse(bd1$fin=="Pas de difficultés financières  -    0", 0, ifelse(bd1$fin == "1.000000", 1, ifelse(bd1$fin=="2.000000", 2, ifelse(bd1$fin=="3.000000", 3, ifelse(bd1$fin=="Difficultés financières trés importantes     -   4", 4, NA)))))
+finunique <- unique(bd1$fin)
+data$Argent <- ifelse(bd1$fin==finunique[2], 0, ifelse(bd1$fin == finunique[1], 1, ifelse(bd1$fin==finunique[5], 2, ifelse(bd1$fin==finunique[3], 3, ifelse(bd1$fin==finunique[6], 4, NA)))))
+
 # Audit-C et consommation d'alcool
 # Fréquence de consommation d'alcool
-data$FreqConso <- ifelse(bd1$frqoh=="Jamais", 0, ifelse(bd1$frqoh=="Une fois par mois ou moins", 1, ifelse(bd1$frqoh== "2 à 4 fois par mois", 2, ifelse(bd1$frqoh == "2 à 3 fois par semaine", 3, ifelse(bd1$frqoh=="4 fois par semaine ou plus", 4, NA)))))
+frqohunique <- unique(bd1$frqoh)
+data$FreqConso <- ifelse(bd1$frqoh==frqohunique[6], 0, ifelse(bd1$frqoh==frqohunique[3], 1, ifelse(bd1$frqoh== frqohunique[2], 2, ifelse(bd1$frqoh == frqohunique[1], 3, ifelse(bd1$frqoh==frqohunique[4], 4, NA)))))
 # Nombre de verres consommés en moyenne à une occasion
-data$NbVerreMoy <- ifelse(bd1$nbvrtyp=="1 ou 2", 0, ifelse(bd1$nbvrtyp =="3 ou 4", 1, ifelse(bd1$nbvrtyp == "5 ou 6", 2, ifelse(bd1$nbvrtyp == "7 à 9", 3, ifelse(bd1$nbvrtyp =="10 ou plus", 4, NA)))))
+nbverreunique <- unique(bd1$nbvrtyp)
+data$NbVerreMoy <- ifelse(bd1$nbvrtyp==nbverreunique[4], 0, ifelse(bd1$nbvrtyp ==nbverreunique[3], 1, ifelse(bd1$nbvrtyp == nbverreunique[2], 2, ifelse(bd1$nbvrtyp == nbverreunique[5], 3, ifelse(bd1$nbvrtyp ==nbverreunique[1], 4, NA)))))
 #Fréquence de consommation de plus de six verres en une occasion
 data$FreqSupSixVerre <-bd1$sixvr
-#Audit-C
-data$Audit <- data$FreqConso + data$NbVerreMoy+ data$FreqSupSixVerre
+
+
 # Image
 # Faire la fête fait partie de l'image que j'ai de moi
 data$FeteImagePerso <- bd1$idt1
@@ -162,7 +260,7 @@ data$FeteQuotidien <- bd1$idt4
 # Les autres considérent que faire la fête fait partie de ma personnalité
 data$FeteImageAutre <- bd1$idt5
 # Mobilité
-data$Mobilité <- bd1$eqmob
+data$Mobilite <- bd1$eqmob
 # Autonomie
 data$Autonomie <- bd1$eqaut
 # Habitudes
@@ -173,36 +271,39 @@ data$Douleur <- bd1$eqdoul
 data$Depression <- bd1$eqdep
 
 # Lieu de résidence : Famille/tuteur, logement indépendant, résidence collective, ailleurs
-data$LogFamille <- ifelse(bd1$logou=="Chez mes 2 parents /Chez ma mère / Chez mon père /Chez un autre membre de ma famille (oncle, tante...) / Chez mon tuteur",1,NA)
-data$LogFamille[is.na(data$LogFamille)]<--0
-data$LogInd <--ifelse(bd1$logou=="Dans un logement indépendant (en location, en colocation, dans un logement dont je suis propriétaire, au domicile d’un autre membre de ma famille...)",1,NA)
-data$LogInd [is.na(data$LogInd )]<--0
-data$LogRes <--ifelse(bd1$logou=="En résidence collective (foyer, internat, résidence universitaire...)",1,NA)
-data$LogRes[is.na(data$LogRes)]<--0
-data$LogAutre <--ifelse(bd1$logou=="Ailleurs",1,NA)
-data$LogAutre[is.na(data$LogAutre)]<--0
+log <- unique(bd1$logou)
+data$LogFamille <- ifelse(bd1$logou==log[1],1,NA)
+data$LogFamille[is.na(data$LogFamille)]<-0
+data$LogInd <-ifelse(bd1$logou==log[3],1,NA)
+data$LogInd [is.na(data$LogInd)]<-0
+data$LogRes <-ifelse(bd1$logou==log[2],1,NA)
+data$LogRes[is.na(data$LogRes)]<- 0
+data$LogAutre <-ifelse(bd1$logou==log[5],1,NA)
+data$LogAutre[is.na(data$LogAutre)]<-0
 # Seul
-data$Seul <- ifelse(bd1$logwho1=="Je vis seul-e",1,NA)
+data$Seul <- ifelse(bd1$logwho1==unique(bd1$logwho1)[2],1,NA)
 data$Seul[is.na(data$Seul)]<--0
 # En couple
-data$Couple <- ifelse(bd1$logwho2=="Je vis en couple avec mon/ma petit-e ami-e ou conjoint-e",1,NA)
+data$Couple <- ifelse(bd1$logwho2==unique(bd1$logwho2)[2],1,NA)
 data$Couple[is.na(data$Couple)]<--0
 # Avec les enfants
-data$Enfants <- ifelse(bd1$logwho3=="Avec mes enfants",1,NA)
+data$Enfants <- ifelse(bd1$logwho3==unique(bd1$logwho3)[2],1,NA)
 data$Enfants[is.na(data$Enfants)]<--0
 # Colocation avec amis
-data$ColocFriend <- ifelse(bd1$logwho4=="En colocation avec un ou des ami-e(s)",1,NA)
+data$ColocFriend <- ifelse(bd1$logwho4==unique(bd1$logwho4)[2],1,NA)
 data$ColocFriend[is.na(data$ColocFriend)]<--0
 # Colocation avec autres personnes
-data$ColocAutres <- ifelse(bd1$logwho5=="En colocation avec une ou plusieurs autres personnes",1,NA)
+data$ColocAutres <- ifelse(bd1$logwho5==unique(bd1$logwho5)[2],1,NA)
 data$ColocAutres[is.na(data$ColocAutres)]<--0
 # Maladie chronique Booléen
 data$MaladieChroniqueBool <- ifelse(bd1$ald=="Oui",1,ifelse(bd1$ald=="Non",0,NA))
 # Bourse
 data$Bourse <- ifelse(bd1$bours=="Oui",1, ifelse(bd1$bours =="Non",0,NA))
 
-
 # Nous avons décidé de ne pas analyser la colonne "aldquoi" car les interrogés ont répondu librement
+
+## Exportation de la base de données full_data
+write.csv2(data,file="data.csv",row.names = FALSE)
 
 # Descriptions des données
 # moyenne, écart-type, nombre de NA dans chaque items
@@ -239,27 +340,39 @@ fort_taux=reponses[reponses$Pourcent<=0,]
 taux_global=100*sum(reponses$Total)/(Nc*Nl) # taux global de réponses manquantes
 
 ###########################################
-# Méthode des plus proches voisins
+###  Méthode des plus proches voisins   ###
 ###########################################
 
-aggr(data, col=c('navyblue','red'), numbers=TRUE, combined = FALSE, sortVars=TRUE, labels=names(data), cex.axis=.7, gap=3, ylab=c("Histogram of missing data","Pattern"))
+#aggr(data, col=c('navyblue','red'), numbers=TRUE, combined = FALSE, sortVars=TRUE, labels=names(data), cex.axis=.7, gap=3, ylab=c("Histogram of missing data","Pattern"))
 # graphique de gauche pour illustrer la part de données manquantes
 
 
 # imputation
-
 NA_max_col=max(info[7,])
 NA_max_row= max(reponses$Pourcent)/100
 
-mat = impute.knn(as.matrix(data),k=79,rowmax=NA_max_row,colmax=NA_max_col)
-full_data = mat$data
+mat = impute.knn(as.matrix(data),k=100,rowmax=NA_max_row,colmax=NA_max_col)
+full_data = as.data.frame(mat$data) 
+
+#Atot
+full_data$atot <- full_data$a1 + full_data$a2 + full_data$a3 + full_data$a4 + full_data$a5 + full_data$a6 + full_data$a7 + full_data$a8 + full_data$a9 + full_data$a10 + full_data$a11 + full_data$a12 + full_data$a13 + full_data$a14 + full_data$a15 + full_data$a16 + full_data$a17 + full_data$a18 + full_data$a19 + full_data$a20 + full_data$a21 + full_data$a22 + full_data$a23 + full_data$a24 + full_data$a25+full_data$a26+ full_data$a27+full_data$a28+full_data$a29+ full_data$a30+full_data$a31+full_data$a32+ full_data$a33+ full_data$a34
+#Audit-C
+full_data$Audit <- full_data$FreqConso + full_data$NbVerreMoy+ full_data$FreqSupSixVerre
+
+
+## Exportation de la base de données full_data
+write.csv2(full_data,file="full_data.csv",row.names = FALSE)
+
+
 
 # information sur la nouvelle matrice de données
-info_full=data.frame(matrix(data=NA,nrow=N_stats,ncol=Nc-1))
+Ncf=dim(full_data)[2]
+info_full=data.frame(matrix(data=NA,nrow=N_stats,ncol=Ncf-1))
 rownames(info_full) <- Nom_stats
-colnames(info_full) <- colnames(data)[2:Nc]
+colnames(info_full) <- colnames(full_data)[2:Ncf]
 
-for (i in (2:Nc)) {
+Ncf=dim(full_data)[2]
+for (i in (2:Ncf)) {
   y=full_data[,i]
   info_full[1,i-1]<- mean(y) # moyenne
   info_full[2,i-1] <-median(y) # médiane
@@ -284,39 +397,52 @@ for (i in (2:Nc)) {
   erreur_impute[5,i-1] <- abs(info[6,i-1]-info_full[6,i-1]) # écart-type
 }
 
-aggr(full_data, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(data), cex.axis=.7, gap=3, ylab=c("Histogram of missing data","Pattern"))
+#aggr(full_data, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(data), cex.axis=.7, gap=3, ylab=c("Histogram of missing data","Pattern"))
 # ce dernier affichage est une petite vérification graphique pour s'assurer 
 # qu'il n'y a plus de données manquantes
+
+
+
+###############################################################################################################################################################################################################
+###############################################################################################################################################################################################################
+###############################################################################################################################################################################################################
+###############################################################################################################################################################################################################
+
+
+#Pour cette partie il faut avoir les bases full_data. Pour celà il faut utiliser setwd pour définir le chemin vers la BDD
+
+# setwd("D:/Users/enysb/Google Drive/Etudes/Git/Projet-SBT13-Addictologie")
+# full_data=read.csv2("full_data.csv")
 
 
 
 ###############################
 ### Correlation de Spearman ###
 ###############################
-
-CorrelationP=matrix(data=NA,nrow=35,ncol=43)
-CorrelationR=matrix(data=NA,nrow=35,ncol=43)
-nomlignes=c()
-nomcolonnes=c()
-for (i in (1:35)){nomlignes=c(nomlignes,names(data[i]))}
-for (i in (36:78)){nomcolonnes=c(nomcolonnes,names(data[i]))}
-rownames(CorrelationP)=nomlignes
-colnames(CorrelationP)=nomcolonnes
-rownames(CorrelationR)=nomlignes
-colnames(CorrelationR)=nomcolonnes
-
-for (i in (1:35))
-{for (j in (36:78))
-{Testspm=cor.test(as.numeric(unlist(data[i])), as.numeric(unlist(data[j])), method="spearman")
-CorrelationP[i,j-35]=as.numeric(Testspm[3])
-CorrelationR[i,j-35]=as.numeric(Testspm[4])}}
-
-View(CorrelationP)
-View(CorrelationR)
-
-persp3D(z = CorrelationP, theta=30,phi=15,xlab='AQoLS',ylab='Consommations',zlab='p-value',expand=0.5,shade=0.8,ticktype="detailed")
-persp3D(z = CorrelationR, theta=30,phi=15,xlab='AQoLS',ylab='Consommations',zlab='R',expand=0.5,shade=0.8,ticktype="detailed")
-
+# 
+# CorrelationP=matrix(data=NA,nrow=35,ncol=43)
+# CorrelationR=matrix(data=NA,nrow=35,ncol=43)
+# nomlignes=c()
+# nomcolonnes=c()
+# for (i in (1:35)){nomlignes=c(nomlignes,names(data[i]))}
+# for (i in (36:78)){nomcolonnes=c(nomcolonnes,names(data[i]))}
+# rownames(CorrelationP)=nomlignes
+# colnames(CorrelationP)=nomcolonnes
+# rownames(CorrelationR)=nomlignes
+# colnames(CorrelationR)=nomcolonnes
+# 
+# for (i in (1:35))
+# {for (j in (36:78))
+# {Testspm=cor.test(as.numeric(unlist(data[i])), as.numeric(unlist(data[j])), method="spearman")
+# CorrelationP[i,j-35]=as.numeric(Testspm[3])
+# CorrelationR[i,j-35]=as.numeric(Testspm[4])}}
+# 
+# View(CorrelationP)
+# View(CorrelationR)
+# 
+# persp3D(z = CorrelationP, theta=30,phi=15,xlab='AQoLS',ylab='Consommations',zlab='p-value',expand=0.5,shade=0.8,ticktype="detailed")
+# persp3D(z = CorrelationR, theta=30,phi=15,xlab='AQoLS',ylab='Consommations',zlab='R',expand=0.5,shade=0.8,ticktype="detailed")
+# 
 
 
 ###############
@@ -334,71 +460,203 @@ Kmeans=function(data,nbclus){
   return(Clusters)
 }
 
-KClusters=Kmeans(data,10)
+KClusters=Kmeans(full_data,10)
 
 
 ###########
 ### ACP ###
 ###########
 
+## On applique une ACP sur l'ensemble des données :
 
-res_pca <- PCA(data,ncp=30)
-
+ACP <- PCA(full_data,ncp=30)
 #La fonction plot.PCA permet d'afficher la représentation des variables () et des individus (Individuals factor map (PCA)) dans le plan des deux premiers facteurs principaux
-plot.PCA(res_pca,col.quali="blue", label="quali")
+plot.PCA(ACP,col.quali="blue", label="quali")
 
+
+## On détermine le nombre de dimension à concerver à l'aide du critère du coude
+## Histogramme des valeurs propores
+barplot(ACP$eig[1:dim(full_data)[2],2], main="Histogramme des valeurs propres", 
+        names.arg=1:dim(full_data)[2], xlab="Axes", ylab="Pourcentage d'inertie", 
+        cex.axis=0.8, font.lab=3, ylim=c(0, 12), col="orange")
+
+
+
+## Nous enlevons les variables proche du centre dans la représentation Variable factor map (PCA)
+## Variables retenues :
+
+DBACP=data.frame(matrix(data=NA,nrow=Nl,ncol=1))
+DBACP<-DBACP[,-1]
+DBACP$a1<-full_data$a1
+DBACP$a2<-full_data$a2
+DBACP$a3<-full_data$a3
+DBACP$a4<-full_data$a4
+DBACP$a5<-full_data$a5
+DBACP$a6<-full_data$a6
+DBACP$a7<-full_data$a7
+DBACP$a8<-full_data$a8
+DBACP$a9<-full_data$a9
+DBACP$a10<-full_data$a10
+DBACP$a11<-full_data$a11
+DBACP$a12<-full_data$a12
+DBACP$a13<-full_data$a13
+DBACP$a14<-full_data$a14
+DBACP$a15<-full_data$a15
+DBACP$a16<-full_data$a16
+DBACP$a17<-full_data$a17
+DBACP$a18<-full_data$a18
+DBACP$a19<-full_data$a19
+DBACP$a20<-full_data$a20
+DBACP$a21<-full_data$a21
+DBACP$a22<-full_data$a22
+DBACP$a23<-full_data$a23
+DBACP$a24<-full_data$a24
+DBACP$a25<-full_data$a25
+DBACP$a26<-full_data$a26
+DBACP$a27<-full_data$a27
+DBACP$a28<-full_data$a28
+DBACP$a29<-full_data$a29
+DBACP$a30<-full_data$a30
+DBACP$a31<-full_data$a31
+DBACP$a32<-full_data$a32
+DBACP$a33<-full_data$a33
+DBACP$a34<-full_data$a34
+DBACP$atot<-full_data$atot
+DBACP$Genre<-full_data$Genre
+DBACP$Douleur<-full_data$Douleur
+DBACP$Depression<-full_data$Depression
+DBACP$Mobilité<-full_data$Mobilité
+DBACP$Autonomie<-full_data$Autonomie
+DBACP$Habitudes<-full_data$Habitudes
+DBACP$FeteImagePerso<-full_data$FeteImagePerso
+DBACP$FeteEtre<-full_data$FeteEtre
+DBACP$FetePerso<-full_data$FetePerso
+DBACP$FeteQuotidien<-full_data$FeteQuotidien
+DBACP$FeteImageAutre<-full_data$FeteImageAutre
+DBACP$Tabac<-full_data$Tabac
+DBACP$Cannabis<-full_data$Cannabis
+DBACP$NbVerreMoy<-full_data$NbVerreMoy
+DBACP$FreqBinge<-full_data$FreqBinge
+DBACP$FreqConso<-full_data$FreqConso
+DBACP$FreqSupSixVerre<-full_data$FreqSupSixVerre
+DBACP$Audit<-full_data$Audit
+
+
+## Exportation de la base de données DBACP
+write.csv2(DBACP,file="DBACP.csv",row.names = FALSE)
+
+## On fait une ACP sur la nouvelle base :
+
+ACP2 <- PCA(DBACP,ncp=9,graph=T)
+
+#La fonction plot.PCA permet d'afficher la représentation des variables 
+#(Variable factor map (PCA)) et des individus (Individuals factor map (PCA)) dans 
+#le plan des deux premiers facteurs principaux
+plot.PCA(ACP2,col.quali="blue", label="quali")
+
+
+## On détermine le nombre de dimension à concerver à l'aide du critère du coude
+## Histogramme des valeurs propores
+barplot(ACP2$eig[1:dim(full_data)[2],2], main="Histogramme des valeurs propres", 
+        names.arg=1:dim(full_data)[2], xlab="Axes", ylab="Pourcentage d'inertie", 
+        cex.axis=0.8, font.lab=3, ylim=c(0, 12), col="orange")
+## 9 semble un bon nombre de dimension d'après le critère du coude
+print(ACP2$eig)
+## Avec 12 dimension on explique 60% de la variabilité
 
 
 ###############################################
 ### classification  hiérarchique ascendante ###
 ###############################################
 
+## Création d'un Cluster :
 
-ClusterCHA=function(dimacp,nbclus,data){
+#On calcule la matrice des distances de ACP2
+Distance=dist(ACP2$ind$coord)
+
+#hclust permet de créer les clusters avec la méthode de WARD
+CHA=hclust(Distance,method="ward.D2")
+
+#plot permet de tracer le dendrograme : ATTENTION ! NECESSITE UNE MACHINE PERFORMANTE !
+#plot(CHA)
+
+#cutree(tree,k) permet de couper le dendrograme pour former k clusters:
+Repartition=cutree(CHA,7)
+
+#On regroupe les ligne du premier cluster dans une même base
+Cluster1=full_data[Repartition==1,]
+
+
+##################################################
+### Itération de la méthode avec des fonctions ###
+##################################################
+
+#ClusterCHA prend en argument la nombre de dimensison de ACP dimacp, le nombre de cluster 
+#à créer nbclus, dataACP la base qui regroupe les variables pour l'ACP et fulldata la base complète.
+#Elle retourne une liste des nbclus Clusters.
+
+ClusterCHA=function(dimacp,nbclus,dataACP,fulldata){
   #On applique la méthode de l'Analyse par composantes principales 
   #à l'aide de la fonction PCA du package FactoMineR
-  ACP=PCA(data,ncp=dimacp)
-  
+  print("ACP encours ... ")
+  ACP=PCA(dataACP,ncp=dimacp)
+  print(c("Pourcentage de variabilité expliqué :",ACP2$eig$`cumulative percentage of variance`[dimacp]))
+  plot.PCA(ACP2,col.quali="blue", label="quali")
+  print("Traçage de l'histogramme des valeurs propres ...")
+  barplot(ACP$eig[1:dim(dataACP)[2],2], main="Histogramme des valeurs propres", 
+          names.arg=1:dim(dataACP)[2], xlab="Axes", ylab="Pourcentage d'inertie", 
+          cex.axis=0.8, font.lab=3, ylim=c(0, 15), col="orange")
   #La fonction plot.PCA permet d'afficher la représentation des variables
   #et des individus (Individuals factor map (PCA)) dans le plan des deux premiers facteurs principaux
   #plot.PCA(ACP,col.quali="blue", label="quali")
   
   # La fonction dist prend comme argument la dataframe et retourne
   #la matrice des distances en utilisant la norme euclidienne
+  print("Calcul de la matrice de distance ...")
   Distance=dist(ACP$ind$coord)
   
   # La fonction hclust prend comme argument la dataframe et la 
   # matrice de distances et retourne la Classification ascendante hiérarchique
+  print('Formation des clusters ...')
   CHA=hclust(Distance,method="ward.D2")
   
-  # Le plot de cah.ward donne le Dendogramme de la classification hiérarchique
+  # Le plot de CHA donne le Dendogramme de la classification hiérarchique
+  # print("Traçage du dendogramme")
   # plot(CHA)
+  # rect.hclust permet de tracer le dendrograme avec des cadres autour des clusters sélectionné
   # rect.hclust(CHA,nbclus)
   
   # La fonction cutree permet de couper le dendogramme et donne nbclus clusters
   Repartition=cutree(CHA,nbclus)
-  
+
   # On range les clusters dans une liste Clusters de dataframes
   Clusters=list()
   for (i in 1:nbclus){
-    Clusters[[i]]=data[Repartition==i,]
+    Clusters[[i]]=fulldata[Repartition==i,]
   }
+  
   return(Clusters)
 }
 
-Clusters=ClusterCHA(30,10,full_data)
+#Il faut utiliser les flèches pour voir les différents graphiques
+
+Clusters=ClusterCHA(7,5,DBACP,full_data)
+
 #Pour accéder au ième Cluster il faut utiliser Clusters[[i]] DEUX CROCHETS !
+
+
 
 ##########################
 ### Etude des Clusters ###
 ##########################
 
+
 #ClassificationClusters prend en argument une liste de clusters et retourne les 
-#indinces des clusters triés par ordre décroissant celon la valeur moyenne de atot
-ClassificationClusters=function(Clusters){
+#indinces des clusters triés par ordre décroissant selon la valeur moyenne de atot
+ClassificationClustersAtot=function(Clusters){
   nbclus=length(Clusters)
   ordre=(1:nbclus)
-  for (i in (2:nbclus)){
+  for (i in (1:nbclus)){
     Temp=as.integer(ordre[i])
     j=i
     while(j>1 && summary(as.data.frame(Clusters[[ordre[j-1]]])$atot)["Mean"]<summary(as.data.frame(Clusters[[Temp]])$atot)["Mean"]){
@@ -410,16 +668,50 @@ ClassificationClusters=function(Clusters){
   return(ordre)
 }
 
-ordreCHA=ClassificationClusters(Clusters)
-print(ordreCHA[1])
+#classement à partir de Audit C
+ClassificationClustersAudit=function(Clusters){
+  nbclus=length(Clusters)
+  ordre=(1:nbclus)
+  for (i in (1:nbclus)){
+    Temp=as.integer(ordre[i])
+    j=i
+    while(j>1 && summary(as.data.frame(Clusters[[ordre[j-1]]])$Audit)["Mean"]<summary(as.data.frame(Clusters[[Temp]])$Audit)["Mean"]){
+      ordre[j]=as.integer(ordre[j-1])
+      j=j-1
+    }
+    ordre[j]=Temp
+  }
+  return(ordre)
+}
 
-summary(Clusters[[ordreCHA[1]]])
-View(Clusters[[ordreCHA[[1]]]])
+ordreCHAAtot=ClassificationClustersAtot(Clusters)
+print(ordreCHAAtot)
 
+ordreCHAAudit=ClassificationClustersAudit(Clusters)
+print(ordreCHAAudit)
+
+## Etude individuelle des Clusters
+## On imprimme dans l'ordre décroissant de Atot les indices des clusters et leurs dimensions :
+for (i in (1:length(Clusters))) {
+  print(ordreCHA[i])
+  print(dim(Clusters[[ordreCHA[i]]]))
+}
+
+## On étudie les clusters avec la moyenne de atot la plus 
+
+summary(Clusters[[5]])
+View(Clusters[[5]])
+
+
+quantile(full_data$atot,0.99)
+
+
+## Pistres et remarques:
 # regression PLS
 # regarder les question où il y a le plus de données manquantes et peut-être les enlever.
 # complete case
 # regarder le nombre de na par lignes
 # Enregistrer les variables saveRDS
 # méthodes explicatives : Anova ou faire des ACP sur les consommation et des ACP sur les quali.
+
 
