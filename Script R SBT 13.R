@@ -416,7 +416,7 @@ for (i in (2:Nc)) {
 # soit en cas de bug utiliser setwd pour définir le chemin vers la BDD et importer la base full_data.
 
 # setwd("")
-# full_data=read.csv2("full_data.csv")
+full_data=read.csv2("full_data.csv")
 
 
 
@@ -490,8 +490,8 @@ barplot(ACP$eig[1:dim(full_data)[2],2], main="Histogramme des valeurs propres",
 
 ## Nous enlevons les variables proche du centre dans la représentation Variable factor map (PCA)
 ## Variables retenues :
-
-DBACP=data.frame(matrix(data=NA,nrow=Nl,ncol=1))
+NlDBACP=dim(full_data)[1]
+DBACP=data.frame(matrix(data=NA,nrow=NlDBACP,ncol=1))
 DBACP<-DBACP[,-1]
 DBACP$a1<-full_data$a1
 DBACP$a2<-full_data$a2
@@ -528,7 +528,6 @@ DBACP$a32<-full_data$a32
 DBACP$a33<-full_data$a33
 DBACP$a34<-full_data$a34
 DBACP$Genre<-full_data$Genre
-DBACP$Depression<-full_data$Depression
 DBACP$Mobilité<-full_data$Mobilité
 DBACP$FeteImagePerso<-full_data$FeteImagePerso
 DBACP$FeteEtre<-full_data$FeteEtre
@@ -549,7 +548,7 @@ write.csv2(DBACP,file="DBACP.csv",row.names = FALSE)
 
 ## On fait une ACP sur la nouvelle base :
 
-ACP2 <- PCA(DBACP,ncp=7)
+ACP2 <- PCA(DBACP,ncp=8)
 
 #La fonction plot.PCA permet d'afficher la représentation des variables 
 #(Variable factor map (PCA)) et des individus (Individuals factor map (PCA)) dans 
@@ -562,9 +561,9 @@ plot.PCA(ACP2,col.quali="blue", label="quali")
 barplot(ACP2$eig[1:dim(full_data)[2],2], main="Histogramme des valeurs propres", 
         names.arg=1:dim(full_data)[2], xlab="Axes", ylab="Pourcentage d'inertie", 
         cex.axis=0.8, font.lab=3, ylim=c(0, 12), col="orange")
-## 7 semble un bon nombre de dimension d'après le critère du coude
+## 8 semble un bon nombre de dimension d'après le critère du coude
 print(ACP2$eig)
-## Avec 7 dimension on explique 50% de la variabilité
+## Avec 8 dimension on explique 53% de la variabilité
 
 
 
@@ -794,5 +793,5 @@ View(CompMedian)
 install.packages("NbClust")
 library("NbClust")
 
-Nbanalyse=NbClust(data=full_data,diss=NULL,distance="euclidean",min.nc=2, max.nc=15,method="ward.D2",index="all")
+Nbanalyse=NbClust(data=full_data,diss=NULL,distance="euclidean",min.nc=2, max.nc=10,method="ward.D2",index="all")
 
