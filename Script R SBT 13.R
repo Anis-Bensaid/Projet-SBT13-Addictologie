@@ -28,19 +28,19 @@ library(impute)
 
 ## Arthur
 # bd <- read_excel("~/Documents/Projet Enjeux/Projet-SBT13-Addictologie/bdmieRpp2.xls")
-# setwd("")
+# setwd("~/Documents/Projet Enjeux/Projet-SBT13-Addictologie")
 
 ## Benjamin
 # bd<- read_excel("~/GitHub/Projet-SBT13-Addictologie/bdmieRpp2.xls")
-# setwd("")
+# setwd("~/GitHub/Projet-SBT13-Addictologie")
 
 ## Emilio
 # bd <- read_excel("C:/Users/Emilio/Desktop/intercambio/clases/enjeux/sbt/Projet-SBT13-Addictologie/bdmieRpp2.xls")
-# setwd("")
+# setwd("C:/Users/Emilio/Desktop/intercambio/clases/enjeux/sbt/Projet-SBT13-Addictologie")
 
 ## Haim
 # bd <- read_excel("~/Desktop/Projet_SBT13/Projet-SBT13-Addictologie-Github/bdmieRpp2.xls")
-# setwd("")
+# setwd("~/Desktop/Projet_SBT13/Projet-SBT13-Addictologie-Github")
 
 
 #############################################
