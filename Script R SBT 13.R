@@ -756,7 +756,7 @@ CompareMax=function(Clusters){
 
 ## Median
 
-CompareQuantile=function(Clusters,percent){
+CompareQuantile=function(Clusters,percent=0.5){
   Comparenbcol=dim(Clusters[[1]])[2]-1
   nbclus=length(Clusters)
   NomCol=colnames(Clusters[[1]])[-1]
