@@ -40,8 +40,8 @@ library(factoextra)
 # setwd("C:/Users/Emilio/Desktop/intercambio/clases/enjeux/sbt/Projet-SBT13-Addictologie")
 
 ## Haim
-# bd <- read_excel("~/Desktop/Projet_SBT13/Projet-SBT13-Addictologie-Github/bdmieRpp2.xls")
-# setwd("~/Desktop/Projet_SBT13/Projet-SBT13-Addictologie-Github")
+bd <- read_excel("~/Desktop/Projet_SBT13/Projet-SBT13-Addictologie-Github/bdmieRpp2.xls")
+setwd("~/Desktop/Projet_SBT13/Projet-SBT13-Addictologie-Github")
 
 
 #############################################
@@ -608,7 +608,7 @@ CHA=hclust(Distance,method="ward.D2")
 
 #plot permet de tracer le dendrograme : ATTENTION ! NECESSITE UNE MACHINE PERFORMANTE !
 plot(CHA)
-
+rect.hclust(CHA,k=6,border=2:7)
 #cutree(tree,k) permet de couper le dendrograme pour former k clusters:
 Repartition=cutree(CHA,7)
 
@@ -798,8 +798,8 @@ CompareQuantile=function(Clusters,percent=0.5){
 ### Etude des Clusters ###
 ##########################
 
-nbcl=5
-dimacp=8
+nbcl=6
+dimacp=7
 Clusters=ClusterCHA(dimacp,nbcl,DBACP,full_data)
 
 for (i in (1:length(Clusters))) {
