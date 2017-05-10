@@ -4,6 +4,7 @@ rm(list=ls())
 # install.packages("readxl")
 # install.packages("plot3D")
 # install.packages("FactoMineR") 
+# install.packages("factoextra")
 
 ## Packages pour la méthode des plus proches voisins 
 # install.packages("VIM")
@@ -15,7 +16,7 @@ library(plot3D)
 library(FactoMineR)
 library(readxl)
 library(impute)
-
+library(factoextra)
 
 #####################################
 ### Lecture de la base de données ###
@@ -23,8 +24,8 @@ library(impute)
 
 
 ## Anis
-bd <- read_excel("D:/Users/enysb/Google Drive/Etudes/Git/Projet-SBT13-Addictologie/bdmieRpp2.xls")
-setwd("D:/Users/enysb/Google Drive/Etudes/Git/Projet-SBT13-Addictologie")
+# bd <- read_excel("D:/Users/enysb/Google Drive/Etudes/Git/Projet-SBT13-Addictologie/bdmieRpp2.xls")
+# setwd("D:/Users/enysb/Google Drive/Etudes/Git/Projet-SBT13-Addictologie")
 
 ## Arthur
 # bd <- read_excel("~/Documents/Projet Enjeux/Projet-SBT13-Addictologie/bdmieRpp2.xls")
@@ -166,6 +167,11 @@ bdscore$a33 <- ifelse(bd1$A33== a33unique[1], 0, ifelse(bd1$A33== a33unique[2], 
 a34unique <- unique(bd1$A34)
 bdscore$a34 <- ifelse(bd1$A34== a34unique[2], 0, ifelse(bd1$A34== a34unique[1], 1,ifelse(bd1$A34==a34unique[3], 2,ifelse(bd1$A34==a34unique[4], 3,NA))))
 
+#Argent
+finunique <- unique(bd1$fin)
+bdscore$Argent <- ifelse(bd1$fin==finunique[2], 0, ifelse(bd1$fin == finunique[1], 1, ifelse(bd1$fin==finunique[5], 2, ifelse(bd1$fin==finunique[3], 3, ifelse(bd1$fin==finunique[6], 4, NA)))))
+
+
 # Age
 bdscore$Age<-bd1$age
 # Genre
@@ -212,7 +218,17 @@ bdscore$StudyAutre[is.na(bdscore$StudyAutre)]<-0
 # bdscore$AutreCursus <- bd1[8]
 
 # Fréquence binge-drinking
-bdscore$FreqBinge <- ifelse(bd1$frqoh== "Jamais", 0, ifelse(bd1$binge== "non", 0, ifelse(bd1$frqb1=="1 fois", 1, ifelse(bd1$frqb2=="2 fois", 2, ifelse(bd1$frqb3=="3 ? 5 fois", 3, ifelse(bd1$frqb6=="6 ? 9 fois", 4, ifelse(bd1$frqb10=="10 fois ou plus", 5, NA)))))))
+bdscore$FreqBinge <- ifelse(bd1$frqoh==unique(bd1$frqoh)[6], 0, ifelse(bd1$binge==unique(bd1$binge)[2], 0, ifelse(is.na(bd1$frqb1),ifelse(is.na(bd1$frqb2),ifelse(is.na(bd1$frqb3), ifelse(is.na(bd1$frqb6),ifelse(is.na(bd1$frqb10),NA,5),4),3),2),1)))
+
+# Audit-C et consommation d'alcool
+# Fréquence de consommation d'alcool
+frqohunique <- unique(bd1$frqoh)
+bdscore$FreqConso <- ifelse(bd1$frqoh==frqohunique[6], 0, ifelse(bd1$frqoh==frqohunique[3], 1, ifelse(bd1$frqoh== frqohunique[2], 2, ifelse(bd1$frqoh == frqohunique[1], 3, ifelse(bd1$frqoh==frqohunique[4], 4, NA)))))
+# Nombre de verres consommés en moyenne à une occasion
+nbverreunique <- unique(bd1$nbvrtyp)
+bdscore$NbVerreMoy <- ifelse(bd1$nbvrtyp==nbverreunique[4], 0, ifelse(bd1$nbvrtyp ==nbverreunique[3], 1, ifelse(bd1$nbvrtyp == nbverreunique[2], 2, ifelse(bd1$nbvrtyp == nbverreunique[5], 3, ifelse(bd1$nbvrtyp ==nbverreunique[1], 4, NA)))))
+#Fréquence de consommation de plus de six verres en une occasion
+bdscore$FreqSupSixVerre <-bd1$sixvr
 
 # Autres substances
 tabacunique <- unique(bd1$tbc)
@@ -235,20 +251,6 @@ bdscore$Poppers <- ifelse(bd1$pop== popunique[1], 0, ifelse(bd1$pop== popunique[
 
 jeuunique<-unique(bd1$jeu)
 bdscore$Jeu <- ifelse(bd1$jeu== jeuunique[1], 0, ifelse(bd1$jeu== jeuunique[2], 1, ifelse(bd1$jeu==jeuunique[6], 1, ifelse(bd1$jeu==jeuunique[4], 2, ifelse(bd1$jeu==jeuunique[5], 3, NA)))))
-
-#Argent
-finunique <- unique(bd1$fin)
-bdscore$Argent <- ifelse(bd1$fin==finunique[2], 0, ifelse(bd1$fin == finunique[1], 1, ifelse(bd1$fin==finunique[5], 2, ifelse(bd1$fin==finunique[3], 3, ifelse(bd1$fin==finunique[6], 4, NA)))))
-
-# Audit-C et consommation d'alcool
-# Fréquence de consommation d'alcool
-frqohunique <- unique(bd1$frqoh)
-bdscore$FreqConso <- ifelse(bd1$frqoh==frqohunique[6], 0, ifelse(bd1$frqoh==frqohunique[3], 1, ifelse(bd1$frqoh== frqohunique[2], 2, ifelse(bd1$frqoh == frqohunique[1], 3, ifelse(bd1$frqoh==frqohunique[4], 4, NA)))))
-# Nombre de verres consommés en moyenne à une occasion
-nbverreunique <- unique(bd1$nbvrtyp)
-bdscore$NbVerreMoy <- ifelse(bd1$nbvrtyp==nbverreunique[4], 0, ifelse(bd1$nbvrtyp ==nbverreunique[3], 1, ifelse(bd1$nbvrtyp == nbverreunique[2], 2, ifelse(bd1$nbvrtyp == nbverreunique[5], 3, ifelse(bd1$nbvrtyp ==nbverreunique[1], 4, NA)))))
-#Fréquence de consommation de plus de six verres en une occasion
-bdscore$FreqSupSixVerre <-bd1$sixvr
 
 
 # Image
@@ -359,9 +361,9 @@ mat = impute.knn(as.matrix(bdscore),k=100,rowmax=NA_max_row,colmax=NA_max_col)
 full_data = as.data.frame(mat$data) 
 
 #Atot
-full_data$atot <- full_data$a1 + full_data$a2 + full_data$a3 + full_data$a4 + full_data$a5 + full_data$a6 + full_data$a7 + full_data$a8 + full_data$a9 + full_data$a10 + full_data$a11 + full_data$a12 + full_data$a13 + full_data$a14 + full_data$a15 + full_data$a16 + full_data$a17 + full_data$a18 + full_data$a19 + full_data$a20 + full_data$a21 + full_data$a22 + full_data$a23 + full_data$a24 + full_data$a25+full_data$a26+ full_data$a27+full_data$a28+full_data$a29+ full_data$a30+full_data$a31+full_data$a32+ full_data$a33+ full_data$a34
+#full_data$atot <- full_data$a1 + full_data$a2 + full_data$a3 + full_data$a4 + full_data$a5 + full_data$a6 + full_data$a7 + full_data$a8 + full_data$a9 + full_data$a10 + full_data$a11 + full_data$a12 + full_data$a13 + full_data$a14 + full_data$a15 + full_data$a16 + full_data$a17 + full_data$a18 + full_data$a19 + full_data$a20 + full_data$a21 + full_data$a22 + full_data$a23 + full_data$a24 + full_data$a25+full_data$a26+ full_data$a27+full_data$a28+full_data$a29+ full_data$a30+full_data$a31+full_data$a32+ full_data$a33+ full_data$a34
 #Audit-C
-full_data$Audit <- full_data$FreqConso + full_data$NbVerreMoy+ full_data$FreqSupSixVerre
+#full_data$Audit <- full_data$FreqConso + full_data$NbVerreMoy+ full_data$FreqSupSixVerre
 
 
 ## Exportation de la base de données full_data
@@ -416,7 +418,7 @@ for (i in (2:Nc)) {
 # soit en cas de bug utiliser setwd pour définir le chemin vers la BDD et importer la base full_data.
 
 # setwd("")
-full_data=read.csv2("full_data.csv")
+# full_data=read.csv2("full_data.csv")
 
 
 
@@ -475,10 +477,20 @@ KClusters=Kmeans(full_data,10)
 
 ## On applique une ACP sur l'ensemble des données :
 
-ACP <- PCA(full_data,ncp=79)
+ACP <- PCA(full_data[-1],ncp=78)
 #La fonction plot.PCA permet d'afficher la représentation des variables () et des individus (Individuals factor map (PCA)) dans le plan des deux premiers facteurs principaux
-plot.PCA(ACP,col.quali="blue", label="quali")
 
+## Graphique des variables
+fviz_pca_var(ACP, col.var="contrib",
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+             repel = TRUE # Avoid text overlapping
+)
+
+# Contributions of variables to PC1
+fviz_contrib(ACP, choice = "var", axes = 1, top = 78)
+
+# Contributions of variables to PC2
+fviz_contrib(ACP, choice = "var", axes = 2, top = 78)
 
 ## On détermine le nombre de dimension à concerver à l'aide du critère du coude
 ## Histogramme des valeurs propores
@@ -486,6 +498,8 @@ barplot(ACP$eig[1:dim(full_data)[2],2], main="Histogramme des valeurs propres",
         names.arg=1:dim(full_data)[2], xlab="Axes", ylab="Pourcentage d'inertie", 
         cex.axis=0.8, font.lab=3, ylim=c(0, 12), col="green")
 
+## Graphique des individus
+fviz_pca_ind(ACP, col.ind="cos2", geom = "point")
 
 
 ## Nous enlevons les variables proche du centre dans la représentation Variable factor map (PCA)
@@ -528,14 +542,12 @@ DBACP$a32<-full_data$a32
 DBACP$a33<-full_data$a33
 DBACP$a34<-full_data$a34
 DBACP$Genre<-full_data$Genre
-DBACP$Mobilité<-full_data$Mobilité
 DBACP$FeteImagePerso<-full_data$FeteImagePerso
 DBACP$FeteEtre<-full_data$FeteEtre
 DBACP$FetePerso<-full_data$FetePerso
 DBACP$FeteQuotidien<-full_data$FeteQuotidien
 DBACP$FeteImageAutre<-full_data$FeteImageAutre
 DBACP$Tabac<-full_data$Tabac
-DBACP$Cannabis<-full_data$Cannabis
 DBACP$NbVerreMoy<-full_data$NbVerreMoy
 DBACP$FreqBinge<-full_data$FreqBinge
 DBACP$FreqConso<-full_data$FreqConso
@@ -548,22 +560,37 @@ write.csv2(DBACP,file="DBACP.csv",row.names = FALSE)
 
 ## On fait une ACP sur la nouvelle base :
 
-ACP2 <- PCA(DBACP,ncp=8)
+ACPred <- PCA(DBACP,ncp=8)
+
+## Graphique des variables
+fviz_pca_var(ACPred, col.var="contrib",
+             gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+             repel = TRUE # Avoid text overlapping
+)
+
+# Contributions of variables to PC1
+fviz_contrib(ACPred, choice = "var", axes = 1, top = 78)
+
+# Contributions of variables to PC2
+fviz_contrib(ACPred, choice = "var", axes = 2, top = 78)
+
+## Graphique des individus
+fviz_pca_ind(ACP, col.ind="cos2", geom = "point")
 
 #La fonction plot.PCA permet d'afficher la représentation des variables 
 #(Variable factor map (PCA)) et des individus (Individuals factor map (PCA)) dans 
 #le plan des deux premiers facteurs principaux
-plot.PCA(ACP2,col.quali="blue", label="quali")
+plot.PCA(ACPred,col.quali="blue", label="quali")
 
 
 ## On détermine le nombre de dimension à concerver à l'aide du critère du coude
 ## Histogramme des valeurs propores
-barplot(ACP2$eig[1:dim(full_data)[2],2], main="Histogramme des valeurs propres", 
+barplot(ACPred$eig[1:dim(full_data)[2],2], main="Histogramme des valeurs propres", 
         names.arg=1:dim(full_data)[2], xlab="Axes", ylab="Pourcentage d'inertie", 
         cex.axis=0.8, font.lab=3, ylim=c(0, 12), col="orange")
 ## 8 semble un bon nombre de dimension d'après le critère du coude
-print(ACP2$eig)
-## Avec 8 dimension on explique 53% de la variabilité
+print(ACPred$eig)
+## Avec 8 dimensions on explique 54.4% de la variabilité
 
 
 
@@ -574,7 +601,7 @@ print(ACP2$eig)
 ## Création d'un Cluster :
 
 #On calcule la matrice des distances de ACP2
-Distance=dist(ACP2$ind$coord)
+Distance=dist(ACPred$ind$coord)
 
 #hclust permet de créer les clusters avec la méthode de WARD
 CHA=hclust(Distance,method="ward.D2")
@@ -630,7 +657,7 @@ ClusterCHA=function(dimacp,nbclus,bdscoreACP,full_data){
   
   # La fonction cutree permet de couper le dendogramme et donne nbclus clusters
   Repartition=cutree(CHA,nbclus)
-
+  
   # On range les clusters dans une liste Clusters de bdscoreframes
   Clusters=list()
   for (i in 1:nbclus){
@@ -681,7 +708,7 @@ ClassificationClustersAudit=function(Clusters){
 }
 
 
- 
+
 ##########################################
 ### Affichage des comparatifs Clusters ###
 ##########################################
@@ -771,9 +798,13 @@ CompareQuantile=function(Clusters,percent=0.5){
 ### Etude des Clusters ###
 ##########################
 
-nbclus=5
-dimacp=7
-Clusters=ClusterCHA(7,5,DBACP,full_data)
+nbcl=5
+dimacp=8
+Clusters=ClusterCHA(dimacp,nbcl,DBACP,full_data)
+
+for (i in (1:length(Clusters))) {
+  print(dim(Clusters[[i]]))
+}
 
 
 CompMoyenne=CompareMean(Clusters)
@@ -790,8 +821,11 @@ View(CompMax)
 View(CompMedian)
 
 
+
+
+
 install.packages("NbClust")
 library("NbClust")
 
-Nbanalyse=NbClust(data=full_data,diss=NULL,distance="euclidean",min.nc=2, max.nc=10,method="ward.D2",index="all")
+Nbanalyse=NbClust(data=full_data,diss=NULL,distance="euclidean",min.nc=2, max.nc=10,method="ward.D2",index=c('ch'))
 
