@@ -560,7 +560,7 @@ write.csv2(DBACP,file="DBACP.csv",row.names = FALSE)
 
 ## On fait une ACP sur la nouvelle base :
 
-ACPred <- PCA(DBACP,ncp=8)
+ACPred <- PCA(DBACP,ncp=7)
 
 ## Graphique des variables
 fviz_pca_var(ACPred, col.var="contrib",
@@ -608,7 +608,7 @@ CHA=hclust(Distance,method="ward.D2")
 
 #plot permet de tracer le dendrograme : ATTENTION ! NECESSITE UNE MACHINE PERFORMANTE !
 plot(CHA)
-rect.hclust(CHA,k=6,border=2:7)
+rect.hclust(CHA,k=5,border=2:6)
 #cutree(tree,k) permet de couper le dendrograme pour former k clusters:
 Repartition=cutree(CHA,7)
 
@@ -798,7 +798,7 @@ CompareQuantile=function(Clusters,percent=0.5){
 ### Etude des Clusters ###
 ##########################
 
-nbcl=6
+nbcl=5
 dimacp=7
 Clusters=ClusterCHA(dimacp,nbcl,DBACP,full_data)
 
