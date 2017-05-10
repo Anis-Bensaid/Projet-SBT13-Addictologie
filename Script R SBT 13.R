@@ -23,8 +23,8 @@ library(impute)
 
 
 ## Anis
-# bd <- read_excel("D:/Users/enysb/Google Drive/Etudes/Git/Projet-SBT13-Addictologie/bdmieRpp2.xls")
-# setwd("D:/Users/enysb/Google Drive/Etudes/Git/Projet-SBT13-Addictologie")
+bd <- read_excel("D:/Users/enysb/Google Drive/Etudes/Git/Projet-SBT13-Addictologie/bdmieRpp2.xls")
+setwd("D:/Users/enysb/Google Drive/Etudes/Git/Projet-SBT13-Addictologie")
 
 ## Arthur
 # bd <- read_excel("~/Documents/Projet Enjeux/Projet-SBT13-Addictologie/bdmieRpp2.xls")
@@ -475,7 +475,7 @@ KClusters=Kmeans(full_data,10)
 
 ## On applique une ACP sur l'ensemble des données :
 
-ACP <- PCA(full_data,ncp=30)
+ACP <- PCA(full_data,ncp=79)
 #La fonction plot.PCA permet d'afficher la représentation des variables () et des individus (Individuals factor map (PCA)) dans le plan des deux premiers facteurs principaux
 plot.PCA(ACP,col.quali="blue", label="quali")
 
@@ -527,13 +527,9 @@ DBACP$a31<-full_data$a31
 DBACP$a32<-full_data$a32
 DBACP$a33<-full_data$a33
 DBACP$a34<-full_data$a34
-DBACP$atot<-full_data$atot
 DBACP$Genre<-full_data$Genre
-DBACP$Douleur<-full_data$Douleur
 DBACP$Depression<-full_data$Depression
 DBACP$Mobilité<-full_data$Mobilité
-DBACP$Autonomie<-full_data$Autonomie
-DBACP$Habitudes<-full_data$Habitudes
 DBACP$FeteImagePerso<-full_data$FeteImagePerso
 DBACP$FeteEtre<-full_data$FeteEtre
 DBACP$FetePerso<-full_data$FetePerso
@@ -545,7 +541,7 @@ DBACP$NbVerreMoy<-full_data$NbVerreMoy
 DBACP$FreqBinge<-full_data$FreqBinge
 DBACP$FreqConso<-full_data$FreqConso
 DBACP$FreqSupSixVerre<-full_data$FreqSupSixVerre
-DBACP$Audit<-full_data$Audit
+
 
 
 ## Exportation de la base de données DBACP
@@ -553,7 +549,7 @@ write.csv2(DBACP,file="DBACP.csv",row.names = FALSE)
 
 ## On fait une ACP sur la nouvelle base :
 
-ACP2 <- PCA(DBACP,ncp=9,graph=T)
+ACP2 <- PCA(DBACP,ncp=7)
 
 #La fonction plot.PCA permet d'afficher la représentation des variables 
 #(Variable factor map (PCA)) et des individus (Individuals factor map (PCA)) dans 
@@ -566,9 +562,10 @@ plot.PCA(ACP2,col.quali="blue", label="quali")
 barplot(ACP2$eig[1:dim(full_data)[2],2], main="Histogramme des valeurs propres", 
         names.arg=1:dim(full_data)[2], xlab="Axes", ylab="Pourcentage d'inertie", 
         cex.axis=0.8, font.lab=3, ylim=c(0, 12), col="orange")
-## 9 semble un bon nombre de dimension d'après le critère du coude
+## 7 semble un bon nombre de dimension d'après le critère du coude
 print(ACP2$eig)
-## Avec 12 dimension on explique 60% de la variabilité
+## Avec 7 dimension on explique 50% de la variabilité
+
 
 
 ########################################################
@@ -794,4 +791,8 @@ View(CompMax)
 View(CompMedian)
 
 
+install.packages("NbClust")
+library("NbClust")
+
+Nbanalyse=NbClust(data=full_data,diss=NULL,distance="euclidean",min.nc=2, max.nc=15,method="ward.D2",index="all")
 
