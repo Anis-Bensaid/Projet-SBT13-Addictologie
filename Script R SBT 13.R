@@ -305,7 +305,7 @@ bdscore$Bourse <- ifelse(bd1$bours=="Oui",1, ifelse(bd1$bours =="Non",0,NA))
 
 # Nous avons décidé de ne pas analyser la colonne "aldquoi" car les interrogés ont répondu librement
 
-## Exportation de la base de données full_data
+## Exportation de la base de données bdscore
 write.csv2(bdscore,file="bdscore.csv",row.names = FALSE)
 
 # Descriptions des données
