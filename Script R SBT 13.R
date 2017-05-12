@@ -1,22 +1,19 @@
 ## Nettoyage de l'espace de travail
 rm(list=ls())
 
-# install.packages("readxl")
-# install.packages("plot3D")
-# install.packages("FactoMineR") 
-# install.packages("factoextra")
+install.packages("readxl")
+install.packages("FactoMineR") 
+install.packages("factoextra")
+# install.packages("VIM") 
+source("http://bioconductor.org/biocLite.R") # essayer avec http:// if not supported
+biocLite("impute") #équivalent de install.packages
 
-## Packages pour la méthode des plus proches voisins 
-# install.packages("VIM")
-# library(VIM)
-# source("http://bioconductor.org/biocLite.R") # essayer avec http:// if not supported
-# biocLite("impute") #équivalent de install.packages
-
-library(plot3D)
-library(FactoMineR)
 library(readxl)
-library(impute)
+library(FactoMineR)
 library(factoextra)
+library(impute)
+
+#library(VIM) #Ne marche pas sur toutes les machines, ce n'est pas un package important.
 
 #####################################
 ### Lecture de la base de données ###
@@ -24,24 +21,33 @@ library(factoextra)
 
 
 ## Anis
-# bd <- read_excel("D:/Users/enysb/Google Drive/Etudes/Git/Projet-SBT13-Addictologie/bdmieRpp2.xls")
 # setwd("D:/Users/enysb/Google Drive/Etudes/Git/Projet-SBT13-Addictologie")
+# bd <- read_excel("D:/Users/enysb/Google Drive/Etudes/Git/Projet-SBT13-Addictologie/bdmieRpp2.xls")
+
 
 ## Arthur
-# bd <- read_excel("~/Documents/Projet Enjeux/Projet-SBT13-Addictologie/bdmieRpp2.xls")
 # setwd("~/Documents/Projet Enjeux/Projet-SBT13-Addictologie")
+# bd <- read_excel("~/Documents/Projet Enjeux/Projet-SBT13-Addictologie/bdmieRpp2.xls")
+
 
 ## Benjamin
-# bd<- read_excel("~/GitHub/Projet-SBT13-Addictologie/bdmieRpp2.xls")
 # setwd("~/GitHub/Projet-SBT13-Addictologie")
+# bd<- read_excel("~/GitHub/Projet-SBT13-Addictologie/bdmieRpp2.xls")
+
 
 ## Emilio
-# bd <- read_excel("C:/Users/Emilio/Desktop/intercambio/clases/enjeux/sbt/Projet-SBT13-Addictologie/bdmieRpp2.xls")
 # setwd("C:/Users/Emilio/Desktop/intercambio/clases/enjeux/sbt/Projet-SBT13-Addictologie")
+# bd <- read_excel("C:/Users/Emilio/Desktop/intercambio/clases/enjeux/sbt/Projet-SBT13-Addictologie/bdmieRpp2.xls")
+
 
 ## Haim
-bd <- read_excel("~/Desktop/Projet_SBT13/Projet-SBT13-Addictologie-Github/bdmieRpp2.xls")
-setwd("~/Desktop/Projet_SBT13/Projet-SBT13-Addictologie-Github")
+# setwd("~/Desktop/Projet_SBT13/Projet-SBT13-Addictologie-Github")
+# bd <- read_excel("~/Desktop/Projet_SBT13/Projet-SBT13-Addictologie-Github/bdmieRpp2.xls")
+
+
+## Autre utilisateur
+setwd("Chemin") #Il faut remplacer "Chemin" par le chemin de la base bdmieRpp2.xls. Vous pouvez aussi utiliser le bouton Session -> Set Working Directory
+bd <- read_excel("bdmieRpp2.xls") #Vous pouvez utiliser le bouton File->Import Dataset->From Excel
 
 
 #############################################
@@ -54,6 +60,7 @@ bd1 <-bd[bd$age<31,]
 
 Nl=dim(bd1)[1] #nombre de lignes
 
+#On crée bdscore, dataframe qui contiendra la conversion des réponses en score.
 bdscore=data.frame(matrix(data=NA,nrow=Nl,ncol=1))
 
 # ID de l'individu interrogé et du collecteur
@@ -64,7 +71,65 @@ bdscore$ID_indiv <-bd1[1]
 # Suppression d'une colonne inutile :
 bdscore<-bdscore[,-1]
 
-# on transforme les réponses de l'AQOLS en score et on les insére dans la data.frame
+# On transforme les réponses de l'AQOLS en score et on les insére dans la data.frame. 
+# L'utilisation de unique permet de contourner tout problème du à l'encodage du script. Noter que nous utilisons UTF-8.
+
+
+# Age
+bdscore$Age<-bd1$age
+# Genre
+genreunique <- unique(bd1$sex)
+bdscore$Genre <- ifelse(bd1$sex== genreunique[2], 1, ifelse(bd1$sex==genreunique[1], 2,ifelse(bd1$sex== genreunique[5], NA ,ifelse(bd1$sex == genreunique[3], NA,NA))))
+# Niveau d'étude après le Bac
+niveauunique <- unique(bd1$niv)
+bdscore$Niveau <- ifelse(bd1$niv==niveauunique[3], 1, ifelse(bd1$niv==niveauunique[1], 2, ifelse(bd1$niv==niveauunique[4],3, ifelse(bd1$niv==niveauunique[5], 4, ifelse(bd1$niv==niveauunique[6],5, ifelse(bd1$niv==niveauunique[2], 6, NA))))))
+
+## Nivautr (dans le tableau bd1)
+# c'est une colonne vide, elle n'a été remplie que par 6 personnes (4 ont répondu 0, 2 ont répondu 9)
+
+# Discipline
+# bdscore$Disc<-bd1$disc --> colonne qualitative, qu'on a préféré scinder en plusieurs 
+# colonnes avec un résultat qualitatif
+uniquestudy <- unique(bd1$disc)
+bdscore$StudyHuma <- ifelse(bd1$disc==uniquestudy[3],1,NA)
+bdscore$StudyHuma[is.na(bdscore$StudyHuma)]<-0
+bdscore$StudyProf <- ifelse(bd1$disc==uniquestudy[1],1,NA)
+bdscore$StudyProf[is.na(bdscore$StudyProf)]<-0
+bdscore$StudyLawEco <- ifelse(bd1$disc==uniquestudy[4],1,NA)
+bdscore$StudyLawEco[is.na(bdscore$StudyLawEco)]<-0
+bdscore$StudyScience <- ifelse(bd1$disc==uniquestudy[2],1,NA)
+bdscore$StudyScience[is.na(bdscore$StudyScience)]<-0
+bdscore$StudyMed <- ifelse(bd1$disc==uniquestudy[5],1,NA)
+bdscore$StudyMed[is.na(bdscore$StudyMed)]<-0
+bdscore$StudyAutre <- ifelse(bd1$disc==uniquestudy[6],1,NA)
+bdscore$StudyAutre[is.na(bdscore$StudyAutre)]<-0
+
+# Autre cursus, c'est une donnée qualitative qui nous semble inutilisable
+# bdscore$AutreCursus <- bd1[8]
+
+
+# Fréquence binge-drinking
+# Si une frqoh="Jamais" FreqBinge reçoit 0, de même si binge="non". Sinon on affecte un score allant de 1 à 5.
+bdscore$FreqBinge <- ifelse(bd1$frqoh==unique(bd1$frqoh)[6], 0, ifelse(bd1$binge==unique(bd1$binge)[2], 0, ifelse(is.na(bd1$frqb1),ifelse(is.na(bd1$frqb2),ifelse(is.na(bd1$frqb3), ifelse(is.na(bd1$frqb6),ifelse(is.na(bd1$frqb10),NA,5),4),3),2),1)))
+
+# Nombre maximum de verres que vous avez bu en UNE occasion
+summary(bd1$max1occ) # le maximum est de 120 ce qui semble abhérrant, mais tout dépend de ce qu'on appelle occasion et de la durée sur le temps.
+hist(bd1$max1occ,  breaks = 30, xlab= "maximal number of alcohol units in one occasion", main="histogram of frequency of maximal number of alcohol units in one occasion ")
+summary(bd1$max1occ>30) #Seulement 34 personnes ont répondu plus de 30 verres en une occasion. Nous avons décidé de tout garder.
+bdscore$NbMaxOcc <- bd1$max1occ
+
+# Audit-C 
+# Fréquence de consommation d'alcool
+frqohunique <- unique(bd1$frqoh)
+bdscore$FreqConso <- ifelse(bd1$frqoh==frqohunique[6], 0, ifelse(bd1$frqoh==frqohunique[3], 1, ifelse(bd1$frqoh== frqohunique[2], 2, ifelse(bd1$frqoh == frqohunique[1], 3, ifelse(bd1$frqoh==frqohunique[4], 4, NA)))))
+# Nombre de verres consommés en moyenne à une occasion
+nbverreunique <- unique(bd1$nbvrtyp)
+bdscore$NbVerreMoy <- ifelse(bd1$nbvrtyp==nbverreunique[4], 0, ifelse(bd1$nbvrtyp ==nbverreunique[3], 1, ifelse(bd1$nbvrtyp == nbverreunique[2], 2, ifelse(bd1$nbvrtyp == nbverreunique[5], 3, ifelse(bd1$nbvrtyp ==nbverreunique[1], 4, NA)))))
+# Fréquence de consommation de plus de six verres en une occasion
+bdscore$FreqSupSixVerre <-bd1$sixvr
+
+
+# AQoLs
 a1unique <- unique(bd1$A1)
 bdscore$a1 <- ifelse(bd1$A1== a1unique[1], 0, ifelse(bd1$A1== a1unique[2], 1,ifelse(bd1$A1==a1unique[4], 2,ifelse(bd1$A1==a1unique[3], 3,NA))))
 
@@ -167,70 +232,12 @@ bdscore$a33 <- ifelse(bd1$A33== a33unique[1], 0, ifelse(bd1$A33== a33unique[2], 
 a34unique <- unique(bd1$A34)
 bdscore$a34 <- ifelse(bd1$A34== a34unique[2], 0, ifelse(bd1$A34== a34unique[1], 1,ifelse(bd1$A34==a34unique[3], 2,ifelse(bd1$A34==a34unique[4], 3,NA))))
 
-#Argent
-finunique <- unique(bd1$fin)
-bdscore$Argent <- ifelse(bd1$fin==finunique[2], 0, ifelse(bd1$fin == finunique[1], 1, ifelse(bd1$fin==finunique[5], 2, ifelse(bd1$fin==finunique[3], 3, ifelse(bd1$fin==finunique[6], 4, NA)))))
+## Mes études et l'alcool
+negresunique <- unique(bd1$negres)
+bdscore$Etudes <- ifelse(bd1$negres==negresunique[1], 0, ifelse(bd1$negres==negresunique[2], 1, ifelse(bd1$negres==negresunique[3], 2, ifelse(bd1$negres==negresunique[4], 3, NA))))
 
 
-# Age
-bdscore$Age<-bd1$age
-# Genre
-genreunique <- unique(bd1$sex)
-bdscore$Genre <- ifelse(bd1$sex== genreunique[2], 1, ifelse(bd1$sex==genreunique[1], 2,ifelse(bd1$sex== genreunique[5], NA ,ifelse(bd1$sex == genreunique[3], NA,NA))))
-# Niveau d'étude après le Bac
-niveauunique <- unique(bd1$niv)
-bdscore$Niveau <- ifelse(bd1$niv==niveauunique[3], 1, ifelse(bd1$niv==niveauunique[1], 2, ifelse(bd1$niv==niveauunique[4],3, ifelse(bd1$niv==niveauunique[5], 4, ifelse(bd1$niv==niveauunique[6],5, ifelse(bd1$niv==niveauunique[2], 6, NA))))))
-
-## Nivautr (dans le tableau bd1)
-# c'est une colonne vide, elle n'a pas été remplie par les personnes interrogées
-# Test :
-## A <- bd1$nivautre
-## N = 16930
-## B=matrix(bdscore = NA, nrow=N, ncol = 1)
-## for (i in (1:N)){
-##  if (is.na(A[i])){B[i]=0}
-##  else {B[i]=1}
-## }
-## S=0
-## for (i in (1:N)){
-##   if (is.null(B[i])){S=S+1}
-## }
-## on obtient S = 0
-
-# Discipline
-# bdscore$Disc<-bd1$disc --> colonne qualitative, qu'on a préféré scinder en plusieurs 
-# colonnes avec un résultat qualitatif
-study <- unique(bd1$disc)
-bdscore$StudyHuma <- ifelse(bd1$disc==study[3],1,NA)
-bdscore$StudyHuma[is.na(bdscore$StudyHuma)]<-0
-bdscore$StudyProf <- ifelse(bd1$disc==study[1],1,NA)
-bdscore$StudyProf[is.na(bdscore$StudyProf)]<-0
-bdscore$StudyLawEco <- ifelse(bd1$disc==study[4],1,NA)
-bdscore$StudyLawEco[is.na(bdscore$StudyLawEco)]<-0
-bdscore$StudyScience <- ifelse(bd1$disc==study[2],1,NA)
-bdscore$StudyScience[is.na(bdscore$StudyScience)]<-0
-bdscore$StudyMed <- ifelse(bd1$disc==study[5],1,NA)
-bdscore$StudyMed[is.na(bdscore$StudyMed)]<-0
-bdscore$StudyAutre <- ifelse(bd1$disc==study[6],1,NA)
-bdscore$StudyAutre[is.na(bdscore$StudyAutre)]<-0
-
-# Autre cursus, c'est une donnée qualitative qui nous semble inutilisable
-# bdscore$AutreCursus <- bd1[8]
-
-# Fréquence binge-drinking
-bdscore$FreqBinge <- ifelse(bd1$frqoh==unique(bd1$frqoh)[6], 0, ifelse(bd1$binge==unique(bd1$binge)[2], 0, ifelse(is.na(bd1$frqb1),ifelse(is.na(bd1$frqb2),ifelse(is.na(bd1$frqb3), ifelse(is.na(bd1$frqb6),ifelse(is.na(bd1$frqb10),NA,5),4),3),2),1)))
-
-# Audit-C et consommation d'alcool
-# Fréquence de consommation d'alcool
-frqohunique <- unique(bd1$frqoh)
-bdscore$FreqConso <- ifelse(bd1$frqoh==frqohunique[6], 0, ifelse(bd1$frqoh==frqohunique[3], 1, ifelse(bd1$frqoh== frqohunique[2], 2, ifelse(bd1$frqoh == frqohunique[1], 3, ifelse(bd1$frqoh==frqohunique[4], 4, NA)))))
-# Nombre de verres consommés en moyenne à une occasion
-nbverreunique <- unique(bd1$nbvrtyp)
-bdscore$NbVerreMoy <- ifelse(bd1$nbvrtyp==nbverreunique[4], 0, ifelse(bd1$nbvrtyp ==nbverreunique[3], 1, ifelse(bd1$nbvrtyp == nbverreunique[2], 2, ifelse(bd1$nbvrtyp == nbverreunique[5], 3, ifelse(bd1$nbvrtyp ==nbverreunique[1], 4, NA)))))
-#Fréquence de consommation de plus de six verres en une occasion
-bdscore$FreqSupSixVerre <-bd1$sixvr
-
-# Autres substances
+## Autres consommations ou pratiques
 tabacunique <- unique(bd1$tbc)
 bdscore$Tabac <- ifelse(bd1$tbc== tabacunique[3], 0, ifelse(bd1$tbc== tabacunique[4], 1, ifelse(bd1$tbc==tabacunique[2], 1, ifelse(bd1$tbc==tabacunique[5], 2, ifelse(bd1$tbc==tabacunique[1], 3, NA)))))
 
@@ -252,8 +259,7 @@ bdscore$Poppers <- ifelse(bd1$pop== popunique[1], 0, ifelse(bd1$pop== popunique[
 jeuunique<-unique(bd1$jeu)
 bdscore$Jeu <- ifelse(bd1$jeu== jeuunique[1], 0, ifelse(bd1$jeu== jeuunique[2], 1, ifelse(bd1$jeu==jeuunique[6], 1, ifelse(bd1$jeu==jeuunique[4], 2, ifelse(bd1$jeu==jeuunique[5], 3, NA)))))
 
-
-# Image
+## La façon dont je me perçois : “partier” self-concept 
 # Faire la fête fait partie de l'image que j'ai de moi
 bdscore$FeteImagePerso <- bd1$idt1
 # Faire la fête fait partie de "qui je suis"
@@ -264,17 +270,20 @@ bdscore$FetePerso <-bd1$idt3
 bdscore$FeteQuotidien <- bd1$idt4
 # Les autres considérent que faire la fête fait partie de ma personnalité
 bdscore$FeteImageAutre <- bd1$idt5
+
+## Ma qualité de vie dans son ensemble
 # Mobilité
 bdscore$Mobilite <- bd1$eqmob
-# Autonomie
+# Soins autonomes
 bdscore$Autonomie <- bd1$eqaut
-# Habitudes
+# Activités habituelles (ex: travail, études, tâches ménagères, activités familiales ou loisirs)
 bdscore$Habitudes <- bd1$eqhab
 # Douleurs/Malaise
 bdscore$Douleur <- bd1$eqdoul
-# Dépression
+# Inquiétude/Dépression
 bdscore$Depression <- bd1$eqdep
 
+## Mes conditions de vie
 # Lieu de résidence : Famille/tuteur, logement indépendant, résidence collective, ailleurs
 log <- unique(bd1$logou)
 bdscore$LogFamille <- ifelse(bd1$logou==log[1],1,NA)
@@ -300,6 +309,10 @@ bdscore$ColocFriend[is.na(bdscore$ColocFriend)]<--0
 # Colocation avec autres personnes
 bdscore$ColocAutres <- ifelse(bd1$logwho5==unique(bd1$logwho5)[2],1,NA)
 bdscore$ColocAutres[is.na(bdscore$ColocAutres)]<--0
+
+# Difficultés financières en ce moment
+finunique <- unique(bd1$fin)
+bdscore$Argent <- ifelse(bd1$fin==finunique[2], 0, ifelse(bd1$fin == finunique[1], 1, ifelse(bd1$fin==finunique[5], 2, ifelse(bd1$fin==finunique[3], 3, ifelse(bd1$fin==finunique[6], 4, NA)))))
 # Maladie chronique Booléen
 bdscore$MaladieChroniqueBool <- ifelse(bd1$ald=="Oui",1,ifelse(bd1$ald=="Non",0,NA))
 # Bourse
@@ -307,15 +320,21 @@ bdscore$Bourse <- ifelse(bd1$bours=="Oui",1, ifelse(bd1$bours =="Non",0,NA))
 
 # Nous avons décidé de ne pas analyser la colonne "aldquoi" car les interrogés ont répondu librement
 
-## Exportation de la base de données bdscore
+###### Exportation de la base de données bdscore ######
 write.csv2(bdscore,file="bdscore.csv",row.names = FALSE)
 
-# Descriptions des données
-# moyenne, écart-type, nombre de NA dans chaque items
+
+
+############################################################
+##############   Descriptions des données  #################
+###  Moyenne, écart-type, nombre de NA dans chaque item  ###
+############################################################
+
 
 Nom_stats = c("Moyenne","Mediane","Maximum","Minimum","Nb de NA","Ecart-type","Part de NA")
 N_stats = length(Nom_stats)
 
+Nl=dim(bdscore)[1] # nombre de lignes
 Nc=dim(bdscore)[2] # nombre d'items
 info=data.frame(matrix(data=NA,nrow=N_stats,ncol=Nc-1))
 rownames(info) <- Nom_stats
@@ -327,7 +346,7 @@ for (i in (2:Nc)) {
   info[2,i-1] <-apply(na.omit(y),2,median) # médiane
   info[3,i-1] <- max(na.omit(y)) # maximum
   info[4,i-1] <- min(na.omit(y)) # Minimum
-  info[5,i-1] <- sum(1*is.na(bdscore[i])) #nb de NA
+  info[5,i-1] <- sum(1*is.na(bdscore[i])) # nb de NA
   info[6,i-1] <- apply(na.omit(y), 2, sd) # écart-type
   info[7,i-1] <- sum(1*is.na(bdscore[i]))/Nl # Part de NA
 }
@@ -349,29 +368,33 @@ taux_global=100*sum(reponses$Total)/(Nc*Nl) # taux global de réponses manquante
 ###  Méthode des plus proches voisins   ###
 ###########################################
 
-#aggr(bdscore, col=c('navyblue','red'), numbers=TRUE, combined = FALSE, sortVars=TRUE, labels=names(bdscore), cex.axis=.7, gap=3, ylab=c("Histogram of missing bdscore","Pattern"))
-# graphique de gauche pour illustrer la part de données manquantes
+# Si le Package VAR est bien chargé, on peut tracer un graph pour illustrer la part de données manquantes
+# aggr(bdscore, col=c('navyblue','red'), numbers=TRUE, combined = FALSE, sortVars=TRUE, labels=names(bdscore), cex.axis=.7, gap=3, ylab=c("Histogram of missing bdscore","Pattern"))
 
 
-# imputation
+# Imputation : La fonction impute.knn du package impute permet d'appliquer la méthode des plus proches voisins à la bdd bdscore.
 NA_max_col=max(info[7,])
 NA_max_row= max(reponses$Pourcent)/100
 
 mat = impute.knn(as.matrix(bdscore),k=100,rowmax=NA_max_row,colmax=NA_max_col)
 full_data = as.data.frame(mat$data) 
 
+# Nous pouvons ainsi calculer les scores Atot=Somme de AQoLs et l'Audit-C. 
+# Cependant, on préfère ne pas les inclure dans la bdd car ils ne seront pas pris en compte dans le clustering.
 #Atot
 #full_data$atot <- full_data$a1 + full_data$a2 + full_data$a3 + full_data$a4 + full_data$a5 + full_data$a6 + full_data$a7 + full_data$a8 + full_data$a9 + full_data$a10 + full_data$a11 + full_data$a12 + full_data$a13 + full_data$a14 + full_data$a15 + full_data$a16 + full_data$a17 + full_data$a18 + full_data$a19 + full_data$a20 + full_data$a21 + full_data$a22 + full_data$a23 + full_data$a24 + full_data$a25+full_data$a26+ full_data$a27+full_data$a28+full_data$a29+ full_data$a30+full_data$a31+full_data$a32+ full_data$a33+ full_data$a34
 #Audit-C
 #full_data$Audit <- full_data$FreqConso + full_data$NbVerreMoy+ full_data$FreqSupSixVerre
 
 
-## Exportation de la base de données full_data
+#####  Exportation de la base de données full_data  ######
 write.csv2(full_data,file="full_data.csv",row.names = FALSE)
 
+#################################################################
+### Information sur la nouvelle matrice de données (complète) ###
+#################################################################
 
-# information sur la nouvelle matrice de données
-Ncf=dim(full_data)[2]
+Ncf=dim(full_data)[2] # nombre d'item
 info_full=data.frame(matrix(data=NA,nrow=N_stats,ncol=Ncf-1))
 rownames(info_full) <- Nom_stats
 colnames(info_full) <- colnames(full_data)[2:Ncf]
@@ -387,8 +410,9 @@ for (i in (2:Ncf)) {
   info_full[6,i-1] <- sd(y) # écart-type
   info_full[7,i-1] <- sum(1*is.na(full_data[i]))/Nl # Part de NA
 }
-# j'aimerais évaluer l'écart entre les statistiques de la base de données non corrigée et 
-# les statistiques de la base corrigée
+
+# On peut évaluer l'écart entre les statistiques de la base de données 
+# non corrigée et les statistiques de la base corrigée
 
 erreur_impute=data.frame(matrix(data=NA,nrow=5,ncol=Nc-1))
 rownames(erreur_impute) <- c("Moyenne","Mediane","Maximum","Minimum","Ecart-type")
@@ -402,9 +426,12 @@ for (i in (2:Nc)) {
   erreur_impute[5,i-1] <- abs(info[6,i-1]-info_full[6,i-1]) # écart-type
 }
 
-#aggr(full_data, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(bdscore), cex.axis=.7, gap=3, ylab=c("Histogram of missing bdscore","Pattern"))
-# ce dernier affichage est une petite vérification graphique pour s'assurer 
-# qu'il n'y a plus de données manquantes
+# Observation : Les écarts sont très faibles.
+
+# Si le package VIM est bien chargé, on peut obtenir une petite vérification graphique 
+# pour nous assurer qu'il n'y a plus de données manquantes
+# aggr(full_data, col=c('navyblue','red'), numbers=TRUE, sortVars=TRUE, labels=names(bdscore), cex.axis=.7, gap=3, ylab=c("Histogram of missing bdscore","Pattern"))
+
 
 
 
@@ -419,38 +446,6 @@ for (i in (2:Nc)) {
 
 # setwd("")
 # full_data=read.csv2("full_data.csv")
-
-
-
-###############################
-### Correlation de Spearman ###
-###############################
-
-# Première étapes de l'étude de la base. Aucune corrélation forte ne semble être présente.
-
-# CorrelationP=matrix(data=NA,nrow=35,ncol=43)
-# CorrelationR=matrix(data=NA,nrow=35,ncol=43)
-# nomlignes=c()
-# nomcolonnes=c()
-# for (i in (1:35)){nomlignes=c(nomlignes,names(bdscore[i]))}
-# for (i in (36:78)){nomcolonnes=c(nomcolonnes,names(bdscore[i]))}
-# rownames(CorrelationP)=nomlignes
-# colnames(CorrelationP)=nomcolonnes
-# rownames(CorrelationR)=nomlignes
-# colnames(CorrelationR)=nomcolonnes
-# 
-# for (i in (1:35))
-# {for (j in (36:78))
-# {Testspm=cor.test(as.numeric(unlist(bdscore[i])), as.numeric(unlist(bdscore[j])), method="spearman")
-# CorrelationP[i,j-35]=as.numeric(Testspm[3])
-# CorrelationR[i,j-35]=as.numeric(Testspm[4])}}
-# 
-# View(CorrelationP)
-# View(CorrelationR)
-# 
-# persp3D(z = CorrelationP, theta=30,phi=15,xlab='AQoLS',ylab='Consommations',zlab='p-value',expand=0.5,shade=0.8,ticktype="detailed")
-# persp3D(z = CorrelationR, theta=30,phi=15,xlab='AQoLS',ylab='Consommations',zlab='R',expand=0.5,shade=0.8,ticktype="detailed")
-# 
 
 
 ###############
@@ -468,37 +463,58 @@ Kmeans=function(bdscore,nbclus){
   return(Clusters)
 }
 
+nbkclus=10  # nombre de clusters souhaités
 KClusters=Kmeans(full_data,10)
+
+# On accède aux clusters en utilisant KClusters[[i]] avec i entre 1 et nbkclus
+# La méthode des K-mean est la méthode que nous avons étudier en cours.
+# Le problèmes c'est que la validiter du clustering repose sur le choix du nombre de cluster.
+# Des indices et des testes existent pour déterminer ce nombre.
+# Le package NbClust permet d'en calculer certain, mais les calculs sont lourds (Complexité en o(n^3))
+# Nous avons donc opté pour une ACP suivie par une Classification Ascendante Hiérarchique (CAH).
+# L'ACP permet de réduire la quantité de donnée en épurant la bdd.
+# La CAH permet de former les clusters et offre un outil visuel (en plus des indices et tests) pour déterminer le nombre de cluster idéal.
+
 
 
 ########################################################################
 ### ACP: Réduction du nombre de dimension et sélection des variables ###
 ########################################################################
 
-## On applique une ACP sur l'ensemble des données :
+### 1ère étape : Sélectionner les variables qui contribuent le plus à la variabilité de la BDD ###
 
-ACP <- PCA(full_data[-1],ncp=78)
-#La fonction plot.PCA permet d'afficher la représentation des variables () et des individus (Individuals factor map (PCA)) dans le plan des deux premiers facteurs principaux
+## On applique une ACP sur l'ensemble des données avec la fonction PCA du package FactoMinR:
+ACP <- PCA(full_data[-1],ncp=78, graph=FALSE)      #Ici le nombre de dimension n'est pas important.
 
-## Graphique des variables
+# print(ACP) #Permet de voir les commandes pour accéder aus résultats
+
+## Graphique des variables (Représentation des variables dans le premier plan) : 
 fviz_pca_var(ACP, col.var="contrib",
              gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
              repel = TRUE # Avoid text overlapping
 )
+# Ce graphique permet de visualiser la contribution de chacun des items au deux 
+# premières composantes principales (qui sont les plus importants).
+# Pour accéder aux valeurs numériques des contributions :
+# View(ACP$var$contrib)
 
-# Contributions of variables to PC1
-fviz_contrib(ACP, choice = "var", axes = 1, top = 78)
 
-# Contributions of variables to PC2
-fviz_contrib(ACP, choice = "var", axes = 2, top = 78)
+## % Contributions des variable à la composante pincipale 1 CP1
+fviz_contrib(ACP, choice = "var", axes = 1)
 
-## On détermine le nombre de dimension à concerver à l'aide du critère du coude
+## % Contributions des variable à la composante pincipale 2 CP2
+fviz_contrib(ACP, choice = "var", axes = 2)
+
+
+## Si on voulait exploiter ces résultats, une méthode pour determiner 
+# le nombre de dim idéal serait le critère du coude. Pour cela on trace :
 ## Histogramme des valeurs propores
 barplot(ACP$eig[1:dim(full_data)[2],2], main="Histogramme des valeurs propres", 
         names.arg=1:dim(full_data)[2], xlab="Axes", ylab="Pourcentage d'inertie", 
         cex.axis=0.8, font.lab=3, ylim=c(0, 12), col="green")
 
-## Graphique des individus
+
+## Graphique des individus (Représentation des individus dans le premier plan)
 fviz_pca_ind(ACP, col.ind="cos2", geom = "point")
 
 
@@ -507,6 +523,12 @@ fviz_pca_ind(ACP, col.ind="cos2", geom = "point")
 NlDBACP=dim(full_data)[1]
 DBACP=data.frame(matrix(data=NA,nrow=NlDBACP,ncol=1))
 DBACP<-DBACP[,-1]
+DBACP$Genre<-full_data$Genre
+DBACP$FreqBinge<-full_data$FreqBinge
+DBACP$NbMaxOcc<-full_data$NbMaxOcc
+DBACP$FreqConso<-full_data$FreqConso
+DBACP$NbVerreMoy<-full_data$NbVerreMoy
+DBACP$FreqSupSixVerre<-full_data$FreqSupSixVerre
 DBACP$a1<-full_data$a1
 DBACP$a2<-full_data$a2
 DBACP$a3<-full_data$a3
@@ -541,46 +563,39 @@ DBACP$a31<-full_data$a31
 DBACP$a32<-full_data$a32
 DBACP$a33<-full_data$a33
 DBACP$a34<-full_data$a34
-DBACP$Genre<-full_data$Genre
+DBACP$Tabac<-full_data$Tabac
 DBACP$FeteImagePerso<-full_data$FeteImagePerso
 DBACP$FeteEtre<-full_data$FeteEtre
 DBACP$FetePerso<-full_data$FetePerso
 DBACP$FeteQuotidien<-full_data$FeteQuotidien
 DBACP$FeteImageAutre<-full_data$FeteImageAutre
-DBACP$Tabac<-full_data$Tabac
-DBACP$NbVerreMoy<-full_data$NbVerreMoy
-DBACP$FreqBinge<-full_data$FreqBinge
-DBACP$FreqConso<-full_data$FreqConso
-DBACP$FreqSupSixVerre<-full_data$FreqSupSixVerre
 
 
-
-## Exportation de la base de données DBACP
+##### Exportation de la base de données DBACP #####
 write.csv2(DBACP,file="DBACP.csv",row.names = FALSE)
 
-## On fait une ACP sur la nouvelle base :
+### Etape 2: On détermine le nombre de dimensions idéal ###
 
+## On fait une ACP sur la nouvelle base :
 ACPred <- PCA(DBACP,ncp=7)
 
 ## Graphique des variables
+# dev.copy(png,'ACPredVariables.png') #Enregistre le plot dans le Working Directory
 fviz_pca_var(ACPred, col.var="contrib",
              gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
              repel = TRUE # Avoid text overlapping
 )
+# dev.off() #Enregistre le plot dans le Working Directory
+# On remarque que les pourcentages ont augmenter !
 
-# Contributions of variables to PC1
-fviz_contrib(ACPred, choice = "var", axes = 1, top = 78)
+## % Contributions des variable à la composante pincipale 1 CP1
+fviz_contrib(ACPred, choice = "var", axes = 1)
 
-# Contributions of variables to PC2
-fviz_contrib(ACPred, choice = "var", axes = 2, top = 78)
+## % Contributions des variable à la composante pincipale 2 CP2
+fviz_contrib(ACPred, choice = "var", axes = 2)
 
 ## Graphique des individus
 fviz_pca_ind(ACP, col.ind="cos2", geom = "point")
-
-#La fonction plot.PCA permet d'afficher la représentation des variables 
-#(Variable factor map (PCA)) et des individus (Individuals factor map (PCA)) dans 
-#le plan des deux premiers facteurs principaux
-plot.PCA(ACPred,col.quali="blue", label="quali")
 
 
 ## On détermine le nombre de dimension à concerver à l'aide du critère du coude
@@ -588,75 +603,96 @@ plot.PCA(ACPred,col.quali="blue", label="quali")
 barplot(ACPred$eig[1:dim(full_data)[2],2], main="Histogramme des valeurs propres", 
         names.arg=1:dim(full_data)[2], xlab="Axes", ylab="Pourcentage d'inertie", 
         cex.axis=0.8, font.lab=3, ylim=c(0, 12), col="orange")
-## 8 semble un bon nombre de dimension d'après le critère du coude
-print(ACPred$eig)
-## Avec 8 dimensions on explique 54.4% de la variabilité
+## 7 semble un bon nombre de dimension d'après le critère du coude
 
+
+## Nous pouvons aussi utiliser la fonction estim_ncp qui donne le nombre idéal de dim (ncp)
+# Smooth Method
+estim_ncp(DBACP, method="Smooth")
+# Generalized cross-validation approximation
+estim_ncp(DBACP, method="GCV")
+## Les deux donnent 7 dimensions !
+
+## Pourcentages cumulés de variabilité expliquée
+ACPred$eig
+## Avec 7 dimensions on explique 52.17% de la variabilité
 
 
 ########################################################
-### Première classification  hiérarchique ascendante ###
+### Première classification ascendante hiérarchique  ###
+######  Détermination du nombre de Clusters idéal  ##### 
 ########################################################
+
+## Afin de déterminer le nombre de Clusters idéal, on trace le Dendrogramme.
+# Nous pouvons alors déterminer le nombre de Cluster en considérant la taille des Cluster,
+# ainsi que les changement d'inertie.
 
 ## Création d'un Cluster :
 
-#On calcule la matrice des distances de ACP2
-Distance=dist(ACPred$ind$coord)
+# On calcule la matrice des distances de ACP2
+Distance=dist(ACPred$ind$coord,method = "euclidean")
 
-#hclust permet de créer les clusters avec la méthode de WARD
-CHA=hclust(Distance,method="ward.D2")
+# hclust permet de créer les clusters avec la méthode de WARD
+CAH=hclust(Distance,method="ward.D2")
 
-#plot permet de tracer le dendrograme : ATTENTION ! NECESSITE UNE MACHINE PERFORMANTE !
-plot(CHA)
-rect.hclust(CHA,k=5,border=2:6)
-#cutree(tree,k) permet de couper le dendrograme pour former k clusters:
-Repartition=cutree(CHA,7)
+# plot permet de tracer le dendrograme : ATTENTION ! NECESSITE UNE MACHINE PERFORMANTE !
+plot(CAH)
 
-#On regroupe les ligne du premier cluster dans une même base
+# Le bon compromis est 4 Clusters
+rect.hclust(CAH,k=4,border=2:5)  #Permet de tracer des carrés autour des clusters choisis
+
+# La fonction cutree(tree,k) permet de couper le dendrograme pour former k clusters:
+Repartition=cutree(CAH,7)
+
+# On regroupe les lignes du premier cluster dans une même base
 Cluster1=full_data[Repartition==1,]
+# On réitère pour le reste des Clusters
 
 
 ##################################################
 ### Itération de la méthode avec des fonctions ###
 ##################################################
 
-#ClusterCHA prend en argument la nombre de dimensison de ACP dimacp, le nombre de cluster 
+# ClusterCAH prend en argument la nombre de dimensison de ACP dimacp, le nombre de cluster 
 #à créer nbclus, bdscoreACP la base qui regroupe les variables pour l'ACP et full_data la base complète.
-#Elle retourne une liste des nbclus Clusters.
+# Elle retourne une liste des nbclus Clusters.
 
-ClusterCHA=function(dimacp,nbclus,bdscoreACP,full_data){
+ClusterCAH=function(dimacp,nbclus,bdscoreACP,full_data){
   #On applique la méthode de l'Analyse par composantes principales 
   #à l'aide de la fonction PCA du package FactoMineR
   print("ACP encours ... ")
-  ACP=PCA(bdscoreACP,ncp=dimacp)
+  ACP=PCA(bdscoreACP,ncp=dimacp,graph=FALSE)
   print(c("Pourcentage de variabilité expliqué :",ACP$eig$`cumulative percentage of variance`[dimacp]))
-  plot.PCA(ACP,col.quali="blue", label="quali")
+  print("Affichage des variables dans le premier plan ... ")
+  fviz_pca_var(ACP, col.var="contrib",
+               gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
+               repel = TRUE # Avoid text overlapping
+  )
+  print("Affichage des individus dans le premier plan ... ")
+  fviz_pca_ind(ACP, col.ind="cos2", geom = "point")
   print("Traçage de l'histogramme des valeurs propres ...")
   barplot(ACP$eig[1:dim(bdscoreACP)[2],2], main="Histogramme des valeurs propres", 
           names.arg=1:dim(bdscoreACP)[2], xlab="Axes", ylab="Pourcentage d'inertie", 
           cex.axis=0.8, font.lab=3, ylim=c(0, 15), col="orange")
-  #La fonction plot.PCA permet d'afficher la représentation des variables
-  #et des individus (Individuals factor map (PCA)) dans le plan des deux premiers facteurs principaux
-  #plot.PCA(ACP,col.quali="blue", label="quali")
-  
-  # La fonction dist prend comme argument la bdscoreframe et retourne
+
+  # La fonction dist prend retourne à partir des coordonner des individus
   #la matrice des distances en utilisant la norme euclidienne
   print("Calcul de la matrice de distance ...")
-  Distance=dist(ACP$ind$coord)
+  Distance=dist(ACP$ind$coord,method = "euclidean")
   
   # La fonction hclust prend comme argument la bdscoreframe et la 
   # matrice de distances et retourne la Classification ascendante hiérarchique
   print('Formation des clusters ...')
-  CHA=hclust(Distance,method="ward.D2")
+  CAH=hclust(Distance,method="ward.D2")
   
-  # Le plot de CHA donne le Dendogramme de la classification hiérarchique
+  # Le plot de CAH donne le Dendogramme de la classification hiérarchique
   # print("Traçage du dendogramme")
-  # plot(CHA)
+  # plot(CAH)
   # rect.hclust permet de tracer le dendrograme avec des cadres autour des clusters sélectionné
-  # rect.hclust(CHA,nbclus)
+  # rect.hclust(CAH,nbclus)
   
   # La fonction cutree permet de couper le dendogramme et donne nbclus clusters
-  Repartition=cutree(CHA,nbclus)
+  Repartition=cutree(CAH,nbclus)
   
   # On range les clusters dans une liste Clusters de bdscoreframes
   Clusters=list()
@@ -798,10 +834,12 @@ CompareQuantile=function(Clusters,percent=0.5){
 ### Etude des Clusters ###
 ##########################
 
-nbcl=5
+nbcl=4
 dimacp=7
-Clusters=ClusterCHA(dimacp,nbcl,DBACP,full_data)
+Clusters=ClusterCAH(dimacp,nbcl,DBACP,full_data)
+#NB: utiliser les flèches bleues pour voir les graphs une fois l'execution terminée.
 
+# On affiche les dimension des Clusters obtenues
 for (i in (1:length(Clusters))) {
   print(dim(Clusters[[i]]))
 }
@@ -820,12 +858,4 @@ View(CompMin)
 View(CompMax)
 View(CompMedian)
 
-
-
-
-
-install.packages("NbClust")
-library("NbClust")
-
-Nbanalyse=NbClust(data=full_data,diss=NULL,distance="euclidean",min.nc=2, max.nc=10,method="ward.D2",index=c('ch'))
 
