@@ -467,13 +467,14 @@ nbkclus=10  # nombre de clusters souhaités
 KClusters=Kmeans(full_data,10)
 
 # On accède aux clusters en utilisant KClusters[[i]] avec i entre 1 et nbkclus
-# La méthode des K-mean est la méthode que nous avons étudier en cours.
-# Le problèmes c'est que la validiter du clustering repose sur le choix du nombre de cluster.
+# La méthode des K-mean est la méthode que nous avons étudiée en cours.
+# Le problème c'est que la validité du clustering repose sur le choix du nombre de clusters.
 # Des indices et des testes existent pour déterminer ce nombre.
-# Le package NbClust permet d'en calculer certain, mais les calculs sont lourds (Complexité en o(n^3))
+# Le package NbClust permet d'en calculer certains, mais les calculs sont lourds (Complexité en o(n^3))
 # Nous avons donc opté pour une ACP suivie par une Classification Ascendante Hiérarchique (CAH).
-# L'ACP permet de réduire la quantité de donnée en épurant la bdd.
-# La CAH permet de former les clusters et offre un outil visuel (en plus des indices et tests) pour déterminer le nombre de cluster idéal.
+# L'ACP permet de réduire la quantité de données en épurant la bdd.
+# La CAH permet de former les clusters et offre un outil visuel (en plus des indices et tests) 
+# pour déterminer le nombre de clusters idéal.
 
 
 
@@ -496,7 +497,7 @@ fviz_pca_var(ACP, col.var="contrib",
 # Ce graphique permet de visualiser la contribution de chacun des items au deux 
 # premières composantes principales (qui sont les plus importants).
 # Pour accéder aux valeurs numériques des contributions :
-# View(ACP$var$contrib)
+View(ACP$var$contrib)
 
 
 ## % Contributions des variable à la composante pincipale 1 CP1
@@ -523,7 +524,6 @@ fviz_pca_ind(ACP, col.ind="cos2", geom = "point")
 NlDBACP=dim(full_data)[1]
 DBACP=data.frame(matrix(data=NA,nrow=NlDBACP,ncol=1))
 DBACP<-DBACP[,-1]
-DBACP$Genre<-full_data$Genre
 DBACP$FreqBinge<-full_data$FreqBinge
 DBACP$NbMaxOcc<-full_data$NbMaxOcc
 DBACP$FreqConso<-full_data$FreqConso
@@ -563,6 +563,7 @@ DBACP$a31<-full_data$a31
 DBACP$a32<-full_data$a32
 DBACP$a33<-full_data$a33
 DBACP$a34<-full_data$a34
+DBACP$Etudes<-full_data$Etudes
 DBACP$Tabac<-full_data$Tabac
 DBACP$FeteImagePerso<-full_data$FeteImagePerso
 DBACP$FeteEtre<-full_data$FeteEtre
@@ -574,19 +575,17 @@ DBACP$FeteImageAutre<-full_data$FeteImageAutre
 ##### Exportation de la base de données DBACP #####
 write.csv2(DBACP,file="DBACP.csv",row.names = FALSE)
 
-### Etape 2: On détermine le nombre de dimensions idéal ###
+### Etape 2: On détermine le nombre idéal de dimensions ###
 
 ## On fait une ACP sur la nouvelle base :
-ACPred <- PCA(DBACP,ncp=7)
+ACPred <- PCA(DBACP,ncp=7, graph=FALSE)
 
 ## Graphique des variables
-# dev.copy(png,'ACPredVariables.png') #Enregistre le plot dans le Working Directory
 fviz_pca_var(ACPred, col.var="contrib",
              gradient.cols = c("#00AFBB", "#E7B800", "#FC4E07"),
              repel = TRUE # Avoid text overlapping
 )
-# dev.off() #Enregistre le plot dans le Working Directory
-# On remarque que les pourcentages ont augmenter !
+# On remarque que les pourcentages ont augmenté !
 
 ## % Contributions des variable à la composante pincipale 1 CP1
 fviz_contrib(ACPred, choice = "var", axes = 1)
@@ -615,7 +614,7 @@ estim_ncp(DBACP, method="GCV")
 
 ## Pourcentages cumulés de variabilité expliquée
 ACPred$eig
-## Avec 7 dimensions on explique 52.17% de la variabilité
+## Avec 7 dimensions on explique 52% de la variabilité
 
 
 ########################################################
@@ -639,7 +638,7 @@ CAH=hclust(Distance,method="ward.D2")
 plot(CAH)
 
 # Le bon compromis est 4 Clusters
-rect.hclust(CAH,k=4,border=2:5)  #Permet de tracer des carrés autour des clusters choisis
+rect.hclust(CAH,k=5,border=2:5)  #Permet de tracer des carrés autour des clusters choisis
 
 # La fonction cutree(tree,k) permet de couper le dendrograme pour former k clusters:
 Repartition=cutree(CAH,7)
@@ -834,7 +833,7 @@ CompareQuantile=function(Clusters,percent=0.5){
 ### Etude des Clusters ###
 ##########################
 
-nbcl=4
+nbcl=5
 dimacp=7
 Clusters=ClusterCAH(dimacp,nbcl,DBACP,full_data)
 #NB: utiliser les flèches bleues pour voir les graphs une fois l'execution terminée.
