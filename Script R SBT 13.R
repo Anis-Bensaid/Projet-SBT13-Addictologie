@@ -531,7 +531,7 @@ DBACP$NbVerreMoy<-full_data$NbVerreMoy
 DBACP$FreqSupSixVerre<-full_data$FreqSupSixVerre
 DBACP$a1<-full_data$a1
 DBACP$a2<-full_data$a2
-DBACP$a3<-full_data$a3
+# DBACP$a3<-full_data$a3
 DBACP$a4<-full_data$a4
 DBACP$a5<-full_data$a5
 DBACP$a6<-full_data$a6
@@ -638,7 +638,7 @@ CAH=hclust(Distance,method="ward.D2")
 plot(CAH)
 
 # Le bon compromis est 4 Clusters
-rect.hclust(CAH,k=5,border=2:5)  #Permet de tracer des carrés autour des clusters choisis
+rect.hclust(CAH,k=5,border=2:10)  #Permet de tracer des carrés autour des clusters choisis
 
 # La fonction cutree(tree,k) permet de couper le dendrograme pour former k clusters:
 Repartition=cutree(CAH,7)
