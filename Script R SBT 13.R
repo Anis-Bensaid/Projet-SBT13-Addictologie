@@ -1,4 +1,4 @@
-  ## Nettoyage de l'espace de travail
+## Nettoyage de l'espace de travail
 rm(list=ls())
 
 install.packages("readxl")
@@ -775,6 +775,7 @@ nbclus=res.hcpc$call$t$nb.clust # Nbr de clusters
 Clusters=list()
 for (i in 1:nbclus){
   Clusters[[i]]=full_data[res.hcpc$data.clust$clust==i,]
+  write.csv2(Clusters[[i]],file=paste("cluser",as.character(i),".csv"),row.names = FALSE)
 }
 
 ## Visualisation des clusters:
@@ -879,11 +880,17 @@ CompareQuantile=function(Clusters,percent=0.5){
 ##########################
 
 
-CompMoyenne=CompareMean(Clusters)
+
+CCompMoyenne=data.frame(CompareMean(Clusters))
+write.csv2(CompMoyenne,file="Moyenne.csv",row.names = FALSE)
 CompEcart=CompareSD(Clusters)
+write.csv2(CompEcart,file="Ecart.csv",row.names = FALSE)
 CompMin=CompareMin(Clusters)
+write.csv2(CompMin,file="Min.csv",row.names = FALSE)
 CompMax=CompareMax(Clusters)
+write.csv2(CompMax,file="Max.csv",row.names = FALSE)
 CompMedian=CompareQuantile(Clusters,0.5)
+write.csv2(CompMedian,file="Mediane.csv",row.names = FALSE)
 
 
 View(CompMoyenne)
