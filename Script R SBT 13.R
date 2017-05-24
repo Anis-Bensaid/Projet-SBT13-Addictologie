@@ -918,3 +918,133 @@ View(Para4)
 Para5=full_data[c(3867,2895,3663,4758,209),]
 View(Para5)
 
+
+
+cl1 <- Clusters[[1]]
+cl2 <- Clusters[[2]]
+cl3 <- Clusters[[3]]
+cl4 <- Clusters[[4]]
+cl5 <- Clusters[[5]]
+
+#Apparently not relevant if we look at the CompMoyenne and ComEcart
+#Age 
+par(mfrow=c(1,5))
+boxplot(cl1$Age, xlab="cl1",ylab="Age")
+boxplot(cl2$Age, xlab="cl2",ylab="Age")
+boxplot(cl3$Age, xlab="cl3",ylab="Age")
+boxplot(cl4$Age, xlab="cl4",ylab="Age")
+boxplot(cl5$Age, xlab="cl5",ylab="Age")
+
+#Gender 
+par(mfrow=c(1,5))
+boxplot(cl1$Genre, xlab="cl1",ylab="Genre")
+boxplot(cl2$Genre, xlab="cl2",ylab="Genre")
+boxplot(cl3$Genre, xlab="cl3",ylab="Genre")
+boxplot(cl4$Genre, xlab="cl4",ylab="Genre")
+boxplot(cl5$Genre, xlab="cl5",ylab="Genre")
+
+#Level of education 
+par(mfrow=c(1,5))
+boxplot(cl1$Niveau, xlab="cl1",ylab="Niveau")
+boxplot(cl2$Niveau, xlab="cl2",ylab="Niveau")
+boxplot(cl3$Niveau, xlab="cl3",ylab="Niveau")
+boxplot(cl4$Niveau, xlab="cl4",ylab="Niveau")
+boxplot(cl5$Niveau, xlab="cl5",ylab="Niveau")
+
+#Humanities 
+par(mfrow=c(1,5))
+boxplot(cl1$StudyHuma, xlab="cl1",ylab="Humanités")
+boxplot(cl2$StudyHuma, xlab="cl2",ylab="Humanités")
+boxplot(cl3$StudyHuma, xlab="cl3",ylab="Humanités")
+boxplot(cl4$StudyHuma, xlab="cl4",ylab="Humanités")
+boxplot(cl5$StudyHuma, xlab="cl5",ylab="Humanités")
+
+#Professeurs?
+par(mfrow=c(1,5))
+boxplot(cl1$StudyProf, xlab="cl1",ylab="Prof")
+boxplot(cl2$StudyProf, xlab="cl2",ylab="Prof")
+boxplot(cl3$StudyProf, xlab="cl3",ylab="Prof")
+boxplot(cl4$StudyProf, xlab="cl4",ylab="Prof")
+boxplot(cl5$StudyProf, xlab="cl5",ylab="Prof")
+
+#Economy and Law
+par(mfrow=c(1,5))
+boxplot(cl1$StudyLawEco, xlab="cl1",ylab="LawEco")
+boxplot(cl2$StudyLawEco, xlab="cl2",ylab="LawEco")
+boxplot(cl3$StudyLawEco, xlab="cl3",ylab="LawEco")
+boxplot(cl4$StudyLawEco, xlab="cl4",ylab="LawEco")
+boxplot(cl5$StudyLawEco, xlab="cl5",ylab="LawEco")
+
+#Science 
+par(mfrow=c(1,5))
+boxplot(cl1$StudyScience, xlab="cl1",ylab="Science")
+boxplot(cl2$StudyScience, xlab="cl2",ylab="Science")
+boxplot(cl3$StudyScience, xlab="cl3",ylab="Science")
+boxplot(cl4$StudyScience, xlab="cl4",ylab="Science")
+boxplot(cl5$StudyScience, xlab="cl5",ylab="Science")
+
+#Medicine 
+par(mfrow=c(1,5))
+boxplot(cl1$StudyMed, xlab="cl1",ylab="Medicine")
+boxplot(cl2$StudyMed, xlab="cl2",ylab="Medicine")
+boxplot(cl3$StudyMed, xlab="cl3",ylab="Medicine")
+boxplot(cl4$StudyMed, xlab="cl4",ylab="Medicine")
+boxplot(cl5$StudyMed, xlab="cl5",ylab="Medicine")
+
+#Others 
+par(mfrow=c(1,5))
+boxplot(cl1$StudyAutre, xlab="cl1",ylab="Autre")
+boxplot(cl2$StudyAutre, xlab="cl2",ylab="Autre")
+boxplot(cl3$StudyAutre, xlab="cl3",ylab="Autre")
+boxplot(cl4$StudyAutre, xlab="cl4",ylab="Autre")
+boxplot(cl5$StudyAutre, xlab="cl5",ylab="Autre")
+
+#Confirmation of previous hyppothesis, none of them is relevant
+
+#More relevant
+#Binge frequency
+par(mfrow=c(1,5))
+boxplot(cl1$FreqBinge, xlab="cl1",ylab="FrequenceBinge")
+boxplot(cl2$FreqBinge, xlab="cl2",ylab="FrequenceBinge")
+boxplot(cl3$FreqBinge, xlab="cl3",ylab="FrequenceBinge")
+boxplot(cl4$FreqBinge, xlab="cl4",ylab="FrequenceBinge")
+boxplot(cl5$FreqBinge, xlab="cl5",ylab="FrequenceBinge")
+#Difference between 1 and 3,4 
+
+#Maximum number of glasses in one occasion
+par(mfrow=c(1,5))
+boxplot(cl1$NbMaxOcc, xlab="cl1",ylab="Max Verres")
+boxplot(cl2$NbMaxOcc, xlab="cl2",ylab="Max Verres")
+boxplot(cl3$NbMaxOcc, xlab="cl3",ylab="Max Verres")
+boxplot(cl4$NbMaxOcc, xlab="cl4",ylab="Max Verres")
+boxplot(cl5$NbMaxOcc, xlab="cl5",ylab="Max Verres")
+#Different sizes. Approximation: difference between 1 and 3
+
+#Consommation frequency
+par(mfrow=c(1,5))
+boxplot(cl1$FreqConso, xlab="cl1",ylab="Frequence consomation")
+boxplot(cl2$FreqConso, xlab="cl2",ylab="Frequence consomation")
+boxplot(cl3$FreqConso, xlab="cl3",ylab="Frequence consomation")
+boxplot(cl4$FreqConso, xlab="cl4",ylab="Frequence consomation")
+boxplot(cl5$FreqConso, xlab="cl5",ylab="Frequence consomation")
+#Difference between 1 and 3 
+
+#Medium glass number 
+par(mfrow=c(1,5))
+boxplot(cl1$NbVerreMoy, xlab="cl1",ylab="Moyenne Verres")
+boxplot(cl2$NbVerreMoy, xlab="cl2",ylab="Moyenne Verres")
+boxplot(cl3$NbVerreMoy, xlab="cl3",ylab="Moyenne Verres")
+boxplot(cl4$NbVerreMoy, xlab="cl4",ylab="Moyenne Verres")
+boxplot(cl5$NbVerreMoy, xlab="cl5",ylab="Moyenne Verres")
+#Difference between 1 and 3 
+
+#Over six glass frequency
+par(mfrow=c(1,5))
+boxplot(cl1$FreqSupSixVerre, xlab="cl1",ylab="Frequence plus 6 Verres")
+boxplot(cl2$FreqSupSixVerre, xlab="cl2",ylab="Frequence plus 6 Verres")
+boxplot(cl3$FreqSupSixVerre, xlab="cl3",ylab="Frequence plus 6 Verres")
+boxplot(cl4$FreqSupSixVerre, xlab="cl4",ylab="Frequence plus 6 Verres")
+boxplot(cl5$FreqSupSixVerre, xlab="cl5",ylab="Frequence plus 6 Verres")
+#Difference between 1 and 3 
+
+#Conclusion: 1 always clearly smaller than 3
