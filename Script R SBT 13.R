@@ -1047,4 +1047,520 @@ boxplot(cl4$FreqSupSixVerre, xlab="cl4",ylab="Frequence plus 6 Verres")
 boxplot(cl5$FreqSupSixVerre, xlab="cl5",ylab="Frequence plus 6 Verres")
 #Difference between 1 and 3 
 
-#Conclusion: 1 always clearly smaller than 3
+#AQoLs
+#a1
+par(mfrow=c(1,5))
+boxplot(cl1$a1, xlab="cl1",ylab="a1")
+boxplot(cl2$a1, xlab="cl2",ylab="a1")
+boxplot(cl3$a1, xlab="cl3",ylab="a1")
+boxplot(cl4$a1, xlab="cl4",ylab="a1")
+boxplot(cl5$a1, xlab="cl5",ylab="a1")
+
+#a2
+par(mfrow=c(1,5))
+boxplot(cl1$a2, xlab="cl1",ylab="a2")
+boxplot(cl2$a2, xlab="cl2",ylab="a2")
+boxplot(cl3$a2, xlab="cl3",ylab="a2")
+boxplot(cl4$a2, xlab="cl4",ylab="a2")
+boxplot(cl5$a2, xlab="cl5",ylab="a2")
+
+#a3
+par(mfrow=c(1,5))
+boxplot(cl1$a3, xlab="cl1",ylab="a3")
+boxplot(cl2$a3, xlab="cl2",ylab="a3")
+boxplot(cl3$a3, xlab="cl3",ylab="a3")
+boxplot(cl4$a3, xlab="cl4",ylab="a3")
+boxplot(cl5$a3, xlab="cl5",ylab="a3")
+
+#a4
+par(mfrow=c(1,5))
+boxplot(cl1$a4, xlab="cl1",ylab="a4")
+boxplot(cl2$a4, xlab="cl2",ylab="a4")
+boxplot(cl3$a4, xlab="cl3",ylab="a4")
+boxplot(cl4$a4, xlab="cl4",ylab="a4")
+boxplot(cl5$a4, xlab="cl5",ylab="a4")
+
+#a5
+par(mfrow=c(1,5))
+boxplot(cl1$a5, xlab="cl1",ylab="a5")
+boxplot(cl2$a5, xlab="cl2",ylab="a5")
+boxplot(cl3$a5, xlab="cl3",ylab="a5")
+boxplot(cl4$a5, xlab="cl4",ylab="a5")
+boxplot(cl5$a5, xlab="cl5",ylab="a5")
+
+#a6
+par(mfrow=c(1,5))
+boxplot(cl1$a6, xlab="cl1",ylab="a6")
+boxplot(cl2$a6, xlab="cl2",ylab="a6")
+boxplot(cl3$a6, xlab="cl3",ylab="a6")
+boxplot(cl4$a6, xlab="cl4",ylab="a6")
+boxplot(cl5$a6, xlab="cl5",ylab="a6")
+
+#a7
+par(mfrow=c(1,5))
+boxplot(cl1$a7, xlab="cl1",ylab="a7")
+boxplot(cl2$a7, xlab="cl2",ylab="a7")
+boxplot(cl3$a7, xlab="cl3",ylab="a7")
+boxplot(cl4$a7, xlab="cl4",ylab="a7")
+boxplot(cl5$a7, xlab="cl5",ylab="a7")
+
+#a8
+par(mfrow=c(1,5))
+boxplot(cl1$a8, xlab="cl1",ylab="a8")
+boxplot(cl2$a8, xlab="cl2",ylab="a8")
+boxplot(cl3$a8, xlab="cl3",ylab="a8")
+boxplot(cl4$a8, xlab="cl4",ylab="a8")
+boxplot(cl5$a8, xlab="cl5",ylab="a8")
+
+#a9
+par(mfrow=c(1,5))
+boxplot(cl1$a9, xlab="cl1",ylab="a9")
+boxplot(cl2$a9, xlab="cl2",ylab="a9")
+boxplot(cl3$a9, xlab="cl3",ylab="a9")
+boxplot(cl4$a9, xlab="cl4",ylab="a9")
+boxplot(cl5$a9, xlab="cl5",ylab="a9")
+
+#a10
+par(mfrow=c(1,5))
+boxplot(cl1$a10, xlab="cl1",ylab="a10")
+boxplot(cl2$a10, xlab="cl2",ylab="a10")
+boxplot(cl3$a10, xlab="cl3",ylab="a10")
+boxplot(cl4$a10, xlab="cl4",ylab="a10")
+boxplot(cl5$a10, xlab="cl5",ylab="a10")
+
+#a11
+par(mfrow=c(1,5))
+boxplot(cl1$a11, xlab="cl1",ylab="a11")
+boxplot(cl2$a11, xlab="cl2",ylab="a11")
+boxplot(cl3$a11, xlab="cl3",ylab="a11")
+boxplot(cl4$a11, xlab="cl4",ylab="a11")
+boxplot(cl5$a11, xlab="cl5",ylab="a11")
+
+#a12
+par(mfrow=c(1,5))
+boxplot(cl1$a12, xlab="cl1",ylab="a12")
+boxplot(cl2$a12, xlab="cl2",ylab="a12")
+boxplot(cl3$a12, xlab="cl3",ylab="a12")
+boxplot(cl4$a12, xlab="cl4",ylab="a12")
+boxplot(cl5$a12, xlab="cl5",ylab="a12")
+
+#a13
+par(mfrow=c(1,5))
+boxplot(cl1$a13, xlab="cl1",ylab="a13")
+boxplot(cl2$a13, xlab="cl2",ylab="a13")
+boxplot(cl3$a13, xlab="cl3",ylab="a13")
+boxplot(cl4$a13, xlab="cl4",ylab="a13")
+boxplot(cl5$a13, xlab="cl5",ylab="a13")
+
+#a14
+par(mfrow=c(1,5))
+boxplot(cl1$a14, xlab="cl1",ylab="a14")
+boxplot(cl2$a14, xlab="cl2",ylab="a14")
+boxplot(cl3$a14, xlab="cl3",ylab="a14")
+boxplot(cl4$a14, xlab="cl4",ylab="a14")
+boxplot(cl5$a14, xlab="cl5",ylab="a14")
+
+#a15
+par(mfrow=c(1,5))
+boxplot(cl1$a15, xlab="cl1",ylab="a15")
+boxplot(cl2$a15, xlab="cl2",ylab="a15")
+boxplot(cl3$a15, xlab="cl3",ylab="a15")
+boxplot(cl4$a15, xlab="cl4",ylab="a15")
+boxplot(cl5$a15, xlab="cl5",ylab="a15")
+
+#a16
+par(mfrow=c(1,5))
+boxplot(cl1$a16, xlab="cl1",ylab="a16")
+boxplot(cl2$a16, xlab="cl2",ylab="a16")
+boxplot(cl3$a16, xlab="cl3",ylab="a16")
+boxplot(cl4$a16, xlab="cl4",ylab="a16")
+boxplot(cl5$a16, xlab="cl5",ylab="a16")
+
+#a17
+par(mfrow=c(1,5))
+boxplot(cl1$a17, xlab="cl1",ylab="a17")
+boxplot(cl2$a17, xlab="cl2",ylab="a17")
+boxplot(cl3$a17, xlab="cl3",ylab="a17")
+boxplot(cl4$a17, xlab="cl4",ylab="a17")
+boxplot(cl5$a17, xlab="cl5",ylab="a17")
+
+#a18
+par(mfrow=c(1,5))
+boxplot(cl1$a18, xlab="cl1",ylab="a18")
+boxplot(cl2$a18, xlab="cl2",ylab="a18")
+boxplot(cl3$a18, xlab="cl3",ylab="a18")
+boxplot(cl4$a18, xlab="cl4",ylab="a18")
+boxplot(cl5$a18, xlab="cl5",ylab="a18")
+
+#a19
+par(mfrow=c(1,5))
+boxplot(cl1$a19, xlab="cl1",ylab="a19")
+boxplot(cl2$a19, xlab="cl2",ylab="a19")
+boxplot(cl3$a19, xlab="cl3",ylab="a19")
+boxplot(cl4$a19, xlab="cl4",ylab="a19")
+boxplot(cl5$a19, xlab="cl5",ylab="a19")
+
+#a20
+par(mfrow=c(1,5))
+boxplot(cl1$a20, xlab="cl1",ylab="a20")
+boxplot(cl2$a20, xlab="cl2",ylab="a20")
+boxplot(cl3$a20, xlab="cl3",ylab="a20")
+boxplot(cl4$a20, xlab="cl4",ylab="a20")
+boxplot(cl5$a20, xlab="cl5",ylab="a20")
+
+#a21
+par(mfrow=c(1,5))
+boxplot(cl1$a21, xlab="cl1",ylab="a21")
+boxplot(cl2$a21, xlab="cl2",ylab="a21")
+boxplot(cl3$a21, xlab="cl3",ylab="a21")
+boxplot(cl4$a21, xlab="cl4",ylab="a21")
+boxplot(cl5$a21, xlab="cl5",ylab="a21")
+
+#a22
+par(mfrow=c(1,5))
+boxplot(cl1$a22, xlab="cl1",ylab="a22")
+boxplot(cl2$a22, xlab="cl2",ylab="a22")
+boxplot(cl3$a22, xlab="cl3",ylab="a22")
+boxplot(cl4$a22, xlab="cl4",ylab="a22")
+boxplot(cl5$a22, xlab="cl5",ylab="a22")
+
+#a23
+par(mfrow=c(1,5))
+boxplot(cl1$a23, xlab="cl1",ylab="a23")
+boxplot(cl2$a23, xlab="cl2",ylab="a23")
+boxplot(cl3$a23, xlab="cl3",ylab="a23")
+boxplot(cl4$a23, xlab="cl4",ylab="a23")
+boxplot(cl5$a23, xlab="cl5",ylab="a23")
+
+#a24
+par(mfrow=c(1,5))
+boxplot(cl1$a24, xlab="cl1",ylab="a24")
+boxplot(cl2$a24, xlab="cl2",ylab="a24")
+boxplot(cl3$a24, xlab="cl3",ylab="a24")
+boxplot(cl4$a24, xlab="cl4",ylab="a24")
+boxplot(cl5$a24, xlab="cl5",ylab="a24")
+
+#a25
+par(mfrow=c(1,5))
+boxplot(cl1$a25, xlab="cl1",ylab="a25")
+boxplot(cl2$a25, xlab="cl2",ylab="a25")
+boxplot(cl3$a25, xlab="cl3",ylab="a25")
+boxplot(cl4$a25, xlab="cl4",ylab="a25")
+boxplot(cl5$a25, xlab="cl5",ylab="a25")
+
+#a26
+par(mfrow=c(1,5))
+boxplot(cl1$a26, xlab="cl1",ylab="a26")
+boxplot(cl2$a26, xlab="cl2",ylab="a26")
+boxplot(cl3$a26, xlab="cl3",ylab="a26")
+boxplot(cl4$a26, xlab="cl4",ylab="a26")
+boxplot(cl5$a26, xlab="cl5",ylab="a26")
+
+#a27
+par(mfrow=c(1,5))
+boxplot(cl1$a27, xlab="cl1",ylab="a27")
+boxplot(cl2$a27, xlab="cl2",ylab="a27")
+boxplot(cl3$a27, xlab="cl3",ylab="a27")
+boxplot(cl4$a27, xlab="cl4",ylab="a27")
+boxplot(cl5$a27, xlab="cl5",ylab="a27")
+
+#a28
+par(mfrow=c(1,5))
+boxplot(cl1$a28, xlab="cl1",ylab="a28")
+boxplot(cl2$a28, xlab="cl2",ylab="a28")
+boxplot(cl3$a28, xlab="cl3",ylab="a28")
+boxplot(cl4$a28, xlab="cl4",ylab="a28")
+boxplot(cl5$a28, xlab="cl5",ylab="a28")
+
+#a29
+par(mfrow=c(1,5))
+boxplot(cl1$a29, xlab="cl1",ylab="a29")
+boxplot(cl2$a29, xlab="cl2",ylab="a29")
+boxplot(cl3$a29, xlab="cl3",ylab="a29")
+boxplot(cl4$a29, xlab="cl4",ylab="a29")
+boxplot(cl5$a29, xlab="cl5",ylab="a29")
+
+#a30
+par(mfrow=c(1,5))
+boxplot(cl1$a30, xlab="cl1",ylab="a30")
+boxplot(cl2$a30, xlab="cl2",ylab="a30")
+boxplot(cl3$a30, xlab="cl3",ylab="a30")
+boxplot(cl4$a30, xlab="cl4",ylab="a30")
+boxplot(cl5$a30, xlab="cl5",ylab="a30")
+
+#a31
+par(mfrow=c(1,5))
+boxplot(cl1$a31, xlab="cl1",ylab="a31")
+boxplot(cl2$a31, xlab="cl2",ylab="a31")
+boxplot(cl3$a31, xlab="cl3",ylab="a31")
+boxplot(cl4$a31, xlab="cl4",ylab="a31")
+boxplot(cl5$a31, xlab="cl5",ylab="a31")
+
+#a32
+par(mfrow=c(1,5))
+boxplot(cl1$a32, xlab="cl1",ylab="a32")
+boxplot(cl2$a32, xlab="cl2",ylab="a32")
+boxplot(cl3$a32, xlab="cl3",ylab="a32")
+boxplot(cl4$a32, xlab="cl4",ylab="a32")
+boxplot(cl5$a32, xlab="cl5",ylab="a32")
+
+#a33
+par(mfrow=c(1,5))
+boxplot(cl1$a33, xlab="cl1",ylab="a33")
+boxplot(cl2$a33, xlab="cl2",ylab="a33")
+boxplot(cl3$a33, xlab="cl3",ylab="a33")
+boxplot(cl4$a33, xlab="cl4",ylab="a33")
+boxplot(cl5$a33, xlab="cl5",ylab="a33")
+
+#a34
+par(mfrow=c(1,5))
+boxplot(cl1$a34, xlab="cl1",ylab="a34")
+boxplot(cl2$a34, xlab="cl2",ylab="a34")
+boxplot(cl3$a34, xlab="cl3",ylab="a34")
+boxplot(cl4$a34, xlab="cl4",ylab="a34")
+boxplot(cl5$a34, xlab="cl5",ylab="a34")
+
+#Etudes
+par(mfrow=c(1,5))
+boxplot(cl1$Etudes, xlab="cl1",ylab="Etudes")
+boxplot(cl2$Etudes, xlab="cl2",ylab="Etudes")
+boxplot(cl3$Etudes, xlab="cl3",ylab="Etudes")
+boxplot(cl4$Etudes, xlab="cl4",ylab="Etudes")
+boxplot(cl5$Etudes, xlab="cl5",ylab="Etudes")
+
+#Tabac 
+par(mfrow=c(1,5))
+boxplot(cl1$Tabac, xlab="cl1",ylab="Tabac")
+boxplot(cl2$Tabac, xlab="cl2",ylab="Tabac")
+boxplot(cl3$Tabac, xlab="cl3",ylab="Tabac")
+boxplot(cl4$Tabac, xlab="cl4",ylab="Tabac")
+boxplot(cl5$Tabac, xlab="cl5",ylab="Tabac")
+
+#Cannabis 
+par(mfrow=c(1,5))
+boxplot(cl1$Cannabis , xlab="cl1",ylab="Cannabis ")
+boxplot(cl2$Cannabis , xlab="cl2",ylab="Cannabis ")
+boxplot(cl3$Cannabis , xlab="cl3",ylab="Cannabis ")
+boxplot(cl4$Cannabis , xlab="cl4",ylab="Cannabis ")
+boxplot(cl5$Cannabis , xlab="cl5",ylab="Cannabis ")
+
+#Cocaine 
+par(mfrow=c(1,5))
+boxplot(cl1$Cocaine , xlab="cl1",ylab="Cocaine ")
+boxplot(cl2$Cocaine , xlab="cl2",ylab="Cocaine ")
+boxplot(cl3$Cocaine , xlab="cl3",ylab="Cocaine ")
+boxplot(cl4$Cocaine , xlab="cl4",ylab="Cocaine ")
+boxplot(cl5$Cocaine , xlab="cl5",ylab="Cocaine ")
+
+#Heroine 
+par(mfrow=c(1,5))
+boxplot(cl1$Heroine, xlab="cl1",ylab="Heroine")
+boxplot(cl2$Heroine, xlab="cl2",ylab="Heroine")
+boxplot(cl3$Heroine, xlab="cl3",ylab="Heroine")
+boxplot(cl4$Heroine, xlab="cl4",ylab="Heroine")
+boxplot(cl5$Heroine, xlab="cl5",ylab="Heroine")
+
+#MD
+par(mfrow=c(1,5))
+boxplot(cl1$MD, xlab="cl1",ylab="MD")
+boxplot(cl2$MD, xlab="cl2",ylab="MD")
+boxplot(cl3$MD, xlab="cl3",ylab="MD")
+boxplot(cl4$MD, xlab="cl4",ylab="MD")
+boxplot(cl5$MD, xlab="cl5",ylab="MD")
+
+#Poppers
+par(mfrow=c(1,5))
+boxplot(cl1$Poppers, xlab="cl1",ylab="Poppers")
+boxplot(cl2$Poppers, xlab="cl2",ylab="Poppers")
+boxplot(cl3$Poppers, xlab="cl3",ylab="Poppers")
+boxplot(cl4$Poppers, xlab="cl4",ylab="Poppers")
+boxplot(cl5$Poppers, xlab="cl5",ylab="Poppers")
+
+#Jeu 
+par(mfrow=c(1,5))
+boxplot(cl1$Jeu, xlab="cl1",ylab="Jeu")
+boxplot(cl2$Jeu, xlab="cl2",ylab="Jeu")
+boxplot(cl3$Jeu, xlab="cl3",ylab="Jeu")
+boxplot(cl4$Jeu, xlab="cl4",ylab="Jeu")
+boxplot(cl5$Jeu, xlab="cl5",ylab="Jeu")
+
+#Fete Image Personne
+par(mfrow=c(1,5))
+boxplot(cl1$FeteImagePerso, xlab="cl1",ylab="FeteImagePerso")
+boxplot(cl2$FeteImagePerso, xlab="cl2",ylab="FeteImagePerso")
+boxplot(cl3$FeteImagePerso, xlab="cl3",ylab="FeteImagePerso")
+boxplot(cl4$FeteImagePerso, xlab="cl4",ylab="FeteImagePerso")
+boxplot(cl5$FeteImagePerso, xlab="cl5",ylab="FeteImagePerso")
+
+#Fete Etre
+par(mfrow=c(1,5))
+boxplot(cl1$FeteEtre, xlab="cl1",ylab="FeteEtre")
+boxplot(cl2$FeteEtre, xlab="cl2",ylab="FeteEtre")
+boxplot(cl3$FeteEtre, xlab="cl3",ylab="FeteEtre")
+boxplot(cl4$FeteEtre, xlab="cl4",ylab="FeteEtre")
+boxplot(cl5$FeteEtre, xlab="cl5",ylab="FeteEtre")
+
+#Fete Personne
+par(mfrow=c(1,5))
+boxplot(cl1$FetePerso, xlab="cl1",ylab="FetePerso")
+boxplot(cl2$FetePerso, xlab="cl2",ylab="FetePerso")
+boxplot(cl3$FetePerso, xlab="cl3",ylab="FetePerso")
+boxplot(cl4$FetePerso, xlab="cl4",ylab="FetePerso")
+boxplot(cl5$FetePerso, xlab="cl5",ylab="FetePerso")
+
+#Fete Quotidien
+par(mfrow=c(1,5))
+boxplot(cl1$FeteQuotidien, xlab="cl1",ylab="FeteQuotidien")
+boxplot(cl2$FeteQuotidien, xlab="cl2",ylab="FeteQuotidien")
+boxplot(cl3$FeteQuotidien, xlab="cl3",ylab="FeteQuotidien")
+boxplot(cl4$FeteQuotidien, xlab="cl4",ylab="FeteQuotidien")
+boxplot(cl5$FeteQuotidien, xlab="cl5",ylab="FeteQuotidien")
+
+#Fete Image Autre
+par(mfrow=c(1,5))
+boxplot(cl1$FeteImageAutre, xlab="cl1",ylab="FeteImageAutre")
+boxplot(cl2$FeteImageAutre, xlab="cl2",ylab="FeteImageAutre")
+boxplot(cl3$FeteImageAutre, xlab="cl3",ylab="FeteImageAutre")
+boxplot(cl4$FeteImageAutre, xlab="cl4",ylab="FeteImageAutre")
+boxplot(cl5$FeteImageAutre, xlab="cl5",ylab="FeteImageAutre")
+
+ 
+par(mfrow=c(1,5))
+boxplot(cl1$Mobilite, xlab="cl1",ylab="Mobilite")
+boxplot(cl2$Mobilite, xlab="cl2",ylab="Mobilite")
+boxplot(cl3$Mobilite, xlab="cl3",ylab="Mobilite")
+boxplot(cl4$Mobilite, xlab="cl4",ylab="Mobilite")
+boxplot(cl5$Mobilite, xlab="cl5",ylab="Mobilite")
+
+
+par(mfrow=c(1,5))
+boxplot(cl1$Autonomie, xlab="cl1",ylab="Autonomie")
+boxplot(cl2$Autonomie, xlab="cl2",ylab="Autonomie")
+boxplot(cl3$Autonomie, xlab="cl3",ylab="Autonomie")
+boxplot(cl4$Autonomie, xlab="cl4",ylab="Autonomie")
+boxplot(cl5$Autonomie, xlab="cl5",ylab="Autonomie")
+
+
+par(mfrow=c(1,5))
+boxplot(cl1$Niveau, xlab="cl1",ylab="Niveau")
+boxplot(cl2$Niveau, xlab="cl2",ylab="Niveau")
+boxplot(cl3$Niveau, xlab="cl3",ylab="Niveau")
+boxplot(cl4$Niveau, xlab="cl4",ylab="Niveau")
+boxplot(cl5$Niveau, xlab="cl5",ylab="Niveau")
+
+
+par(mfrow=c(1,5))
+boxplot(cl1$Habitudes, xlab="cl1",ylab="Habitudes")
+boxplot(cl2$Habitudes, xlab="cl2",ylab="Habitudes")
+boxplot(cl3$Habitudes, xlab="cl3",ylab="Habitudes")
+boxplot(cl4$Habitudes, xlab="cl4",ylab="Habitudes")
+boxplot(cl5$Habitudes, xlab="cl5",ylab="Habitudes")
+
+
+par(mfrow=c(1,5))
+boxplot(cl1$Douleur, xlab="cl1",ylab="Douleur")
+boxplot(cl2$Douleur, xlab="cl2",ylab="Douleur")
+boxplot(cl3$Douleur, xlab="cl3",ylab="Douleur")
+boxplot(cl4$Douleur, xlab="cl4",ylab="Douleur")
+boxplot(cl5$Douleur, xlab="cl5",ylab="Douleur")
+
+
+par(mfrow=c(1,5))
+boxplot(cl1$Depression, xlab="cl1",ylab="Depression")
+boxplot(cl2$Depression, xlab="cl2",ylab="Depression")
+boxplot(cl3$Depression, xlab="cl3",ylab="Depression")
+boxplot(cl4$Depression, xlab="cl4",ylab="Depression")
+boxplot(cl5$Depression, xlab="cl5",ylab="Depression")
+
+
+par(mfrow=c(1,5))
+boxplot(cl1$LogFamille, xlab="cl1",ylab="LogFamille")
+boxplot(cl2$LogFamille, xlab="cl2",ylab="LogFamille")
+boxplot(cl3$LogFamille, xlab="cl3",ylab="LogFamille")
+boxplot(cl4$LogFamille, xlab="cl4",ylab="LogFamille")
+boxplot(cl5$LogFamille, xlab="cl5",ylab="LogFamille")
+
+
+par(mfrow=c(1,5))
+boxplot(cl1$LogInd, xlab="cl1",ylab="LogInd")
+boxplot(cl2$LogInd, xlab="cl2",ylab="LogInd")
+boxplot(cl3$LogInd, xlab="cl3",ylab="LogInd")
+boxplot(cl4$LogInd, xlab="cl4",ylab="LogInd")
+boxplot(cl5$LogInd, xlab="cl5",ylab="LogInd")
+
+
+par(mfrow=c(1,5))
+boxplot(cl1$LogRes, xlab="cl1",ylab="LogRes")
+boxplot(cl2$LogRes, xlab="cl2",ylab="LogRes")
+boxplot(cl3$LogRes, xlab="cl3",ylab="LogRes")
+boxplot(cl4$LogRes, xlab="cl4",ylab="LogRes")
+boxplot(cl5$LogRes, xlab="cl5",ylab="LogRes")
+
+
+par(mfrow=c(1,5))
+boxplot(cl1$LogAutre, xlab="cl1",ylab="LogAutre")
+boxplot(cl2$LogAutre, xlab="cl2",ylab="LogAutre")
+boxplot(cl3$LogAutre, xlab="cl3",ylab="LogAutre")
+boxplot(cl4$LogAutre, xlab="cl4",ylab="LogAutre")
+boxplot(cl5$LogAutre, xlab="cl5",ylab="LogAutre")
+
+
+par(mfrow=c(1,5))
+boxplot(cl1$Seul, xlab="cl1",ylab="Seul")
+boxplot(cl2$Seul, xlab="cl2",ylab="Seul")
+boxplot(cl3$Seul, xlab="cl3",ylab="Seul")
+boxplot(cl4$Seul, xlab="cl4",ylab="Seul")
+boxplot(cl5$Seul, xlab="cl5",ylab="Seul")
+
+
+par(mfrow=c(1,5))
+boxplot(cl1$Couple, xlab="cl1",ylab="Couple")
+boxplot(cl2$Couple, xlab="cl2",ylab="Couple")
+boxplot(cl3$Couple, xlab="cl3",ylab="Couple")
+boxplot(cl4$Couple, xlab="cl4",ylab="Couple")
+boxplot(cl5$Couple, xlab="cl5",ylab="Couple")
+
+ 
+par(mfrow=c(1,5))
+boxplot(cl1$Enfants, xlab="cl1",ylab="Enfants")
+boxplot(cl2$Enfants, xlab="cl2",ylab="Enfants")
+boxplot(cl3$Enfants, xlab="cl3",ylab="Enfants")
+boxplot(cl4$Enfants, xlab="cl4",ylab="Enfants")
+boxplot(cl5$Enfants, xlab="cl5",ylab="Enfants")
+
+
+par(mfrow=c(1,5))
+boxplot(cl1$ColocFriend, xlab="cl1",ylab="ColocFriend")
+boxplot(cl2$ColocFriend, xlab="cl2",ylab="ColocFriend")
+boxplot(cl3$ColocFriend, xlab="cl3",ylab="ColocFriend")
+boxplot(cl4$ColocFriend, xlab="cl4",ylab="ColocFriend")
+boxplot(cl5$ColocFriend, xlab="cl5",ylab="ColocFriend")
+
+par(mfrow=c(1,5))
+boxplot(cl1$ColocAutres, xlab="cl1",ylab="ColocAutres")
+boxplot(cl2$ColocAutres, xlab="cl2",ylab="ColocAutres")
+boxplot(cl3$ColocAutres, xlab="cl3",ylab="ColocAutres")
+boxplot(cl4$ColocAutres, xlab="cl4",ylab="ColocAutres")
+boxplot(cl5$ColocAutres, xlab="cl5",ylab="ColocAutres")
+
+par(mfrow=c(1,5))
+boxplot(cl1$Argent, xlab="cl1",ylab="Argent")
+boxplot(cl2$Argent, xlab="cl2",ylab="Argent")
+boxplot(cl3$Argent, xlab="cl3",ylab="Argent")
+boxplot(cl4$Argent, xlab="cl4",ylab="Argent")
+boxplot(cl5$Argent, xlab="cl5",ylab="Argent")
+
+par(mfrow=c(1,5))
+boxplot(cl1$MaladieChroniqueBool, xlab="cl1",ylab="MaladieChroniqueBool")
+boxplot(cl2$MaladieChroniqueBool, xlab="cl2",ylab="MaladieChroniqueBool")
+boxplot(cl3$MaladieChroniqueBool, xlab="cl3",ylab="MaladieChroniqueBool")
+boxplot(cl4$MaladieChroniqueBool, xlab="cl4",ylab="MaladieChroniqueBool")
+boxplot(cl5$MaladieChroniqueBool, xlab="cl5",ylab="MaladieChroniqueBool")
+
+par(mfrow=c(1,5))
+boxplot(cl1$Bourse, xlab="cl1",ylab="Bourse")
+boxplot(cl2$Bourse, xlab="cl2",ylab="Bourse")
+boxplot(cl3$Bourse, xlab="cl3",ylab="Bourse")
+boxplot(cl4$Bourse, xlab="cl4",ylab="Bourse")
+boxplot(cl5$Bourse, xlab="cl5",ylab="Bourse")
+
