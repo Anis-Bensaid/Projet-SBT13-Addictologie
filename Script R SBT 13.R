@@ -464,7 +464,7 @@ full_data=read.csv2("full_data.csv")
 # ou si les répartition des individus est complétement aléatoire.
 ## Pour celà, on utilise la statistique de Hopkins et la fonction get_clust_tendency:
 
-get_clust_tendency(full_data, n=10, graph = TRUE, 
+Hopkins=get_clust_tendency(full_data, n=10, graph = FALSE, 
                    gradient = list(low = "red", mid = "white", high = "blue"), seed = 123)
 
 # Résultat:
@@ -711,7 +711,7 @@ fviz_pca_ind(ACP, col.ind="cos2", geom = "point")
 
 # Critère de Kaiser (Ne retenir que les valeurs propores >1)
 ACPred$eig$eigenvalue[ACPred$eig$eigenvalue>1]
-# Ce critère donne 10 dimensions, donc un même ordre de grandeur.
+# Ce critère donne 11 dimensions, donc un même ordre de grandeur.
 
 # Critère du coude (Cattell):
 ## Histogramme des valeurs propores
@@ -732,7 +732,7 @@ estim_ncp(DBACP, method="GCV")
 ## Il faut savoir que tous ces critères sont pertinents. Il faut cependant faire attention à garder un taux 
 # d'explication de la variabilité important pour ne pas déformer le nuage des points. 
 # En pratique, un aspect important à prendre en compte est le degré auquel une solution est interprétable. 
-# C'est pourquoi, nous avons examiné plusieurs solutions avec des dimensions allant de 8 à 9, et nous avons
+# C'est pourquoi, nous avons examiné plusieurs solutions avec des dimensions allant de 8 à 11, et nous avons
 # choisi la plus pertinente: 10 dimensions.
 
 ## Pourcentages cumulés de variabilité expliquée :
@@ -792,15 +792,15 @@ fviz_cluster(res.hcpc, data = scale(full_data), geom = "point",
 ## Moyenne :
 
 CompareMean=function(Clusters){
-  Comparenbcol=dim(Clusters[[1]])[2]
+  Comparenbrow=dim(Clusters[[1]])[2]
   nbclus=length(Clusters)
-  NomCol=c("Dim",colnames(Clusters[[1]])[-1])
-  CompareArray=data.frame(matrix(data=NA,nrow=nbclus,ncol=Comparenbcol))
-  colnames(CompareArray)=NomCol
-  for (i in (1:nbclus)){
-    CompareArray[i,1]=dim(Clusters[[i]])[1]
-    for (j in (2:Comparenbcol)){
-      CompareArray[i,j]=mean(Clusters[[i]][[j]])
+  NomRow=c("Dim",colnames(Clusters[[1]])[-1])
+  CompareArray=data.frame(matrix(data=NA,nrow=Comparenbrow,ncol=nbclus))
+  rownames(CompareArray)=NomRow
+  for (j in (1:nbclus)){
+    CompareArray[1,j]=dim(Clusters[[j]])[1]
+    for (i in (2:Comparenbrow)){
+      CompareArray[i,j]=mean(Clusters[[j]][[i]])
     }
   }
   return(CompareArray)
@@ -809,32 +809,31 @@ CompareMean=function(Clusters){
 ## Ecart-type :
 
 CompareSD=function(Clusters){
-  Comparenbcol=dim(Clusters[[1]])[2]
+  Comparenbrow=dim(Clusters[[1]])[2]
   nbclus=length(Clusters)
-  NomCol=c("Dim",colnames(Clusters[[1]])[-1])
-  CompareArray=data.frame(matrix(data=NA,nrow=nbclus,ncol=Comparenbcol))
-  colnames(CompareArray)=NomCol
-  for (i in (1:nbclus)){
-    CompareArray[i,1]=dim(Clusters[[i]])[1]
-    for (j in (2:Comparenbcol)){
-      CompareArray[i,j]=sd(Clusters[[i]][[j]])
+  NomRow=c("Dim",colnames(Clusters[[1]])[-1])
+  CompareArray=data.frame(matrix(data=NA,nrow=Comparenbrow,ncol=nbclus))
+  rownames(CompareArray)=NomRow
+  for (j in (1:nbclus)){
+    CompareArray[1,j]=dim(Clusters[[j]])[1]
+    for (i in (2:Comparenbrow)){
+      CompareArray[i,j]=sd(Clusters[[j]][[i]])
     }
   }
   return(CompareArray)
 }
-
 ## Minimum
 
 CompareMin=function(Clusters){
-  Comparenbcol=dim(Clusters[[1]])[2]
+  Comparenbrow=dim(Clusters[[1]])[2]
   nbclus=length(Clusters)
-  NomCol=c("Dim",colnames(Clusters[[1]])[-1])
-  CompareArray=data.frame(matrix(data=NA,nrow=nbclus,ncol=Comparenbcol))
-  colnames(CompareArray)=NomCol
-  for (i in (1:nbclus)){
-    CompareArray[i,1]=dim(Clusters[[i]])[1]
-    for (j in (2:Comparenbcol)){
-      CompareArray[i,j]=min(Clusters[[i]][[j]])
+  NomRow=c("Dim",colnames(Clusters[[1]])[-1])
+  CompareArray=data.frame(matrix(data=NA,nrow=Comparenbrow,ncol=nbclus))
+  rownames(CompareArray)=NomRow
+  for (j in (1:nbclus)){
+    CompareArray[1,j]=dim(Clusters[[j]])[1]
+    for (i in (2:Comparenbrow)){
+      CompareArray[i,j]=min(Clusters[[j]][[i]])
     }
   }
   return(CompareArray)
@@ -843,15 +842,15 @@ CompareMin=function(Clusters){
 ## Maximum
 
 CompareMax=function(Clusters){
-  Comparenbcol=dim(Clusters[[1]])[2]
+  Comparenbrow=dim(Clusters[[1]])[2]
   nbclus=length(Clusters)
-  NomCol=c("Dim",colnames(Clusters[[1]])[-1])
-  CompareArray=data.frame(matrix(data=NA,nrow=nbclus,ncol=Comparenbcol))
-  colnames(CompareArray)=NomCol
-  for (i in (1:nbclus)){
-    CompareArray[i,1]=dim(Clusters[[i]])[1]
-    for (j in (2:Comparenbcol)){
-      CompareArray[i,j]=max(Clusters[[i]][[j]])
+  NomRow=c("Dim",colnames(Clusters[[1]])[-1])
+  CompareArray=data.frame(matrix(data=NA,nrow=Comparenbrow,ncol=nbclus))
+  rownames(CompareArray)=NomRow
+  for (j in (1:nbclus)){
+    CompareArray[1,j]=dim(Clusters[[j]])[1]
+    for (i in (2:Comparenbrow)){
+      CompareArray[i,j]=max(Clusters[[j]][[i]])
     }
   }
   return(CompareArray)
@@ -860,20 +859,20 @@ CompareMax=function(Clusters){
 ## Median
 
 CompareQuantile=function(Clusters,percent=0.5){
-  Comparenbcol=dim(Clusters[[1]])[2]
+  Comparenbrow=dim(Clusters[[1]])[2]
   nbclus=length(Clusters)
-  NomCol=c("Dim",colnames(Clusters[[1]])[-1])
-  CompareArray=data.frame(matrix(data=NA,nrow=nbclus,ncol=Comparenbcol))
-  colnames(CompareArray)=NomCol
-  for (i in (1:nbclus)){
-    CompareArray[i,1]=dim(Clusters[[i]])[1]
-    for (j in (2:Comparenbcol)){
-      CompareArray[i,j]=quantile(Clusters[[i]][[j]],percent)
+  NomRow=c("Dim",colnames(Clusters[[1]])[-1])
+  CompareArray=data.frame(matrix(data=NA,nrow=Comparenbrow,ncol=nbclus))
+  rownames(CompareArray)=NomRow
+  for (j in (1:nbclus)){
+    CompareArray[1,j]=dim(Clusters[[j]])[1]
+    for (i in (2:Comparenbrow)){
+      CompareArray[i,j]=quantile(Clusters[[j]][[i]],percent)
     }
   }
   return(CompareArray)
 }
-
+  
 
 ##########################
 ### Etude des Clusters ###
@@ -881,16 +880,16 @@ CompareQuantile=function(Clusters,percent=0.5){
 
 
 
-CCompMoyenne=data.frame(CompareMean(Clusters))
-write.csv2(CompMoyenne,file="Moyenne.csv",row.names = FALSE)
+CompMoyenne=data.frame(CompareMean(Clusters))
+write.csv2(CompMoyenne,file="Moyenne.csv")
 CompEcart=CompareSD(Clusters)
-write.csv2(CompEcart,file="Ecart.csv",row.names = FALSE)
+write.csv2(CompEcart,file="Ecart.csv")
 CompMin=CompareMin(Clusters)
-write.csv2(CompMin,file="Min.csv",row.names = FALSE)
+write.csv2(CompMin,file="Min.csv")
 CompMax=CompareMax(Clusters)
-write.csv2(CompMax,file="Max.csv",row.names = FALSE)
+write.csv2(CompMax,file="Max.csv")
 CompMedian=CompareQuantile(Clusters,0.5)
-write.csv2(CompMedian,file="Mediane.csv",row.names = FALSE)
+write.csv2(CompMedian,file="Mediane.csv")
 
 
 View(CompMoyenne)
@@ -902,4 +901,20 @@ View(CompMedian)
 # Nous pouvons étudier les individus "para" qui sont les plus proches du centre du cluster.
 # Ces individus représente le plus le cluster.
 res.hcpc$desc.ind$para
+
+# Cluster 1:
+para1=full_data[c(7493,6611,5220,7430,7333),]
+View(Para1)
+# Cluster 2:
+Para2=full_data[c(15944,14366,15675,15911,16857),]
+View(Para2)
+# Cluster 3:
+Para3=full_data[c(957,2885,3776,3674,3810),]
+View(Para3)
+# Cluster 4:
+Para4=full_data[c(3031,5841,1008,5641,5675),]
+View(Para4)
+# Cluster 5:
+Para5=full_data[c(3867,2895,3663,4758,209),]
+View(Para5)
 
