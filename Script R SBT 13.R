@@ -1684,7 +1684,7 @@ abline(h=mean(cl4$FeteImageAutre))
 boxplot(cl5$FeteImageAutre, xlab="cl5",ylab="FeteImageAutre")
 abline(h=mean(cl5$FeteImageAutre))
 
- 
+#Mobilite 
 par(mfrow=c(1,5))
 boxplot(cl1$Mobilite, xlab="cl1",ylab="Mobilite")
 abline(h=mean(cl1$Mobilite))
@@ -1697,7 +1697,7 @@ abline(h=mean(cl4$Mobilite))
 boxplot(cl5$Mobilite, xlab="cl5",ylab="Mobilite")
 abline(h=mean(cl5$Mobilite))
 
-
+#Autonomie
 par(mfrow=c(1,5))
 boxplot(cl1$Autonomie, xlab="cl1",ylab="Autonomie")
 abline(h=mean(cl1$Autonomie))
@@ -1710,7 +1710,7 @@ abline(h=mean(cl4$Autonomie))
 boxplot(cl5$Autonomie, xlab="cl5",ylab="Autonomie")
 abline(h=mean(cl5$Autonomie))
 
-
+#Habitudes
 par(mfrow=c(1,5))
 boxplot(cl1$Habitudes, xlab="cl1",ylab="Habitudes")
 abline(h=mean(cl1$Habitudes))
@@ -1723,7 +1723,7 @@ abline(h=mean(cl4$Habitudes))
 boxplot(cl5$Habitudes, xlab="cl5",ylab="Habitudes")
 abline(h=mean(cl5$Habitudes))
 
-
+#Douleur
 par(mfrow=c(1,5))
 boxplot(cl1$Douleur, xlab="cl1",ylab="Douleur")
 abline(h=mean(cl1$Douleur))
@@ -1736,7 +1736,7 @@ abline(h=mean(cl4$Douleur))
 boxplot(cl5$Douleur, xlab="cl5",ylab="Douleur")
 abline(h=mean(cl5$Douleur))
 
-
+#Depression
 par(mfrow=c(1,5))
 boxplot(cl1$Depression, xlab="cl1",ylab="Depression")
 abline(h=mean(cl1$Depression))
