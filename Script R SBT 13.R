@@ -8,7 +8,7 @@ install.packages("cluster")
 install.packages("NbClust")
 install.packages("fpc")
 install.packages("modeltools")
-source("http://bioconductor.org/biocLite.R") # essayer avec http:// if not supported
+source("http://bioconductor.org/biocLite.R") # essayer avec http:// si ça ne marche pas
 biocLite("impute") #équivalent de install.packages
 # install.packages("VIM") 
 
@@ -68,7 +68,7 @@ bd1 <-bd[bd$age<31,]
 
 Nl=dim(bd1)[1] #nombre de lignes
 
-#On crée bdscore, dataframe qui contiendra la conversion des réponses en score.
+#On crée bdscore, une dataframe qui contiendra les réponses converties en score.
 bdscore=data.frame(matrix(data=NA,nrow=Nl,ncol=1))
 
 # ID de l'individu interrogé et du collecteur
@@ -80,7 +80,7 @@ bdscore$ID_indiv <-bd1[1]
 bdscore<-bdscore[,-1]
 
 # On transforme les réponses de l'AQOLS en score et on les insére dans la dataframe. 
-# L'utilisation de unique permet de contourner tout problème du à l'encodage du script. NB: Nous utilisons UTF-8.
+# L'utilisation de unique permet de contourner tout problème dû à l'encodage du script. NB: Nous utilisons UTF-8.
 
 
 # Age
@@ -420,7 +420,7 @@ for (i in (2:Ncf)) {
 }
 
 # On peut évaluer l'écart entre les statistiques de la base de données 
-# non complétée et les statistiques de la base complété
+# non complétée et les statistiques de la base complétée
 
 erreur_impute=data.frame(matrix(data=NA,nrow=5,ncol=Nc-1))
 rownames(erreur_impute) <- c("Moyenne","Mediane","Maximum","Minimum","Ecart-type")
@@ -462,7 +462,7 @@ full_data=read.csv2("full_data.csv")
 
 ## Avant de se lancer dans la clusterisation, on veut savoir si la BDD contient des clusters 
 # ou si les répartition des individus est complétement aléatoire.
-## Pour celà, on utilise la statistique de Hopkins et la fonction get_clust_tendency:
+## Pour cela, on utilise la statistique de Hopkins et la fonction get_clust_tendency:
 
 Hopkins=get_clust_tendency(full_data, n=10, graph = FALSE, 
                    gradient = list(low = "red", mid = "white", high = "blue"), seed = 123)
@@ -486,8 +486,8 @@ help(kmeans)
 # On vous conseille de ne pas l'exécuter.
 #http://www.sthda.com/english/wiki/determining-the-optimal-number-of-clusters-3-must-known-methods-unsupervised-machine-learning
 
-# Afin de déterminer le nbr idéal de clusters, on utlise le package NbClust qui permet de calculer 30 indices
-# dont chacun suggeste le choix d'un nombre de cluster.
+# Afin de déterminer le nombre idéal de clusters, on utlise le package NbClust qui permet de calculer 30 indices
+# dont chacun suggère le choix d'un nombre de clusters.
 
 res.nbcl <- NbClust(scale(full_data), distance = "euclidean",
                     min.nc = 2, max.nc = 10, 
@@ -541,9 +541,9 @@ fviz_cluster(res.Kmeans, data = scale(DBACP), geom = "point",
 ## On applique une ACP sur l'ensemble des données avec la fonction PCA du package FactoMinR:
 ACP <- PCA(full_data[-1],scale.unit=TRUE,ncp=12, graph=FALSE)      
 
-# Ici le nombre de dimension n'est pas important.
-# L'argument scale.unit=TRUE permet de réduire la variance des colonne à 1.
-# Réduire la variance à 1 permet de donner un même poid à toutes les variables.
+# Ici le nombre de dimensions n'est pas important.
+# L'argument scale.unit=TRUE permet de réduire la variance des colonnes à 1.
+# Réduire la variance à 1 permet de donner un même poids à toutes les variables.
 
 print(ACP) #Permet de voir les commandes pour accéder aus résultats
 
@@ -616,7 +616,7 @@ for (i in (1:Nlcon)){
 View(Contributions)
 
 
-## Nous enlevons les variables proche du centre dans la représentation Variable factor map (PCA):
+## Nous enlevons les variables proches du centre dans la représentation Variable factor map (PCA):
 ## On choisit de garder les variables avec une norme > 1
 ## Variables retenues classées en ordre décroissant de contribution :
 NlDBACP=dim(full_data)[1]
@@ -703,9 +703,7 @@ fviz_contrib(ACPred, choice = "var", axes = 2)
 fviz_pca_ind(ACP, col.ind="cos2", geom = "point")
 
 
-# On peut par ailleurs utiliser le 
-
-## Détrmination du nombre de dimensions:
+## Détermination du nombre de dimensions:
 
 # Kaiser vs Cantell : http://www.statsoft.fr/concepts-statistiques/analyse-factorielle/analyse-factorielle.htm
 
@@ -732,7 +730,7 @@ estim_ncp(DBACP, method="GCV")
 ## Il faut savoir que tous ces critères sont pertinents. Il faut cependant faire attention à garder un taux 
 # d'explication de la variabilité important pour ne pas déformer le nuage des points. 
 # En pratique, un aspect important à prendre en compte est le degré auquel une solution est interprétable. 
-# C'est pourquoi, nous avons examiné plusieurs solutions avec des dimensions allant de 8 à 11, et nous avons
+# C'est pourquoi nous avons examiné plusieurs solutions avec des dimensions allant de 8 à 11, et nous avons
 # choisi la plus pertinente: 10 dimensions.
 
 ## Pourcentages cumulés de variabilité expliquée :
@@ -753,7 +751,7 @@ ACPred$eig
 # laquelle l'utilisateur peut choisir le nombre de clusters en cliquant su la hauteur de coupe souhaitée.
 # Si nb.clust=-1. La fonction retourne le nombre de cluster idéal c'est à dire maximisant l'inertie:
 help(HCPC) # La méthode est expliquée dans la partie Details de la doc.
-# De plus HCPC offre la possibilité de consolider les cluster avec la méthode des K-means.
+# De plus HCPC offre la possibilité de consolider les clusters avec la méthode des K-means.
 # K-means peut soit être appliqué avant la CAH (kk=nb de cluster initial) et nécessite un nbr idéal de clusters pour K-means
 # soit après la CAH (consol=TRUE), et dans ce cas K-means utilise le nombre de clusters établi par CAH.
 
@@ -770,7 +768,7 @@ plot.HCPC(res.hcpc, choice="tree", rect=TRUE,
 
 
 
-## On restitut l'ensemble des variables (full_data) sous forme de liste de Clusters : 
+## On restitue l'ensemble des variables (full_data) sous forme de liste de Clusters : 
 nbclus=res.hcpc$call$t$nb.clust # Nbr de clusters
 Clusters=list()
 for (i in 1:nbclus){
