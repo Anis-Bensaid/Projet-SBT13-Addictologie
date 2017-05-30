@@ -29,7 +29,7 @@ library(impute)
 ## Nous avons tous travaillé sur le même code via GitHub
 
 # Anis
-# setwd("D:/Users/enysb/Google Drive/Etudes/Git/Projet-SBT13-Addictologie")
+# setwd("D:/Users/enysb/Desktop/Projet-SBT13-Addictologie")
 # bd <- read_excel("D:/Users/enysb/Google Drive/Etudes/Git/Projet-SBT13-Addictologie/bdmieRpp2.xls")
 
 
@@ -359,7 +359,7 @@ for (i in (2:Nc)) {
   info[7,i-1] <- sum(1*is.na(bdscore[i]))/Nl # Part de NA
 }
 
-
+write.csv2(info,file="info.csv")
 # Données manquantes 
 # Taux de réponse de chaque individu et le nombre d'individus dont le nombre de réponses est insuffisant
 
